@@ -15,7 +15,7 @@ public class EnemyVisionComponent : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     internal bool CanSeePlayer(Transform player, out Vector3 lastKnownPosition)
     {
-        Debug.Log($"[{name}] Scanning for player...");
+        //Debug.Log($"[{name}] Scanning for player...");
 
         lastKnownPosition = default;
 
@@ -23,22 +23,22 @@ public class EnemyVisionComponent : MonoBehaviour
         Vector3 directionToPlayer = player.position - eyePosition;
         float dist = directionToPlayer.magnitude;
 
-        Debug.Log($"Distance to player: {dist:F2} / Vision Range: {_visionRange}");
+        //Debug.Log($"Distance to player: {dist:F2} / Vision Range: {_visionRange}");
 
         if (dist > _visionRange)
         {
-            Debug.Log("❌ Player is out of vision range.");
+          //  Debug.Log("❌ Player is out of vision range.");
             return false;
         }
 
         directionToPlayer.Normalize();
 
         float angle = Vector3.Angle(_eyePoint.forward, directionToPlayer);
-        Debug.Log($"View Angle: {angle:F2}° / FOV Limit: {_fieldOfView * 0.5f:F2}°");
+        //Debug.Log($"View Angle: {angle:F2}° / FOV Limit: {_fieldOfView * 0.5f:F2}°");
 
         if (angle > _fieldOfView * 0.5f)
         {
-            Debug.Log("❌ Player is outside field of view.");
+            //Debug.Log("❌ Player is outside field of view.");
             return false;
         }
 
@@ -47,14 +47,14 @@ public class EnemyVisionComponent : MonoBehaviour
         if (Physics.Raycast(eyePosition, directionToPlayer, out RaycastHit hit, dist, _obstacleLayer))
         {
             Debug.DrawRay(eyePosition, directionToPlayer * hit.distance, Color.red, 0.5f);
-            Debug.Log($"❌ Vision blocked by '{hit.collider.name}' at {hit.distance:F2}m.");
+            //Debug.Log($"❌ Vision blocked by '{hit.collider.name}' at {hit.distance:F2}m.");
             return false;
         }
 
         Debug.DrawRay(eyePosition, directionToPlayer * dist, Color.green, 0.5f);
 
         lastKnownPosition = player.position;
-        Debug.Log($"✅ Player spotted at {lastKnownPosition}");
+        //Debug.Log($"✅ Player spotted at {lastKnownPosition}");
 
         return true;
     }

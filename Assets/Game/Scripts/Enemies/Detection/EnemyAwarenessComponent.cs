@@ -46,6 +46,6 @@ public class EnemyAwarenessComponent : MonoBehaviour
         {
             CurrentState = AwarenessState.Idle;
         }
-        Debug.Log(CurrentState);
+        //Debug.Log(CurrentState);
     }
 }

@@ -1,21 +1,21 @@
 using UnityEngine;
 
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : EnemyBase
 {
     private EnemyAwarenessComponent _enemyAwarenessComponent;
-    private EnemyPatroullingComponent _enemyPatroullingComponent;
+    private EnemyPatrollingComponent _enemyPatrollingComponent;
 
     private void Awake()
     {
         _enemyAwarenessComponent = GetComponent<EnemyAwarenessComponent>();
-        _enemyPatroullingComponent = GetComponent<EnemyPatroullingComponent>();
+        _enemyPatrollingComponent = GetComponent<EnemyPatrollingComponent>();
     }
 
     private void Start()
     {
-        _enemyPatroullingComponent.Initialize();
-        _enemyPatroullingComponent.StartPatrolling();
+        _enemyPatrollingComponent.Initialize();
+        _enemyPatrollingComponent.StartPatrolling();
 
 
     }
@@ -25,16 +25,16 @@ public class EnemyController : MonoBehaviour
         switch (_enemyAwarenessComponent.CurrentState)
         {
             case EnemyAwarenessComponent.AwarenessState.Idle:
-                _enemyPatroullingComponent.StartPatrolling();
+                _enemyPatrollingComponent.StartPatrolling();
                 break;
             case EnemyAwarenessComponent.AwarenessState.Suspicious:
-                _enemyPatroullingComponent.StopPatroling();
+                _enemyPatrollingComponent.StopPatroling();
                 break;
             case EnemyAwarenessComponent.AwarenessState.Alerted:
-                _enemyPatroullingComponent.StopPatroling();
+                _enemyPatrollingComponent.StopPatroling();
                 break;
             default:
-                _enemyPatroullingComponent.StopPatroling();
+                _enemyPatrollingComponent.StopPatroling();
                 break;
         }
     }
