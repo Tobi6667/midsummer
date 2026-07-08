@@ -13,6 +13,7 @@ public class InventoryManager : MonoBehaviour {
     public GameObject iconPrefab;
     private GameObject hoverObject;
      public GameObject dropItem;
+    public GameObject trapItem;
     public GameObject toolObject;
     public Text sizeTextObject;
     public Text visualTextObject;

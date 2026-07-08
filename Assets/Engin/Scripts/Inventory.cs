@@ -14,6 +14,7 @@ public class Inventory : MonoBehaviour {
 	public int rows;
 	private float hoverOffset;
 	public float slotSize;
+
 		
     //slots that we are moving item from and to
 	
@@ -73,16 +74,26 @@ public class Inventory : MonoBehaviour {
             {
                 InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;//resets the slot colors.
 				foreach (ItemScript item in InventoryManager.Instance.From.Items)
-				{
-					float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
-					Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
-					v *= 25;//how far from the player do we want to drop.
-					GameObject tmpDrop = Instantiate(InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
-                 // tmpDrop.AddComponent<ItemScript>();
-                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+				{ if (item.spriteHighlighted.name == "Items00_4")
+                    {
+                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
+                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
+                        v *= 25;//how far from the player do we want to drop.
+                        GameObject tmpDrop = Instantiate(InventoryManager.Instance.trapItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
+                        // tmpDrop.AddComponent<ItemScript>();
+                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                    }
+                    else if (item.spriteHighlighted.name == "Items00_11")
+                    {
+                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
+                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
+                        v *= 25;//how far from the player do we want to drop.
+                        GameObject tmpDrop = Instantiate(InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
+                      //  tmpDrop.AddComponent<ItemScript>();
+                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                    }
 
-                   
-				}
+                }
                 InventoryManager.Instance.From.ClearSlot();//removes the item from the slot
                 Destroy(GameObject.Find("Hover"));//removes the hover icon.
                                                   //resets the objects
@@ -94,13 +105,26 @@ public class Inventory : MonoBehaviour {
             {
 			foreach (ItemScript item in InventoryManager.Instance.MovingSlot.Items)
 				{
-					float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
-					Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
-					v *= 25;//how far from the player do we want to drop.
-				GameObject tmpDrop= Instantiate(InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
-                 //  tmpDrop.AddComponent<ItemScript>();
-                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                    if (item.tag == "Item")
+                    {
+                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
+                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
+                        v *= 25;//how far from the player do we want to drop.
+                        GameObject tmpDrop = Instantiate(InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
+                        // tmpDrop.AddComponent<ItemScript>();
+                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                    }
+                    else if (item.tag == "Trap")
+                    {
 
+                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);//random angle
+                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));//where to drop
+                        v *= 25;//how far from the player do we want to drop.
+                        GameObject tmpDrop = Instantiate(InventoryManager.Instance.trapItem, playerRef.transform.position - v, Quaternion.identity) as GameObject;
+                       //  tmpDrop.AddComponent<ItemScript>();
+                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+
+                    }
                 }
                 InventoryManager.Instance.MovingSlot.ClearSlot();
                 Destroy(GameObject.Find("Hover"));

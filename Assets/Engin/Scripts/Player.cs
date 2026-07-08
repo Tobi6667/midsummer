@@ -142,6 +142,16 @@ public class Player : MonoBehaviour {
 
             
         }
+        else if (collision.gameObject.tag == "Trap")
+        {
+
+            if (inventory.AddItem(collision.gameObject.GetComponent<ItemScript>()))
+            {
+                Destroy(collision.gameObject);
+            }
+
+
+        }
     }
     public void SetStats(int agility, int strength, int stamina, int intellect)
     {
