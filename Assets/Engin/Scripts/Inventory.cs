@@ -624,8 +624,3 @@ public class Inventory : MonoBehaviour
     }
 }
 
-
-
-	
-
-   
