@@ -1137,6 +1137,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1930933215951278, guid: 081f6fb8127fab14f9132aff68f414c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224240523411185684, guid: 081f6fb8127fab14f9132aff68f414c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.000000052154064
@@ -2693,6 +2697,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 101694, guid: 6e18cf47a67839c4f9e63609292019f2, type: 3}
   iconPrefab: {fileID: 141306, guid: 795e1b1534b9a21409dceca1275d5dc4, type: 3}
   dropItem: {fileID: 3381621776244839814, guid: eb3225516446415418a5c365f80bd68f, type: 3}
+  trapItem: {fileID: 853098587539954425, guid: fc29602db69a4f14c981f73f24d50634, type: 3}
   toolObject: {fileID: 1113492145}
   sizeTextObject: {fileID: 889639327}
   visualTextObject: {fileID: 1896978961}
@@ -3428,6 +3433,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1669162120622960, guid: 6203c0a9970ed074ba822f6f092ee1af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4860543075496680, guid: 6203c0a9970ed074ba822f6f092ee1af, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -3815,7 +3824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1171002562
 MonoBehaviour:
   m_ObjectHideFlags: 0
