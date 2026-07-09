@@ -40,7 +40,7 @@ namespace Kryz.CharacterStats.Examples
 			Vector3 transformedVelocity = transform.TransformDirection(velocity);
 			transformedVelocity *= MovementSpeed;
 
-			Vector3 velocityChange = transformedVelocity - Rigidbody.velocity;
+			Vector3 velocityChange = transformedVelocity - Rigidbody.linearVelocity;
 			velocityChange.y = 0;
 
 			if (isGrounded) {
