@@ -60,40 +60,40 @@ public class CharacterPanel : Inventory {
     {
 
     }
-    public override void ShowToolTip(GameObject slot)
-    {
-        Slot tmpSlot = slot.GetComponent<Slot>();
-        if (slot.GetComponentInParent<Inventory>().IsOpen && !tmpSlot.IsEmpty && InventoryManager.Instance.HoverObject == null && !InventoryManager.Instance.selectStackSize.activeSelf)
-        {
-            InventoryManager.Instance.visualTextObject.text = tmpSlot.CurrentItem.GetTooltip();
-            InventoryManager.Instance.sizeTextObject.text = InventoryManager.Instance.visualTextObject.text;
-            InventoryManager.Instance.toolObject.SetActive(true);
-            float xpos = slot.transform.position.x;
-            float ypos = slot.transform.position.y;
-            InventoryManager.Instance.toolObject.transform.position = new Vector2(xpos, ypos);
-        }
-    }
-    public void CalculateStats()
-    {
+    //public override void ShowToolTip(GameObject slot)
+    //{
+    //    Slot tmpSlot = slot.GetComponent<Slot>();
+    //    if (slot.GetComponentInParent<Inventory>().IsOpen && !tmpSlot.IsEmpty && InventoryManager.Instance.HoverObject == null && !InventoryManager.Instance.selectStackSize.activeSelf)
+    //    {
+    //        InventoryManager.Instance.visualTextObject.text = tmpSlot.CurrentItem.GetTooltip();
+    //        InventoryManager.Instance.sizeTextObject.text = InventoryManager.Instance.visualTextObject.text;
+    //        InventoryManager.Instance.toolObject.SetActive(true);
+    //        float xpos = slot.transform.position.x;
+    //        float ypos = slot.transform.position.y;
+    //        InventoryManager.Instance.toolObject.transform.position = new Vector2(xpos, ypos);
+    //    }
+    //}
+    //public void CalculateStats()
+    //{
 
-        int _agility = 0;
-        int _strength = 0;
-        int _stamina = 0;
-        int _intellect = 0;
-        foreach(Slot slot in equipmentSlots)
-        {
-            if (!slot.IsEmpty)
-            {
-                Equipment e = (Equipment)slot.CurrentItem.Item;
-                _agility += e.Agility;
-                _intellect += e.Intellect;
-                _stamina += e.Stamina;
-                _strength += e.Strength;
-             }
+    //    int _agility = 0;
+    //    int _strength = 0;
+    //    int _stamina = 0;
+    //    int _intellect = 0;
+    //    foreach(Slot slot in equipmentSlots)
+    //    {
+    //        if (!slot.IsEmpty)
+    //        {
+    //            Equipment e = (Equipment)slot.CurrentItem.Item;
+    //            _agility += e.Agility;
+    //            _intellect += e.Intellect;
+    //            _stamina += e.Stamina;
+    //            _strength += e.Strength;
+    //         }
            
-        }
-        Player.Instance.SetStats(_agility, _strength, _stamina, _intellect);
-    }
+    //    }
+    //    Player.Instance.SetStats(_agility, _strength, _stamina, _intellect);
+    //}
     public override void SaveInventory()
     {
         string content = string.Empty;
@@ -134,7 +134,7 @@ public class CharacterPanel : Inventory {
             }
             equipmentSlots[index].AddItem(loadedItem.GetComponent<ItemScript>());
             Destroy(loadedItem);
-            CalculateStats();
+           // CalculateStats();
         }
     }
 }

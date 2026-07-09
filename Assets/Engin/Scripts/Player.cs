@@ -4,20 +4,20 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
     static Player instance;
-	public float speed;
+	//public float speed;
 	  public Inventory inventory;
     public Inventory charPanel;
      Inventory chest;
-    public Text statText;
-    public ItemScript[] items = new ItemScript[10];
-    int intellect;
-    int agility;
-    int strength;
-    int stamina;
-    public int baseIntellect;
-    public int baseAgility;
-    public int baseStrength;
-    public int baseStamina;
+    //public Text statText;
+    //public ItemScript[] items = new ItemScript[10];
+    //int intellect;
+    //int agility;
+    //int strength;
+    //int stamina;
+    //public int baseIntellect;
+    //public int baseAgility;
+    //public int baseStrength;
+    //public int baseStamina;
 
     public static Player Instance
     {
@@ -36,34 +36,34 @@ public class Player : MonoBehaviour {
             instance = value;
         }
     }
-    private void Start()
-    {
-        SetStats(0, 0, 0, 0);
+    //private void Start()
+    //{
+    //    SetStats(0, 0, 0, 0);
 
-    }
-    void Update()
-	{
+    //}
+ //   void Update()
+	//{
 
-		HandleMovement();
-        if(Input.GetKeyDown(KeyCode.B))
-        {
-            inventory.Open();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (chest != null)
-                chest.Open();
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (charPanel != null)
-                charPanel.Open();
-        }
-    }
+	//	HandleMovement();
+ //       if(Input.GetKeyDown(KeyCode.B))
+ //       {
+ //           inventory.Open();
+ //       }
+ //       if (Input.GetKeyDown(KeyCode.E))
+ //       {
+ //           if (chest != null)
+ //               chest.Open();
+ //       }
+ //       if (Input.GetKeyDown(KeyCode.C))
+ //       {
+ //           if (charPanel != null)
+ //               charPanel.Open();
+ //       }
+ //   }
 
-	private void HandleMovement(){
-		float translation=speed*Time.deltaTime;
-		transform.Translate(new Vector3(Input.GetAxis("Horizontal")*translation, 0, Input.GetAxis("Vertical")*translation));}
+	//private void HandleMovement(){
+	//	float translation=speed*Time.deltaTime;
+	//	transform.Translate(new Vector3(Input.GetAxis("Horizontal")*translation, 0, Input.GetAxis("Vertical")*translation));}
 	private void OnTriggerEnter(Collider other)
 	{
         if (other.tag == "Item")
@@ -153,15 +153,15 @@ public class Player : MonoBehaviour {
 
         }
     }
-    public void SetStats(int agility, int strength, int stamina, int intellect)
-    {
-        this.agility = agility + baseAgility;
-        this.strength = strength + baseStrength;
-        this.stamina = stamina + baseStamina;
-        this.intellect = intellect + baseIntellect;
-        statText.text = string.Format("Stamina: {0}\nStrength: {1}\nIntellect: {2}\nAgility: {3}" , this.stamina , this.strength , this.intellect ,this.agility);
+    //public void SetStats(int agility, int strength, int stamina, int intellect)
+    //{
+    //    this.agility = agility + baseAgility;
+    //    this.strength = strength + baseStrength;
+    //    this.stamina = stamina + baseStamina;
+    //    this.intellect = intellect + baseIntellect;
+    //    statText.text = string.Format("Stamina: {0}\nStrength: {1}\nIntellect: {2}\nAgility: {3}" , this.stamina , this.strength , this.intellect ,this.agility);
 
-    }
+    //}
 }
 
 

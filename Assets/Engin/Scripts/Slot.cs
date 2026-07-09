@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class Slot: MonoBehaviour, IPointerClickHandler
 {		private Stack<ItemScript> items;
@@ -106,21 +107,38 @@ public class Slot: MonoBehaviour, IPointerClickHandler
     }
     //Handles onpointer events
     public void OnPointerClick(PointerEventData eventData)
-        //if the rightmousebutton was clicked.
-	{
-        if (eventData.button==PointerEventData.InputButton.Right&& !GameObject.Find("Hover")&& canvasGroup.alpha>0)
-            //uses an item on slot.
-        { UseItem();
-			}
-        else if (eventData.button==PointerEventData.InputButton.Left && Input.GetKey(KeyCode.LeftShift) && !IsEmpty && !GameObject.Find("Hover"))
+    {
+        // Right click uses the item
+        if (eventData.button == PointerEventData.InputButton.Right &&
+            !GameObject.Find("Hover") &&
+            canvasGroup.alpha > 0)
         {
+            UseItem();
+        }
+
+        // Shift + Left Click splits the stack
+        else if (eventData.button == PointerEventData.InputButton.Left &&
+                 Keyboard.current != null &&
+                 Keyboard.current.leftShiftKey.isPressed &&
+                 !IsEmpty &&
+                 !GameObject.Find("Hover"))
+        {
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+
             Vector2 position;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(InventoryManager.Instance.canvas.transform as RectTransform, Input.mousePosition, InventoryManager.Instance.canvas.worldCamera, out position);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                InventoryManager.Instance.canvas.transform as RectTransform,
+                mousePosition,
+                InventoryManager.Instance.canvas.worldCamera,
+                out position);
+
             InventoryManager.Instance.selectStackSize.SetActive(true);
-            InventoryManager.Instance.selectStackSize.transform.position = InventoryManager.Instance.canvas.transform.TransformPoint(position);
+            InventoryManager.Instance.selectStackSize.transform.position =
+                InventoryManager.Instance.canvas.transform.TransformPoint(position);
+
             InventoryManager.Instance.SetStackInfo(items.Count);
         }
-                }
+    }
     void Awake()
     {
         items = new Stack<ItemScript>();
@@ -155,10 +173,10 @@ public class Slot: MonoBehaviour, IPointerClickHandler
                     }
                 }
             }
-            if (calcStats)
-            {
-                CharacterPanel.Instance.CalculateStats();
-            }
+            //if (calcStats)
+            //{
+            //    CharacterPanel.Instance.CalculateStats();
+            //}
         }
      
     }
