@@ -2,5 +2,7 @@ public enum EEnemyState
 {
     Patrolling,
     Aware,
-    Attacking
+    Chase,
+    IdleAction,
+    Distracted
 }

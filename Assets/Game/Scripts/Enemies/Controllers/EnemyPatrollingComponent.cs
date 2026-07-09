@@ -36,6 +36,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
 
     internal void StartPatrolling()
     {
+        if(_isPatroling) return;
         _isPatroling = true;
         _navAgent.isStopped = false;
         

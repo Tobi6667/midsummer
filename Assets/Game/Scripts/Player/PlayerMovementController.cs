@@ -1,89 +1,83 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovementController : MonoBehaviour
 {
-    [Header("Movement")]
-    public float moveSpeed = 5f;
-    public float sprintMultiplier = 1.6f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 1.2f;
-
-    [Header("Look")]
-    public Transform cameraPivot;
-    public float mouseSensitivity = 0.1f;
-    public float minPitch = -40f;
-    public float maxPitch = 75f;
-
     [Header("References")]
-    public PlayerController input; // drag the same GameObject's PlayerController here, or GetComponent in Awake
+    [SerializeField] private PlayerInputController input;
+    [SerializeField] private PlayerCameraController cameraController;
+    [SerializeField] private PlayerGravityController gravity;
+    [SerializeField] private PlayerRotationController rotation;
+    [SerializeField] private PlayerGroundDetector ground;
 
-    CharacterController controller;
-    Vector3 velocity;
-    float pitch;
-    bool isSprinting;
-    bool isCrouching;
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 6f;
+    [SerializeField] private float sprintMultiplier = 1.5f;
 
-    void Awake()
+    private CharacterController controller;
+
+    private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        if (input == null) input = GetComponent<PlayerController>();
-    }
 
-    void OnEnable()
-    {
-      /*  input.OnJumpPressed += HandleJump;
-        input.OnSprintChanged += HandleSprintChanged;
-        input.OnCrouchChanged += HandleCrouchChanged;
-      */
+        if (input == null)
+            input = GetComponent<PlayerInputController>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void OnDisable()
-    {
-      /*  input.OnJumpPressed -= HandleJump;
-        input.OnSprintChanged -= HandleSprintChanged;
-        input.OnCrouchChanged -= HandleCrouchChanged;
-      */
-    }
-
     void Update()
     {
-        Look();
+        ground.Tick();
+
+        if (ground.IsGrounded)
+        {
+           // gravity.SetUp(ground.SurfaceNormal);
+        }
+
+        gravity.Tick(ground.IsGrounded);
+
+        rotation.Tick();
+
         Move();
     }
 
-    void Look()
+    private void Move()
     {
-        float yaw = input.LookInput.x * mouseSensitivity;
-        pitch -= input.LookInput.y * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+       Vector3 forward = Vector3.ProjectOnPlane(
+    cameraController.Forward,
+    gravity.Up
+).normalized;
 
-        transform.Rotate(Vector3.up * yaw);
-        if (cameraPivot != null)
-            cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+
+Vector3 right = Vector3.ProjectOnPlane(
+    cameraController.Right,
+    gravity.Up
+).normalized;
+
+
+Vector3 move =
+    forward * input.MoveInput.y +
+    right * input.MoveInput.x;
+
+        if (move.sqrMagnitude > 1f)
+            move.Normalize();
+
+        float speed = moveSpeed;
+
+     /*   if (input.SprintHeld)
+            speed *= sprintMultiplier;
+     */
+        Vector3 velocity =
+            move * speed +
+            gravity.Velocity;
+
+        controller.Move(velocity * Time.deltaTime);
+
+     /*   if (input.ConsumeJump())
+        {
+            gravity.Jump();
+        }*/
     }
-
-    void Move()
-    {
-        Vector3 move = transform.right * input.MoveInput.x + transform.forward * input.MoveInput.y;
-        float speed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
-        move *= speed;
-
-        if (controller.isGrounded && velocity.y < 0) velocity.y = -2f;
-        velocity.y += gravity * Time.deltaTime;
-
-        controller.Move((move + velocity) * Time.deltaTime);
-    }
-
-    void HandleJump()
-    {
-        if (controller.isGrounded)
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-    }
-
-    void HandleSprintChanged(bool sprinting) => isSprinting = sprinting;
-    void HandleCrouchChanged(bool crouching) => isCrouching = crouching; // hook up controller.height/center change if you want actual crouch
 }

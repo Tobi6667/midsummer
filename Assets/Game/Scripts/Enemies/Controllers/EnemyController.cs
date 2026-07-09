@@ -5,6 +5,8 @@ public class EnemyController : EnemyBase
 {
     private EnemyAwarenessComponent _enemyAwarenessComponent;
     private EnemyPatrollingComponent _enemyPatrollingComponent;
+    private EEnemyState _currentState = EEnemyState.Patrolling;
+    private INPCStateBehavior _stateBehavior;
 
     private void Awake()
     {
@@ -22,6 +24,9 @@ public class EnemyController : EnemyBase
 
     private void Update()
     {
+
+        if(_stateBehavior != null) _stateBehavior.Tick(Time.deltaTime);
+
         switch (_enemyAwarenessComponent.CurrentState)
         {
             case EnemyAwarenessComponent.AwarenessState.Idle:
