@@ -1,7 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="InventoryItem" src="project://database/Assets/Game/UI/Inventory/InventoryItem.uxml?fileID=9197481963319205126&amp;guid=657c8f3d0a82ab14fb3ed17efa10d2e3&amp;type=3#InventoryItem"/>
     <Style src="project://database/Assets/Game/UI/InGameStyle.uss?fileID=7433441132597879392&amp;guid=216194d0746671245bcebd06b167b8ae&amp;type=3#InGameStyle"/>
     <ui:VisualElement name="VisualElement" style="flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; flex-direction: column;"/>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: column;">
+            <ui:VisualElement name="inventory-panel" style="flex-grow: 1;">
+                <ui:Instance template="InventoryItem"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-self: auto; align-items: flex-end; margin-bottom: 0; padding-bottom: 50px; padding-left: 50px; margin-right: 50px;">
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:ProgressBar value="22" title="my-progress"/>

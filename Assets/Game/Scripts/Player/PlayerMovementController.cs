@@ -14,6 +14,7 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField] private float moveSpeed = 6f;
     [SerializeField] private float sprintMultiplier = 1.5f;
 
+    private bool isMoving = true;
     private CharacterController controller;
 
     private void Awake()
@@ -29,6 +30,8 @@ public class PlayerMovementController : MonoBehaviour
 
     void Update()
     {
+
+        if (!isMoving) return;
         ground.Tick();
 
         if (ground.IsGrounded)
@@ -41,6 +44,12 @@ public class PlayerMovementController : MonoBehaviour
         rotation.Tick();
 
         Move();
+    }
+
+
+    internal void StopMovement()
+    {
+        isMoving = false;
     }
 
     private void Move()
