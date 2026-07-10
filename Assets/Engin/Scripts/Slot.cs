@@ -4,8 +4,9 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Linq;
 
-public class Slot: MonoBehaviour, IPointerClickHandler
+public class Slot: MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {		private Stack<ItemScript> items;
 		public Stack<ItemScript> Items
 		{get {return items;}
@@ -16,6 +17,7 @@ public class Slot: MonoBehaviour, IPointerClickHandler
 		public bool IsEmpty{
 			get{return items.Count==0;}
 		}
+    static GameObject playerRef;
     CanvasGroup canvasGroup;
     public ItemType canContain;
 		public void AddItem(ItemScript item)
@@ -44,7 +46,8 @@ public class Slot: MonoBehaviour, IPointerClickHandler
         get {return items.Peek();}
     }
 	void Start(){
-        if(transform.parent!=null)
+        playerRef = GameObject.Find("PlayerEko");
+        if (transform.parent!=null)
         {
             canvasGroup = transform.parent.GetComponent<CanvasGroup>();
         }
@@ -56,7 +59,201 @@ public class Slot: MonoBehaviour, IPointerClickHandler
 		txtRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotRect.sizeDelta.x);
 		txtRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotRect.sizeDelta.y);
 	}
-	private void ChangeSprite(Sprite neutral, Sprite highlight )
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("Begin Drag");
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        if (IsEmpty)
+            return;
+
+        if (GameObject.Find("Hover"))
+            return;
+
+        InventoryManager.Instance.Clicked = gameObject;
+        InventoryManager.Instance.From = this;
+
+        GetComponent<Image>().color = Color.gray;
+
+        CreateDragIcon();
+    }
+    //public void OnBeginDrag(PointerEventData eventData)
+    //{
+    //    if (eventData.button != PointerEventData.InputButton.Left)
+    //        return;
+
+    //    if (IsEmpty)
+    //        return;
+
+    //    InventoryManager.Instance.From = this;
+    //    InventoryManager.Instance.Clicked = gameObject;
+
+    //    CreateDragIcon();
+    //}
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (InventoryManager.Instance.HoverObject == null)
+            return;
+        Debug.Log("Dragging");
+        InventoryManager.Instance.HoverObject.transform.position =
+            eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+
+    {
+        InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;
+
+        foreach (ItemScript item in InventoryManager.Instance.From.Items)
+        {
+            if (item.spriteHighlighted.name == "Items00_4")
+            {
+                float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+                Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+                v *= 25;
+
+                GameObject tmpDrop = Instantiate(
+                    InventoryManager.Instance.trapItem,
+                    playerRef.transform.position - v,
+                    Quaternion.identity
+                ) as GameObject;
+
+                tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+            }
+            else if (item.spriteHighlighted.name == "Items00_11")
+            {
+                float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+                Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+                v *= 25;
+
+                GameObject tmpDrop = Instantiate( InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity ) as GameObject;
+
+                tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+            }
+        }
+
+        InventoryManager.Instance.From.ClearSlot();
+        Destroy(GameObject.Find("Hover"));
+
+        InventoryManager.Instance.To = null;
+        InventoryManager.Instance.From = null;
+    }
+   
+
+
+  
+
+   
+
+    
+
+  
+
+    //private void CleanupDrag()
+    //{
+    //    Image slotImage = GetComponent<Image>();
+
+    //    if (slotImage != null)
+    //    {
+    //        slotImage.color = Color.white;
+    //    }
+
+    //    if (InventoryManager.Instance != null)
+    //    {
+    //        if (InventoryManager.Instance.HoverObject != null)
+    //        {
+    //            Destroy(InventoryManager.Instance.HoverObject);
+    //            InventoryManager.Instance.HoverObject = null;
+    //        }
+
+    //        InventoryManager.Instance.To = null;
+    //        InventoryManager.Instance.From = null;
+    //    }
+    //}
+    //    public void OnEndDrag(PointerEventData eventData)
+    //    {    foreach (ItemScript item in InventoryManager.Instance.From.Items)
+    //                {
+    //                    if (item.spriteHighlighted.name == "Items00_4")
+    //                    {
+    //                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //    v *= 25;
+
+    //                        GameObject tmpDrop = Instantiate(
+    //                            InventoryManager.Instance.trapItem,
+    //                            playerRef.transform.position - v,
+    //                            Quaternion.identity
+    //                        ) as GameObject;
+
+    //    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //                    }
+    //                    else if (item.spriteHighlighted.name == "Items00_11")
+    //{
+    //    float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //    v *= 25;
+
+    //    GameObject tmpDrop = Instantiate(
+    //        InventoryManager.Instance.dropItem,
+    //        playerRef.transform.position - v,
+    //        Quaternion.identity
+    //    ) as GameObject;
+
+    //    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //}
+    //                }
+
+    //                InventoryManager.Instance.From.ClearSlot();
+    //Destroy(GameObject.Find("Hover"));
+
+    //InventoryManager.Instance.To = null;
+    //InventoryManager.Instance.From = null;
+    //            }
+
+
+    // {
+    //if (InventoryManager.Instance.From == null)
+    //    return;
+
+    //GameObject objectUnderPointer = eventData.pointerCurrentRaycast.gameObject;
+    //Slot destinationSlot = null;
+
+    //if (objectUnderPointer != null)
+    //{
+    //    destinationSlot = objectUnderPointer.GetComponent<Slot>();
+
+    //    if (destinationSlot == null)
+    //    {
+    //        destinationSlot = objectUnderPointer.GetComponentInParent<Slot>();
+    //    }
+    //}
+
+    //if (destinationSlot != null && destinationSlot != this)
+    //{
+    //    Slot.SwapItems(this, destinationSlot);
+    //}
+    //else
+    //{
+    //    DropItemsIntoWorld();
+    //}
+
+    //GetComponent<Image>().color = Color.white;
+
+    //InventoryManager.Instance.From = null;
+    //InventoryManager.Instance.To = null;
+
+    //if (InventoryManager.Instance.HoverObject != null)
+    //{
+    //    Destroy(InventoryManager.Instance.HoverObject);
+    //    InventoryManager.Instance.HoverObject = null;
+    //}
+    // }
+
+
+
+    private void ChangeSprite(Sprite neutral, Sprite highlight )
 	{
 		GetComponent<Image>().sprite=neutral;
 		SpriteState st=new SpriteState();
@@ -108,6 +305,7 @@ public class Slot: MonoBehaviour, IPointerClickHandler
     //Handles onpointer events
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("Slot clicked");
         // Right click uses the item
         if (eventData.button == PointerEventData.InputButton.Right &&
             !GameObject.Find("Hover") &&
@@ -115,7 +313,7 @@ public class Slot: MonoBehaviour, IPointerClickHandler
         {
             UseItem();
         }
-
+        
         // Shift + Left Click splits the stack
         else if (eventData.button == PointerEventData.InputButton.Left &&
                  Keyboard.current != null &&
@@ -180,7 +378,128 @@ public class Slot: MonoBehaviour, IPointerClickHandler
         }
      
     }
-    
+    private void CreateDragIcon()
+    {
+        GameObject hoverObject = Instantiate(
+            InventoryManager.Instance.iconPrefab,
+            InventoryManager.Instance.canvas.transform
+        );
+
+        hoverObject.name = "Hover";
+
+        hoverObject.GetComponent<Image>().sprite =
+            GetComponent<Image>().sprite;
+
+        RectTransform hoverRect =
+            hoverObject.GetComponent<RectTransform>();
+
+        RectTransform slotRect =
+            GetComponent<RectTransform>();
+
+        hoverRect.sizeDelta = slotRect.sizeDelta;
+        hoverRect.position = slotRect.position;
+       
+        CanvasGroup hoverCanvasGroup =
+            hoverObject.GetComponent<CanvasGroup>();
+
+        if (hoverCanvasGroup == null)
+        {
+            hoverCanvasGroup =
+                hoverObject.AddComponent<CanvasGroup>();
+        }
+
+        // Important: the dragged icon must not block raycasts.
+        hoverCanvasGroup.blocksRaycasts = false;
+        hoverCanvasGroup.interactable = false;
+
+        InventoryManager.Instance.HoverObject = hoverObject;
+    }
+ 
+private void DropItemsIntoWorld()
+    {
+        if (IsEmpty)
+            return;
+
+        GameObject player = GameObject.Find("PlayerEko");
+
+        if (player == null)
+        {
+            Debug.LogError("Player GameObject could not be found.");
+            return;
+        }
+
+        // Copy the stack so it can safely be modified afterward.
+        ItemScript[] itemsToDrop = items.ToArray();
+
+        foreach (ItemScript itemScript in itemsToDrop)
+        {
+            if (itemScript == null)
+            {
+                Debug.LogWarning(
+                    "DROPITEMSA destroyed or missing ItemScript was found in the slot."
+                );
+                continue;
+            }
+
+            Item itemData = itemScript.Item;
+
+            if (itemData == null)
+            {
+                Debug.LogWarning("ItemScript has no Item data.");
+                continue;
+            }
+
+            float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+
+            Vector3 offset = new Vector3(
+                Mathf.Sin(angle),
+                0f,
+                Mathf.Cos(angle)
+            ) * 25f;
+
+            GameObject prefabToDrop;
+
+            if (itemData.ItemType == ItemType.Trap)
+            {
+                prefabToDrop = InventoryManager.Instance.trapItem;
+            }
+            else
+            {
+                prefabToDrop = InventoryManager.Instance.dropItem;
+            }
+
+            GameObject droppedObject = Instantiate(
+                prefabToDrop,
+                player.transform.position - offset,
+                Quaternion.identity
+            );
+
+            ItemScript droppedItemScript =
+                droppedObject.GetComponent<ItemScript>();
+
+            if (droppedItemScript == null)
+            {
+                droppedItemScript =
+                    droppedObject.AddComponent<ItemScript>();
+            }
+
+            droppedItemScript.Item = itemData;
+
+            // The old hidden inventory object is no longer needed.
+            Destroy(itemScript.gameObject);
+        }
+
+        items.Clear();
+        ChangeSprite(slotEmpty, slotHighlight);
+        stackTxt.text = string.Empty;
+
+        Inventory inventory = GetComponentInParent<Inventory>();
+
+        if (inventory != null)
+        {
+            inventory.EmptySlots++;
+        }
+    }
 }
 
 

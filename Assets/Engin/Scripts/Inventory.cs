@@ -58,45 +58,45 @@ public class Inventory : MonoBehaviour
         {
             if (!mouseInside && InventoryManager.Instance.From != null)
             {
-                InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;
+            //    InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;
 
-                foreach (ItemScript item in InventoryManager.Instance.From.Items)
-                {
-                    if (item.spriteHighlighted.name == "Items00_4")
-                    {
-                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
-                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                        v *= 25;
+            //    foreach (ItemScript item in InventoryManager.Instance.From.Items)
+            //    {
+            //        if (item.spriteHighlighted.name == "Items00_4")
+            //        {
+            //            float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+            //            Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+            //            v *= 25;
 
-                        GameObject tmpDrop = Instantiate(
-                            InventoryManager.Instance.trapItem,
-                            playerRef.transform.position - v,
-                            Quaternion.identity
-                        ) as GameObject;
+            //            GameObject tmpDrop = Instantiate(
+            //                InventoryManager.Instance.trapItem,
+            //                playerRef.transform.position - v,
+            //                Quaternion.identity
+            //            ) as GameObject;
 
-                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
-                    }
-                    else if (item.spriteHighlighted.name == "Items00_11")
-                    {
-                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
-                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                        v *= 25;
+            //            tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+            //        }
+            //        else if (item.spriteHighlighted.name == "Items00_11")
+            //        {
+            //            float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+            //            Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+            //            v *= 25;
 
-                        GameObject tmpDrop = Instantiate(
-                            InventoryManager.Instance.dropItem,
-                            playerRef.transform.position - v,
-                            Quaternion.identity
-                        ) as GameObject;
+            //            GameObject tmpDrop = Instantiate(
+            //                InventoryManager.Instance.dropItem,
+            //                playerRef.transform.position - v,
+            //                Quaternion.identity
+            //            ) as GameObject;
 
-                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
-                    }
-                }
+            //            tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+            //        }
+            //    }
 
-                InventoryManager.Instance.From.ClearSlot();
-                Destroy(GameObject.Find("Hover"));
+            //    InventoryManager.Instance.From.ClearSlot();
+            //    Destroy(GameObject.Find("Hover"));
 
-                InventoryManager.Instance.To = null;
-                InventoryManager.Instance.From = null;
+            //    InventoryManager.Instance.To = null;
+            //    InventoryManager.Instance.From = null;
             }
             else if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject()
                      && !InventoryManager.Instance.MovingSlot.IsEmpty)
@@ -263,7 +263,14 @@ public class Inventory : MonoBehaviour
 
                     allSlots[index].GetComponent<Slot>().AddItem(loadedItem.GetComponent<ItemScript>());
 
-                    Destroy(loadedItem);
+                    ItemScript loadedItemScript = loadedItem.GetComponent<ItemScript>();
+                    loadedItemScript.Item = tmp;
+
+                    allSlots[index].GetComponent<Slot>().AddItem(loadedItemScript);
+
+                    // Keep the object alive, but hide it.
+                    loadedItem.transform.SetParent(transform);
+                    loadedItem.SetActive(false);
                 }
             }
         }

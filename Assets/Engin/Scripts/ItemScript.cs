@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum ItemType{Consumable, MainHand, TwoHanded, OffHand,Head,Neck,Chest,Ring, Legs,Braces, Boots, Trinket, Shoulders, Belt, Generic, GenericWeapon};
+public enum ItemType{Consumable, MainHand, TwoHanded, OffHand,Head,Neck,Chest,Ring, Legs,Braces, Boots, Trinket, Shoulders, Belt, Generic, GenericWeapon, Trap, TNT};
 public enum Quality { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, ARTIFACT };
 
 public class ItemScript : MonoBehaviour {
