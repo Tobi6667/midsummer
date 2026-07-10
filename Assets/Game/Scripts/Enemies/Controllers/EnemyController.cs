@@ -17,8 +17,8 @@ public class EnemyController : EnemyBase
     private void Start()
     {
         _enemyPatrollingComponent.Initialize();
-        _enemyPatrollingComponent.StartPatrolling();
-
+        _stateBehavior = new PatrolState(this);
+        _stateBehavior.Enter(); // <-- you're missing this currently
 
     }
 
@@ -27,21 +27,14 @@ public class EnemyController : EnemyBase
 
         if(_stateBehavior != null) _stateBehavior.Tick(Time.deltaTime);
 
-        switch (_enemyAwarenessComponent.CurrentState)
-        {
-            case EnemyAwarenessComponent.AwarenessState.Idle:
-                _enemyPatrollingComponent.StartPatrolling();
-                break;
-            case EnemyAwarenessComponent.AwarenessState.Suspicious:
-                _enemyPatrollingComponent.StopPatroling();
-                break;
-            case EnemyAwarenessComponent.AwarenessState.Alerted:
-                _enemyPatrollingComponent.StopPatroling();
-                break;
-            default:
-                _enemyPatrollingComponent.StopPatroling();
-                break;
-        }
+
+    }
+
+    internal void ChangeState(INPCStateBehavior newState)
+    {
+        _stateBehavior?.Exit();
+        _stateBehavior = newState;
+        _stateBehavior.Enter();
     }
 
 }

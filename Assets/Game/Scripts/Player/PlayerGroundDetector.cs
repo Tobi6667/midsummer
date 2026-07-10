@@ -13,7 +13,7 @@ public class PlayerGroundDetector : MonoBehaviour
 
     public void Tick()
     {
-        Debug.Log("Checking for ground...");
+        //Debug.Log("Checking for ground...");
         IsGrounded = Physics.SphereCast(
             transform.position,
             sphereRadius,
@@ -30,7 +30,7 @@ public class PlayerGroundDetector : MonoBehaviour
 
         if (IsGrounded)
         {
-            Debug.Log("Ground detected: " + hit.normal);
+           // Debug.Log("Ground detected: " + hit.normal);
 
             GroundHit = hit;
             gravity.SetUp(hit.normal);
