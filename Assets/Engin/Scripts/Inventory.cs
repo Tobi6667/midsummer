@@ -182,30 +182,30 @@ public class Inventory : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public virtual void ShowToolTip(GameObject slot)
-    {
-        Slot tmpSlot = slot.GetComponent<Slot>();
+    //public virtual void ShowToolTip(GameObject slot)
+    //{
+    //    Slot tmpSlot = slot.GetComponent<Slot>();
 
-        if (slot.GetComponentInParent<Inventory>().isOpen
-            && !tmpSlot.IsEmpty
-            && InventoryManager.Instance.HoverObject == null
-            && !InventoryManager.Instance.selectStackSize.activeSelf)
-        {
-            InventoryManager.Instance.visualTextObject.text = tmpSlot.CurrentItem.GetTooltip();
-            InventoryManager.Instance.sizeTextObject.text = InventoryManager.Instance.visualTextObject.text;
-            InventoryManager.Instance.toolObject.SetActive(true);
+    //    if (slot.GetComponentInParent<Inventory>().isOpen
+    //        && !tmpSlot.IsEmpty
+    //        && InventoryManager.Instance.HoverObject == null
+    //        && !InventoryManager.Instance.selectStackSize.activeSelf)
+    //    {
+    //        InventoryManager.Instance.visualTextObject.text = tmpSlot.CurrentItem.GetTooltip();
+    //        InventoryManager.Instance.sizeTextObject.text = InventoryManager.Instance.visualTextObject.text;
+    //        InventoryManager.Instance.toolObject.SetActive(true);
 
-            float xpos = slot.transform.position.x + slotPaddingLeft;
-            float ypos = slot.transform.position.y - slot.GetComponent<RectTransform>().sizeDelta.y - slotPaddingTop;
+    //        float xpos = slot.transform.position.x + slotPaddingLeft;
+    //        float ypos = slot.transform.position.y - slot.GetComponent<RectTransform>().sizeDelta.y - slotPaddingTop;
 
-            InventoryManager.Instance.toolObject.transform.position = new Vector2(xpos, ypos);
-        }
-    }
+    //        InventoryManager.Instance.toolObject.transform.position = new Vector2(xpos, ypos);
+    //    }
+    //}
 
-    public void HideToolTip()
-    {
-        InventoryManager.Instance.toolObject.SetActive(false);
-    }
+    //public void HideToolTip()
+    //{
+    //    InventoryManager.Instance.toolObject.SetActive(false);
+    //}
 
     public virtual void LoadInventory()
     {
@@ -519,12 +519,12 @@ public class Inventory : MonoBehaviour
             InventoryManager.Instance.MovingSlot.ClearSlot();
         }
 
-        InventoryManager.Instance.selectStackSize.SetActive(false);
+     //   InventoryManager.Instance.selectStackSize.SetActive(false);
     }
 
     public void SplitStack()
     {
-        InventoryManager.Instance.selectStackSize.SetActive(false);
+      //  InventoryManager.Instance.selectStackSize.SetActive(false);
 
         if (InventoryManager.Instance.SplitAmount == InventoryManager.Instance.MaxStackCount)
         {
@@ -549,7 +549,7 @@ public class Inventory : MonoBehaviour
         if (InventoryManager.Instance.SplitAmount > InventoryManager.Instance.MaxStackCount)
             InventoryManager.Instance.SplitAmount = InventoryManager.Instance.MaxStackCount;
 
-        InventoryManager.Instance.stackText.text = InventoryManager.Instance.SplitAmount.ToString();
+       // InventoryManager.Instance.stackText.text = InventoryManager.Instance.SplitAmount.ToString();
     }
 
     public void MergeStacks(Slot source, Slot destination)
@@ -620,7 +620,7 @@ public class Inventory : MonoBehaviour
         {
             StartCoroutine("FadeOut");
             PutItemBack();
-            HideToolTip();
+            //HideToolTip();
             isOpen = false;
         }
         else

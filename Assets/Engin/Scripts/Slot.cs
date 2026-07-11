@@ -330,11 +330,11 @@ public class Slot: MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDrag
                 InventoryManager.Instance.canvas.worldCamera,
                 out position);
 
-            InventoryManager.Instance.selectStackSize.SetActive(true);
-            InventoryManager.Instance.selectStackSize.transform.position =
-                InventoryManager.Instance.canvas.transform.TransformPoint(position);
+            //InventoryManager.Instance.selectStackSize.SetActive(true);
+            //InventoryManager.Instance.selectStackSize.transform.position =
+            //    InventoryManager.Instance.canvas.transform.TransformPoint(position);
 
-            InventoryManager.Instance.SetStackInfo(items.Count);
+            //InventoryManager.Instance.SetStackInfo(items.Count);
         }
     }
     void Awake()

@@ -19,17 +19,17 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject dropItem;
     public GameObject trapItem;
-    public GameObject toolObject;
+    //public GameObject toolObject;
 
-    public Text sizeTextObject;
-    public Text visualTextObject;
+    //public Text sizeTextObject;
+    //public Text visualTextObject;
 
     public Canvas canvas;
 
     private Slot from, to;
     private GameObject clicked;
 
-    public Text stackText;
+    //public Text stackText;
 
     private int splitAmount;
     private int maxStackCount;
@@ -37,7 +37,7 @@ public class InventoryManager : MonoBehaviour
     private Slot movingSlot;
 
     public EventSystem eventSystem;
-    public GameObject selectStackSize;
+    //public GameObject selectStackSize;
 
     ItemContainer itemContainer = new ItemContainer();
 
@@ -120,16 +120,16 @@ public class InventoryManager : MonoBehaviour
         textReader.Close();
     }
 
-    public void SetStackInfo(int maxStackCount)
-    {
-        selectStackSize.SetActive(true);
-        toolObject.SetActive(false);
+    //public void SetStackInfo(int maxStackCount)
+    //{
+    //    selectStackSize.SetActive(true);
+    //    toolObject.SetActive(false);
 
-        SplitAmount = 0;
-        this.MaxStackCount = maxStackCount;
+    //    SplitAmount = 0;
+    //    this.MaxStackCount = maxStackCount;
 
-        stackText.text = SplitAmount.ToString();
-    }
+    //    stackText.text = SplitAmount.ToString();
+    //}
 
     public void Save()
     {
