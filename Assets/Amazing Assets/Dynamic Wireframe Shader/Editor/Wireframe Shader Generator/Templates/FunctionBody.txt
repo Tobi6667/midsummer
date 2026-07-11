@@ -1,0 +1,26 @@
+    #if defined(_WIREFRAME_IS_DYNAMIC)
+        float3 fw = fwidth(barycentric);
+
+        float3 t = thickness.xxx;
+
+        #if defined(_WIREFRAME_IS_DYNAMIC)
+            #if defined(_WIREFRAME_SHADER_STYLE_SCREEN_SPACE)
+                t *= fw * 5;
+            #endif
+        #else
+            t *= lerp(1, fw * 5, saturate(renderInScreenSpace));
+        #endif                    
+
+        float3 df = barycentric - t;
+        df /= fw * antiAliasing * 10 + 1e-6;
+        float e = min(df.x, min(df.y, df.z));
+
+        OutWireframe = 1 - smoothstep(0.0, 1.0, e + 0.5);
+
+        df = barycentric / t;
+        float u = min(df.x, min(df.y, df.z));
+        OutBarycentricUV = float2(saturate(u), 0.5);
+    #else
+        OutWireframe = 0;
+        OutBarycentricUV = float2(0, 0);
+    #endif

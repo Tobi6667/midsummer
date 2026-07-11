@@ -1,0 +1,248 @@
+struct Appdata
+{
+	float3 positionOS : INTERNALTESSPOS;
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		float3 normalOS : NORMAL;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		float4 tangentOS : TANGENT;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		float4 uv0 : TEXCOORD0;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		float4 uv1 : TEXCOORD1;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		float4 uv2 : TEXCOORD2;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		float4 uv3 : TEXCOORD3;
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			float4 uv4 : TEXCOORD4;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			float4 uv5 : TEXCOORD5;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			float4 uv6 : TEXCOORD6;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			float4 uv7 : TEXCOORD7;
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		float4 color : COLOR;
+	#endif
+
+	UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+Appdata Vertex (##Attributes## v)
+{
+	Appdata o;
+	UNITY_SETUP_INSTANCE_ID(v);
+	UNITY_TRANSFER_INSTANCE_ID(v, o);
+
+	o.positionOS = v.positionOS;
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		o.normalOS = v.normalOS;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		o.tangentOS = v.tangentOS;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		o.uv0 = v.uv0;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		o.uv1 = v.uv1;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		o.uv2 = v.uv2;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		o.uv3 = v.uv3;
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			o.uv4 = v.uv4;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			o.uv5 = v.uv5;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			o.uv6 = v.uv6;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			o.uv7 = v.uv7;
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		o.color = v.color;
+	#endif
+
+	return o;  
+}
+
+struct TessellationFactors 
+{
+    float edge[3] : SV_TessFactor;
+    float inside : SV_InsideTessFactor;
+};
+
+TessellationFactors PatchConstantFunction (InputPatch<Appdata,3> input)
+{
+	TessellationFactors output;	
+	output.edge[0] = 1;
+	output.edge[1] = 1; 
+	output.edge[2] = 1; 
+	output.inside = 1;
+
+	return output;
+}
+
+[domain("tri")]
+[partitioning("integer")]
+[outputtopology("triangle_cw")]
+[patchconstantfunc("PatchConstantFunction")]
+[outputcontrolpoints(3)]
+Appdata Hull (InputPatch<Appdata,3> patch, uint id : SV_OutputControlPointID) 
+{
+	return patch[id];
+}
+
+void WireframeShaderCalculateBarycentric(float3 vertex1, float3 vertex2, float3 vertex3, out float3 bary1, out float3 bary2, out float3 bary3)
+{	
+	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED) || defined(_WIREFRAME_SHADER_SHAPE_QUAD)
+		float d1 = distance(vertex1, vertex2);
+		float d2 = distance(vertex2, vertex3);
+		float d3 = distance(vertex3, vertex1);		
+	#endif
+
+	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED)
+	 
+		float4 b = float4(0, 
+		                  length(cross(vertex3 - vertex1, vertex3 - vertex2)) / d1, 
+						  length(cross(vertex1 - vertex2, vertex1 - vertex3)) / d2, 
+						  length(cross(vertex2 - vertex1, vertex2 - vertex3)) / d3);
+		b /= min(b.y, min(b.z, b.w));
+
+		bary1 = b.xzx;
+		bary2 = b.xxw;
+		bary3 = b.yxx;	
+
+	#else
+		
+		bary1 = float3(0, 1, 0);
+		bary2 = float3(0, 0, 1);
+		bary3 = float3(1, 0, 0);
+
+	#endif
+
+
+	#if defined(_WIREFRAME_SHADER_SHAPE_QUAD)
+		bary1.x = ((d1 > d2) && (d1 > d3)) ? 10000 : 0;
+		bary1.z = ((d3 >= d1) && (d3 > d2)) ? 10000 : 0;
+		bary2.y = ((d2 >= d1) && (d2 >= d3)) ? 10000 : 0;
+	#endif
+}
+
+#define TESSELLATION_INTERPOLATE(a) patch[0].a * bary.x + patch[1].a * bary.y + patch[2].a * bary.z
+
+[domain("tri")]
+##PackedVaryings## Domain(TessellationFactors factors, OutputPatch<Appdata, 3> patch, float3 bary : SV_DomainLocation)
+{
+	##Attributes## output = (##Attributes##) 0;
+	output.positionOS = TESSELLATION_INTERPOLATE(positionOS);
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		output.normalOS = TESSELLATION_INTERPOLATE(normalOS);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		output.tangentOS = TESSELLATION_INTERPOLATE(tangentOS);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		output.uv0 = TESSELLATION_INTERPOLATE(uv0);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		output.uv1 = TESSELLATION_INTERPOLATE(uv1);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		output.uv2 = TESSELLATION_INTERPOLATE(uv2);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		output.uv3 = TESSELLATION_INTERPOLATE(uv3);
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			output.uv4 = TESSELLATION_INTERPOLATE(uv4);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			output.uv5 = TESSELLATION_INTERPOLATE(uv5);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			output.uv6 = TESSELLATION_INTERPOLATE(uv6);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			output.uv7 = TESSELLATION_INTERPOLATE(uv7);
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		output.color = TESSELLATION_INTERPOLATE(color);
+	#endif
+
+	UNITY_TRANSFER_INSTANCE_ID(patch[0], output);
+
+
+    #if defined(RENDER_PIPELINE_HIGH_DEFINITION) && ((SHADERPASS == SHADERPASS_FORWARD && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_FORWARD_UNLIT && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_MOTION_VECTORS))
+        AttributesPass inputPass = (AttributesPass)0;
+	    ##PackedVaryings## pv = ##vert##(output, inputPass);
+    #else
+        ##PackedVaryings## pv = ##vert##(output);
+    #endif
+
+
+	float3 b0;
+	float3 b1;
+	float3 b2;
+	WireframeShaderCalculateBarycentric(patch[0].positionOS, patch[1].positionOS, patch[2].positionOS, b0, b1, b2);
+
+	##pv.barycentric## = b0 * bary.x + b1 * bary.y + b2 * bary.z;
+
+
+	return pv;
+}
