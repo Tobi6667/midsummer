@@ -96,7 +96,7 @@ public class PlayerGravityReceiver : MonoBehaviour
         if (cameraPivot != null)
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0, 0);
 
-        pendingYaw += input.LookInput.x * mouseSensitivity;
+        //pendingYaw += input.LookInput.x * mouseSensitivity;
 
       //  if (input.JumpPressed) // rename to match your actual PlayerController field
         //    jumpQueued = true;
@@ -130,12 +130,12 @@ public class PlayerGravityReceiver : MonoBehaviour
 
     public void ExitZone(GravityZone zone)
     {
-        activeZones.Remove(zone);
+       // activeZones.Remove(zone);
 
-        Vector3 targetUp = activeZones.Count > 0 ? activeZones[activeZones.Count - 1].Up : Vector3.up;
-        float duration = activeZones.Count > 0 ? activeZones[activeZones.Count - 1].transitionDuration : 0.4f;
+       // Vector3 targetUp = activeZones.Count > 0 ? activeZones[activeZones.Count - 1].Up : Vector3.up;
+      //  float duration = activeZones.Count > 0 ? activeZones[activeZones.Count - 1].transitionDuration : 0.4f;
 
-        BeginTransitionTo(targetUp, duration);
+       // BeginTransitionTo(targetUp, duration);
     }
 
     void BeginTransitionTo(Vector3 targetUp, float duration)
@@ -160,8 +160,7 @@ public class PlayerGravityReceiver : MonoBehaviour
 
     void UpdateTransition()
     {
-        if (!isTransitioning)
-            return;
+        if (!isTransitioning) return;
 
         transitionElapsed += Time.fixedDeltaTime;
         float t = Mathf.Clamp01(transitionElapsed / transitionDuration);
