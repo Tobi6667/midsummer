@@ -39,7 +39,7 @@ Tags
 }
 Pass
 {
-    Name "ForwardLit"
+    Name "Universal Forward"
     Tags
     {
         "LightMode" = "UniversalForward"
@@ -60,36 +60,39 @@ ZWrite On
 HLSLPROGRAM
 
 // Pragmas
-#pragma target 2.0
+#pragma target 5.0
 #pragma multi_compile_instancing
+#pragma multi_compile_fog
 #pragma instancing_options renderinglayer
-#pragma vertex vert
+#pragma require tessellation
+#pragma vertex Vertex
+#pragma hull Hull
+#pragma domain Domain
+#define _WIREFRAME_IS_DYNAMIC
+#pragma shader_feature_local _ _WIREFRAME_SHADER_SHAPE_QUAD
+#pragma shader_feature_local _ _WIREFRAME_SHADER_STYLE_NORMALIZED _WIREFRAME_SHADER_STYLE_SCREEN_SPACE
+#define RENDER_PIPELINE_UNIVERSAL
+
 #pragma fragment frag
 
 // Keywords
 #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
-#pragma multi_compile_fragment _ _SCREEN_SPACE_IRRADIANCE
 #pragma multi_compile _ LIGHTMAP_ON
 #pragma multi_compile _ DYNAMICLIGHTMAP_ON
 #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-#pragma multi_compile _ USE_LEGACY_LIGHTMAPS
-#pragma multi_compile _ LIGHTMAP_BICUBIC_SAMPLING
-#pragma multi_compile _ REFLECTION_PROBE_ROTATION
 #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
 #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
 #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
 #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-#pragma multi_compile_fragment _ _REFLECTION_PROBE_ATLAS
-#pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+#pragma multi_compile_fragment _ _SHADOWS_SOFT
 #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
 #pragma multi_compile _ SHADOWS_SHADOWMASK
 #pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2 _DBUFFER_MRT3
 #pragma multi_compile_fragment _ _LIGHT_LAYERS
 #pragma multi_compile_fragment _ DEBUG_DISPLAY
 #pragma multi_compile_fragment _ _LIGHT_COOKIES
-#pragma multi_compile _ _CLUSTER_LIGHT_LOOP
-#pragma multi_compile _ EVALUATE_SH_MIXED EVALUATE_SH_VERTEX
+#pragma multi_compile _ _FORWARD_PLUS
 // GraphKeywords: <None>
 
 // Defines
@@ -102,12 +105,6 @@ HLSLPROGRAM
 #define ATTRIBUTES_NEED_TEXCOORD1
 #define ATTRIBUTES_NEED_TEXCOORD2
 #define ATTRIBUTES_NEED_TEXCOORD3
-#define ATTRIBUTES_NEED_TEXCOORD4
-#define ATTRIBUTES_NEED_TEXCOORD5
-#define ATTRIBUTES_NEED_TEXCOORD6
-#define ATTRIBUTES_NEED_TEXCOORD7
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_POSITION_WS
 #define VARYINGS_NEED_NORMAL_WS
 #define VARYINGS_NEED_TANGENT_WS
@@ -115,15 +112,13 @@ HLSLPROGRAM
 #define VARYINGS_NEED_TEXCOORD1
 #define VARYINGS_NEED_TEXCOORD2
 #define VARYINGS_NEED_TEXCOORD3
-#define VARYINGS_NEED_TEXCOORD4
-#define VARYINGS_NEED_TEXCOORD5
-#define VARYINGS_NEED_TEXCOORD6
-#define VARYINGS_NEED_TEXCOORD7
 #define VARYINGS_NEED_FOG_AND_VERTEX_LIGHT
 #define VARYINGS_NEED_SHADOW_COORD
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_FORWARD
+#define _FOG_FRAGMENT 1
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -131,18 +126,13 @@ HLSLPROGRAM
 
 // Includes
 #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Fog.hlsl"
 #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
@@ -163,11 +153,7 @@ struct Attributes
  float4 uv1 : TEXCOORD1;
  float4 uv2 : TEXCOORD2;
  float4 uv3 : TEXCOORD3;
- float4 uv4 : TEXCOORD4;
- float4 uv5 : TEXCOORD5;
- float4 uv6 : TEXCOORD6;
- float4 uv7 : TEXCOORD7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -181,10 +167,6 @@ struct Varyings
  float4 texCoord1;
  float4 texCoord2;
  float4 texCoord3;
- float4 texCoord4;
- float4 texCoord5;
- float4 texCoord6;
- float4 texCoord7;
 #if defined(LIGHTMAP_ON)
  float2 staticLightmapUV;
 #endif
@@ -194,14 +176,11 @@ struct Varyings
 #if !defined(LIGHTMAP_ON)
  float3 sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
- float4 probeOcclusion;
-#endif
  float4 fogFactorAndVertexLight;
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
  float4 shadowCoord;
 #endif
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -213,6 +192,7 @@ struct Varyings
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
  FRONT_FACE_TYPE cullFace : FRONT_FACE_SEMANTIC;
 #endif
+float3 barycentric;
 };
 struct SurfaceDescriptionInputs
 {
@@ -222,10 +202,7 @@ struct SurfaceDescriptionInputs
  float4 uv1;
  float4 uv2;
  float4 uv3;
- float4 uv4;
- float4 uv5;
- float4 uv6;
- float4 uv7;
+float3 barycentric;
 };
 struct VertexDescriptionInputs
 {
@@ -235,6 +212,7 @@ struct VertexDescriptionInputs
 };
 struct PackedVaryings
 {
+float3 barycentric : INTERP12;
  float4 positionCS : SV_POSITION;
 #if defined(LIGHTMAP_ON)
  float2 staticLightmapUV : INTERP0;
@@ -245,25 +223,18 @@ struct PackedVaryings
 #if !defined(LIGHTMAP_ON)
  float3 sh : INTERP2;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
- float4 probeOcclusion : INTERP3;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
- float4 shadowCoord : INTERP4;
+ float4 shadowCoord : INTERP3;
 #endif
- float4 tangentWS : INTERP5;
- float4 texCoord0 : INTERP6;
- float4 texCoord1 : INTERP7;
- float4 texCoord2 : INTERP8;
- float4 texCoord3 : INTERP9;
- float4 texCoord4 : INTERP10;
- float4 texCoord5 : INTERP11;
- float4 texCoord6 : INTERP12;
- float4 texCoord7 : INTERP13;
- float4 fogFactorAndVertexLight : INTERP14;
- float3 positionWS : INTERP15;
- float3 normalWS : INTERP16;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+ float4 tangentWS : INTERP4;
+ float4 texCoord0 : INTERP5;
+ float4 texCoord1 : INTERP6;
+ float4 texCoord2 : INTERP7;
+ float4 texCoord3 : INTERP8;
+ float4 fogFactorAndVertexLight : INTERP9;
+ float3 positionWS : INTERP10;
+ float3 normalWS : INTERP11;
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -291,9 +262,6 @@ output.dynamicLightmapUV = input.dynamicLightmapUV;
 #if !defined(LIGHTMAP_ON)
 output.sh = input.sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
-output.probeOcclusion = input.probeOcclusion;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 output.shadowCoord = input.shadowCoord;
 #endif
@@ -302,14 +270,10 @@ output.texCoord0.xyzw = input.texCoord0;
 output.texCoord1.xyzw = input.texCoord1;
 output.texCoord2.xyzw = input.texCoord2;
 output.texCoord3.xyzw = input.texCoord3;
-output.texCoord4.xyzw = input.texCoord4;
-output.texCoord5.xyzw = input.texCoord5;
-output.texCoord6.xyzw = input.texCoord6;
-output.texCoord7.xyzw = input.texCoord7;
 output.fogFactorAndVertexLight.xyzw = input.fogFactorAndVertexLight;
 output.positionWS.xyz = input.positionWS;
 output.normalWS.xyz = input.normalWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -321,6 +285,7 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
+output.barycentric = input.barycentric;
 return output;
 }
 
@@ -337,9 +302,6 @@ output.dynamicLightmapUV = input.dynamicLightmapUV;
 #if !defined(LIGHTMAP_ON)
 output.sh = input.sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
-output.probeOcclusion = input.probeOcclusion;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 output.shadowCoord = input.shadowCoord;
 #endif
@@ -348,14 +310,10 @@ output.texCoord0 = input.texCoord0.xyzw;
 output.texCoord1 = input.texCoord1.xyzw;
 output.texCoord2 = input.texCoord2.xyzw;
 output.texCoord3 = input.texCoord3.xyzw;
-output.texCoord4 = input.texCoord4.xyzw;
-output.texCoord5 = input.texCoord5.xyzw;
-output.texCoord6 = input.texCoord6.xyzw;
-output.texCoord7 = input.texCoord7.xyzw;
 output.fogFactorAndVertexLight = input.fogFactorAndVertexLight.xyzw;
 output.positionWS = input.positionWS.xyz;
 output.normalWS = input.normalWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -367,6 +325,7 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
+output.barycentric = input.barycentric;
 return output;
 }
 
@@ -388,7 +347,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -524,10 +482,8 @@ float Occlusion;
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_BaseColorMap, sampler_BaseColorMap, _BaseColorMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_BaseColorMap);
 float4 _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.tex, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.samplerstate, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_R_4_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.r;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_G_5_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.g;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_B_6_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.b;
@@ -537,18 +493,16 @@ float _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float = _Wireframe_Thickn
 float _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float = _Wireframe_Anti_aliasing;
 float _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float;
 float2 _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2;
-WireframeRenderer_float(IN.uv3.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
+WireframeRenderer_float(IN.barycentric.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
 float4x4 _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4 = _WireframeShaderMaskData;
 float _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float;
-WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, float(0), _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
+WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, 0, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
 float _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float;
 Unity_Multiply_float_float(_WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float, _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float);
 float4 _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4;
 Unity_Lerp_float4(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_fea879b3f3324ecb9cb1e0f2f9890529_Out_0_Vector4, (_Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float.xxxx), _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4);
-UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_NormalMap, sampler_NormalMap, _NormalMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_NormalMap);
 float4 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.tex, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.samplerstate, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode);
 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.rgb = UnpackNormal(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4);
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_R_4_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.r;
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_G_5_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.g;
@@ -571,10 +525,8 @@ Unity_Multiply_float4_float4(_Property_bdb9446ca60e4334aaf2d68ef022f6df_Out_0_Ve
 float4 _Property_f8bc404cb1f0474081562f509e25130e_Out_0_Vector4 = IsGammaSpace() ? LinearToSRGB(_Wireframe_Color) : _Wireframe_Color;
 float4 _Lerp_673aa80ed8444024935140cccdff3aea_Out_3_Vector4;
 Unity_Lerp_float4(_Multiply_4382fbf7eea741d8ac9db946ef8e8f35_Out_2_Vector4, _Property_f8bc404cb1f0474081562f509e25130e_Out_0_Vector4, (_Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float.xxxx), _Lerp_673aa80ed8444024935140cccdff3aea_Out_3_Vector4);
-UnityTexture2D _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_MaskMap, sampler_MaskMap, _MaskMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_MaskMap);
 float4 _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.tex, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.samplerstate, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_R_4_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.r;
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_G_5_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.g;
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_B_6_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.b;
@@ -582,7 +534,7 @@ float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_A_7_Float = _SampleTextu
 float _Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float = _Metallic;
 float _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float = _Occlusion;
 float _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float = _Smoothness;
-float4 _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4 = float4(_Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float, _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float, float(0), _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float);
+float4 _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4 = float4(_Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float, _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float, 0, _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float);
 float4 _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4;
 Unity_Multiply_float4_float4(_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4, _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4, _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4);
 float _Split_123282f82243417dbb2fb945779b3f5b_R_1_Float = _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4[0];
@@ -613,9 +565,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -651,13 +600,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     output.uv1 = input.texCoord1;
     output.uv2 = input.texCoord2;
     output.uv3 = input.texCoord3;
-    output.uv4 = input.texCoord4;
-    output.uv5 = input.texCoord5;
-    output.uv6 = input.texCoord6;
-    output.uv7 = input.texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -665,6 +607,7 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 #endif
 #undef BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN
 
+output.barycentric = input.barycentric;
         return output;
 }
 
@@ -680,6 +623,254 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/VisualEffectVertex.hlsl"
 #endif
 
+struct Appdata
+{
+	float3 positionOS : INTERNALTESSPOS;
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		float3 normalOS : NORMAL;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		float4 tangentOS : TANGENT;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		float4 uv0 : TEXCOORD0;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		float4 uv1 : TEXCOORD1;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		float4 uv2 : TEXCOORD2;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		float4 uv3 : TEXCOORD3;
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			float4 uv4 : TEXCOORD4;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			float4 uv5 : TEXCOORD5;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			float4 uv6 : TEXCOORD6;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			float4 uv7 : TEXCOORD7;
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		float4 color : COLOR;
+	#endif
+
+	UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+Appdata Vertex (Attributes v)
+{
+	Appdata o;
+	UNITY_SETUP_INSTANCE_ID(v);
+	UNITY_TRANSFER_INSTANCE_ID(v, o);
+
+	o.positionOS = v.positionOS;
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		o.normalOS = v.normalOS;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		o.tangentOS = v.tangentOS;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		o.uv0 = v.uv0;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		o.uv1 = v.uv1;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		o.uv2 = v.uv2;
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		o.uv3 = v.uv3;
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			o.uv4 = v.uv4;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			o.uv5 = v.uv5;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			o.uv6 = v.uv6;
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			o.uv7 = v.uv7;
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		o.color = v.color;
+	#endif
+
+	return o;  
+}
+
+struct TessellationFactors 
+{
+    float edge[3] : SV_TessFactor;
+    float inside : SV_InsideTessFactor;
+};
+
+TessellationFactors PatchConstantFunction (InputPatch<Appdata,3> input)
+{
+	TessellationFactors output;	
+	output.edge[0] = 1;
+	output.edge[1] = 1; 
+	output.edge[2] = 1; 
+	output.inside = 1;
+
+	return output;
+}
+
+[domain("tri")]
+[partitioning("integer")]
+[outputtopology("triangle_cw")]
+[patchconstantfunc("PatchConstantFunction")]
+[outputcontrolpoints(3)]
+Appdata Hull (InputPatch<Appdata,3> patch, uint id : SV_OutputControlPointID) 
+{
+	return patch[id];
+}
+
+void WireframeShaderCalculateBarycentric(float3 vertex1, float3 vertex2, float3 vertex3, out float3 bary1, out float3 bary2, out float3 bary3)
+{	
+	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED) || defined(_WIREFRAME_SHADER_SHAPE_QUAD)
+		float d1 = distance(vertex1, vertex2);
+		float d2 = distance(vertex2, vertex3);
+		float d3 = distance(vertex3, vertex1);		
+	#endif
+
+	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED)
+	 
+		float4 b = float4(0, 
+		                  length(cross(vertex3 - vertex1, vertex3 - vertex2)) / d1, 
+						  length(cross(vertex1 - vertex2, vertex1 - vertex3)) / d2, 
+						  length(cross(vertex2 - vertex1, vertex2 - vertex3)) / d3);
+		b /= min(b.y, min(b.z, b.w));
+
+		bary1 = b.xzx;
+		bary2 = b.xxw;
+		bary3 = b.yxx;	
+
+	#else
+		
+		bary1 = float3(0, 1, 0);
+		bary2 = float3(0, 0, 1);
+		bary3 = float3(1, 0, 0);
+
+	#endif
+
+
+	#if defined(_WIREFRAME_SHADER_SHAPE_QUAD)
+		bary1.x = ((d1 > d2) && (d1 > d3)) ? 10000 : 0;
+		bary1.z = ((d3 >= d1) && (d3 > d2)) ? 10000 : 0;
+		bary2.y = ((d2 >= d1) && (d2 >= d3)) ? 10000 : 0;
+	#endif
+}
+
+#define TESSELLATION_INTERPOLATE(a) patch[0].a * bary.x + patch[1].a * bary.y + patch[2].a * bary.z
+
+[domain("tri")]
+PackedVaryings Domain(TessellationFactors factors, OutputPatch<Appdata, 3> patch, float3 bary : SV_DomainLocation)
+{
+	Attributes output = (Attributes) 0;
+	output.positionOS = TESSELLATION_INTERPOLATE(positionOS);
+
+	#if defined(ATTRIBUTES_NEED_NORMAL)
+		output.normalOS = TESSELLATION_INTERPOLATE(normalOS);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TANGENT)
+		output.tangentOS = TESSELLATION_INTERPOLATE(tangentOS);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
+		output.uv0 = TESSELLATION_INTERPOLATE(uv0);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
+		output.uv1 = TESSELLATION_INTERPOLATE(uv1);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
+		output.uv2 = TESSELLATION_INTERPOLATE(uv2);
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
+		output.uv3 = TESSELLATION_INTERPOLATE(uv3);
+	#endif
+
+	#if UNITY_VERSION >= 60030000
+		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
+			output.uv4 = TESSELLATION_INTERPOLATE(uv4);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
+			output.uv5 = TESSELLATION_INTERPOLATE(uv5);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
+			output.uv6 = TESSELLATION_INTERPOLATE(uv6);
+		#endif
+
+		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
+			output.uv7 = TESSELLATION_INTERPOLATE(uv7);
+		#endif
+	#endif
+
+	#if defined(ATTRIBUTES_NEED_COLOR)
+		output.color = TESSELLATION_INTERPOLATE(color);
+	#endif
+
+	UNITY_TRANSFER_INSTANCE_ID(patch[0], output);
+
+
+    #if defined(RENDER_PIPELINE_HIGH_DEFINITION) && ((SHADERPASS == SHADERPASS_FORWARD && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_FORWARD_UNLIT && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_MOTION_VECTORS))
+        AttributesPass inputPass = (AttributesPass)0;
+	    PackedVaryings pv = vert(output, inputPass);
+    #else
+        PackedVaryings pv = vert(output);
+    #endif
+
+
+	float3 b0;
+	float3 b1;
+	float3 b2;
+	WireframeShaderCalculateBarycentric(patch[0].positionOS, patch[1].positionOS, patch[2].positionOS, b0, b1, b2);
+
+	pv.barycentric = b0 * bary.x + b1 * bary.y + b2 * bary.z;
+
+
+	return pv;
+}
 ENDHLSL
 }
 Pass
@@ -705,9 +896,10 @@ ZWrite On
 HLSLPROGRAM
 
 // Pragmas
-#pragma target 45,0
-#pragma exclude_renderers gles3 glcore
+#pragma target 5.0
+#pragma exclude_renderers gles gles3 glcore
 #pragma multi_compile_instancing
+#pragma multi_compile_fog
 #pragma instancing_options renderinglayer
 #pragma require tessellation
 #pragma vertex Vertex
@@ -721,17 +913,13 @@ HLSLPROGRAM
 #pragma fragment frag
 
 // Keywords
-#pragma multi_compile_fragment _ _SCREEN_SPACE_IRRADIANCE
 #pragma multi_compile _ LIGHTMAP_ON
 #pragma multi_compile _ DYNAMICLIGHTMAP_ON
 #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-#pragma multi_compile _ USE_LEGACY_LIGHTMAPS
-#pragma multi_compile _ LIGHTMAP_BICUBIC_SAMPLING
-#pragma multi_compile _ REFLECTION_PROBE_ROTATION
 #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
 #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
 #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
-#pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+#pragma multi_compile_fragment _ _SHADOWS_SOFT
 #pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
 #pragma multi_compile _ SHADOWS_SHADOWMASK
 #pragma multi_compile _ _MIXED_LIGHTING_SUBTRACTIVE
@@ -739,7 +927,6 @@ HLSLPROGRAM
 #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
 #pragma multi_compile_fragment _ _RENDER_PASS_ENABLED
 #pragma multi_compile_fragment _ DEBUG_DISPLAY
-#pragma multi_compile _ _CLUSTER_LIGHT_LOOP
 // GraphKeywords: <None>
 
 // Defines
@@ -752,12 +939,6 @@ HLSLPROGRAM
 #define ATTRIBUTES_NEED_TEXCOORD1
 #define ATTRIBUTES_NEED_TEXCOORD2
 #define ATTRIBUTES_NEED_TEXCOORD3
-#define ATTRIBUTES_NEED_TEXCOORD4
-#define ATTRIBUTES_NEED_TEXCOORD5
-#define ATTRIBUTES_NEED_TEXCOORD6
-#define ATTRIBUTES_NEED_TEXCOORD7
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_POSITION_WS
 #define VARYINGS_NEED_NORMAL_WS
 #define VARYINGS_NEED_TANGENT_WS
@@ -765,16 +946,13 @@ HLSLPROGRAM
 #define VARYINGS_NEED_TEXCOORD1
 #define VARYINGS_NEED_TEXCOORD2
 #define VARYINGS_NEED_TEXCOORD3
-#define VARYINGS_NEED_TEXCOORD4
-#define VARYINGS_NEED_TEXCOORD5
-#define VARYINGS_NEED_TEXCOORD6
-#define VARYINGS_NEED_TEXCOORD7
 #define VARYINGS_NEED_FOG_AND_VERTEX_LIGHT
 #define VARYINGS_NEED_SHADOW_COORD
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_GBUFFER
 #define _FOG_FRAGMENT 1
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -782,18 +960,13 @@ HLSLPROGRAM
 
 // Includes
 #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Fog.hlsl"
 #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ProbeVolumeVariants.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DBuffer.hlsl"
@@ -814,11 +987,7 @@ struct Attributes
  float4 uv1 : TEXCOORD1;
  float4 uv2 : TEXCOORD2;
  float4 uv3 : TEXCOORD3;
- float4 uv4 : TEXCOORD4;
- float4 uv5 : TEXCOORD5;
- float4 uv6 : TEXCOORD6;
- float4 uv7 : TEXCOORD7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -832,10 +1001,6 @@ struct Varyings
  float4 texCoord1;
  float4 texCoord2;
  float4 texCoord3;
- float4 texCoord4;
- float4 texCoord5;
- float4 texCoord6;
- float4 texCoord7;
 #if defined(LIGHTMAP_ON)
  float2 staticLightmapUV;
 #endif
@@ -845,14 +1010,11 @@ struct Varyings
 #if !defined(LIGHTMAP_ON)
  float3 sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
- float4 probeOcclusion;
-#endif
  float4 fogFactorAndVertexLight;
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
  float4 shadowCoord;
 #endif
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -874,10 +1036,6 @@ struct SurfaceDescriptionInputs
  float4 uv1;
  float4 uv2;
  float4 uv3;
- float4 uv4;
- float4 uv5;
- float4 uv6;
- float4 uv7;
 float3 barycentric;
 };
 struct VertexDescriptionInputs
@@ -888,7 +1046,7 @@ struct VertexDescriptionInputs
 };
 struct PackedVaryings
 {
-float3 barycentric : INTERP17;
+float3 barycentric : INTERP12;
  float4 positionCS : SV_POSITION;
 #if defined(LIGHTMAP_ON)
  float2 staticLightmapUV : INTERP0;
@@ -899,25 +1057,18 @@ float3 barycentric : INTERP17;
 #if !defined(LIGHTMAP_ON)
  float3 sh : INTERP2;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
- float4 probeOcclusion : INTERP3;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
- float4 shadowCoord : INTERP4;
+ float4 shadowCoord : INTERP3;
 #endif
- float4 tangentWS : INTERP5;
- float4 texCoord0 : INTERP6;
- float4 texCoord1 : INTERP7;
- float4 texCoord2 : INTERP8;
- float4 texCoord3 : INTERP9;
- float4 texCoord4 : INTERP10;
- float4 texCoord5 : INTERP11;
- float4 texCoord6 : INTERP12;
- float4 texCoord7 : INTERP13;
- float4 fogFactorAndVertexLight : INTERP14;
- float3 positionWS : INTERP15;
- float3 normalWS : INTERP16;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+ float4 tangentWS : INTERP4;
+ float4 texCoord0 : INTERP5;
+ float4 texCoord1 : INTERP6;
+ float4 texCoord2 : INTERP7;
+ float4 texCoord3 : INTERP8;
+ float4 fogFactorAndVertexLight : INTERP9;
+ float3 positionWS : INTERP10;
+ float3 normalWS : INTERP11;
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -945,9 +1096,6 @@ output.dynamicLightmapUV = input.dynamicLightmapUV;
 #if !defined(LIGHTMAP_ON)
 output.sh = input.sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
-output.probeOcclusion = input.probeOcclusion;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 output.shadowCoord = input.shadowCoord;
 #endif
@@ -956,14 +1104,10 @@ output.texCoord0.xyzw = input.texCoord0;
 output.texCoord1.xyzw = input.texCoord1;
 output.texCoord2.xyzw = input.texCoord2;
 output.texCoord3.xyzw = input.texCoord3;
-output.texCoord4.xyzw = input.texCoord4;
-output.texCoord5.xyzw = input.texCoord5;
-output.texCoord6.xyzw = input.texCoord6;
-output.texCoord7.xyzw = input.texCoord7;
 output.fogFactorAndVertexLight.xyzw = input.fogFactorAndVertexLight;
 output.positionWS.xyz = input.positionWS;
 output.normalWS.xyz = input.normalWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -992,9 +1136,6 @@ output.dynamicLightmapUV = input.dynamicLightmapUV;
 #if !defined(LIGHTMAP_ON)
 output.sh = input.sh;
 #endif
-#if defined(USE_APV_PROBE_OCCLUSION)
-output.probeOcclusion = input.probeOcclusion;
-#endif
 #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
 output.shadowCoord = input.shadowCoord;
 #endif
@@ -1003,14 +1144,10 @@ output.texCoord0 = input.texCoord0.xyzw;
 output.texCoord1 = input.texCoord1.xyzw;
 output.texCoord2 = input.texCoord2.xyzw;
 output.texCoord3 = input.texCoord3.xyzw;
-output.texCoord4 = input.texCoord4.xyzw;
-output.texCoord5 = input.texCoord5.xyzw;
-output.texCoord6 = input.texCoord6.xyzw;
-output.texCoord7 = input.texCoord7.xyzw;
 output.fogFactorAndVertexLight = input.fogFactorAndVertexLight.xyzw;
 output.positionWS = input.positionWS.xyz;
 output.normalWS = input.normalWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -1044,7 +1181,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -1180,10 +1316,8 @@ float Occlusion;
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_BaseColorMap, sampler_BaseColorMap, _BaseColorMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_BaseColorMap);
 float4 _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.tex, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.samplerstate, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_R_4_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.r;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_G_5_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.g;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_B_6_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.b;
@@ -1196,15 +1330,13 @@ float2 _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vecto
 WireframeRenderer_float(IN.barycentric.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
 float4x4 _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4 = _WireframeShaderMaskData;
 float _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float;
-WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, float(0), _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
+WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, 0, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
 float _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float;
 Unity_Multiply_float_float(_WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float, _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float);
 float4 _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4;
 Unity_Lerp_float4(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_fea879b3f3324ecb9cb1e0f2f9890529_Out_0_Vector4, (_Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float.xxxx), _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4);
-UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_NormalMap, sampler_NormalMap, _NormalMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_NormalMap);
 float4 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.tex, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.samplerstate, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode);
 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.rgb = UnpackNormal(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4);
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_R_4_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.r;
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_G_5_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.g;
@@ -1227,10 +1359,8 @@ Unity_Multiply_float4_float4(_Property_bdb9446ca60e4334aaf2d68ef022f6df_Out_0_Ve
 float4 _Property_f8bc404cb1f0474081562f509e25130e_Out_0_Vector4 = IsGammaSpace() ? LinearToSRGB(_Wireframe_Color) : _Wireframe_Color;
 float4 _Lerp_673aa80ed8444024935140cccdff3aea_Out_3_Vector4;
 Unity_Lerp_float4(_Multiply_4382fbf7eea741d8ac9db946ef8e8f35_Out_2_Vector4, _Property_f8bc404cb1f0474081562f509e25130e_Out_0_Vector4, (_Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float.xxxx), _Lerp_673aa80ed8444024935140cccdff3aea_Out_3_Vector4);
-UnityTexture2D _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_MaskMap, sampler_MaskMap, _MaskMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_MaskMap);
 float4 _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.tex, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.samplerstate, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4, _Property_8aeec34382e7496a90a75cf71f78669a_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_R_4_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.r;
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_G_5_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.g;
 float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_B_6_Float = _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4.b;
@@ -1238,7 +1368,7 @@ float _SampleTexture2D_5168a720c80e4fd284459ac99f12e000_A_7_Float = _SampleTextu
 float _Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float = _Metallic;
 float _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float = _Occlusion;
 float _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float = _Smoothness;
-float4 _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4 = float4(_Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float, _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float, float(0), _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float);
+float4 _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4 = float4(_Property_cc9f9654e9e44f4e8c26ec7b2028ffa5_Out_0_Float, _Property_1ad841d6193e43e29ecff3be96570ac8_Out_0_Float, 0, _Property_d941783a0d2b45358b44caf5c0a9e423_Out_0_Float);
 float4 _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4;
 Unity_Multiply_float4_float4(_SampleTexture2D_5168a720c80e4fd284459ac99f12e000_RGBA_0_Vector4, _Vector4_f7ac65081169444f91514c23f507abca_Out_0_Vector4, _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4);
 float _Split_123282f82243417dbb2fb945779b3f5b_R_1_Float = _Multiply_e3a403aeb66f46909162a9743d13313b_Out_2_Vector4[0];
@@ -1269,9 +1399,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -1307,13 +1434,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     output.uv1 = input.texCoord1;
     output.uv2 = input.texCoord2;
     output.uv3 = input.texCoord3;
-    output.uv4 = input.texCoord4;
-    output.uv5 = input.texCoord5;
-    output.uv6 = input.texCoord6;
-    output.uv7 = input.texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -1329,9 +1449,8 @@ output.barycentric = input.barycentric;
 // Main
 
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/GBufferOutput.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/UnityGBuffer.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/PBRGBufferPass.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/GBufferOutputFormat.hlsl"
 
 // --------------------------------------------------
 // Visual Effect Vertex Invocations
@@ -1627,12 +1746,11 @@ HLSLPROGRAM
 #define _NORMAL_DROPOFF_TS 1
 #define ATTRIBUTES_NEED_NORMAL
 #define ATTRIBUTES_NEED_TANGENT
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_NORMAL_WS
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_SHADOWCASTER
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -1643,12 +1761,9 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
@@ -1663,7 +1778,7 @@ struct Attributes
  float3 positionOS : POSITION;
  float3 normalOS : NORMAL;
  float4 tangentOS : TANGENT;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -1671,7 +1786,7 @@ struct Varyings
 {
  float4 positionCS : SV_POSITION;
  float3 normalWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -1697,7 +1812,7 @@ struct PackedVaryings
 {
  float4 positionCS : SV_POSITION;
  float3 normalWS : INTERP0;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -1717,7 +1832,7 @@ PackedVaryings output;
 ZERO_INITIALIZE(PackedVaryings, output);
 output.positionCS = input.positionCS;
 output.normalWS.xyz = input.normalWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -1737,7 +1852,7 @@ Varyings UnpackVaryings (PackedVaryings input)
 Varyings output;
 output.positionCS = input.positionCS;
 output.normalWS = input.normalWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -1770,7 +1885,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -1855,9 +1969,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -1887,9 +1998,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     #endif
 
 
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -1905,313 +2013,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShadowCasterPass.hlsl"
-
-// --------------------------------------------------
-// Visual Effect Vertex Invocations
-#ifdef HAVE_VFX_MODIFICATION
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/VisualEffectVertex.hlsl"
-#endif
-
-ENDHLSL
-}
-Pass
-{
-    Name "MotionVectors"
-    Tags
-    {
-        "LightMode" = "MotionVectors"
-    }
-
-// Render State
-Cull Back
-ZTest LEqual
-ZWrite On
-ColorMask RG
-
-// Debug
-// <None>
-
-// --------------------------------------------------
-// Pass
-
-HLSLPROGRAM
-
-// Pragmas
-#pragma target 3.5
-#pragma multi_compile_instancing
-#pragma vertex vert
-#pragma fragment frag
-
-// Keywords
-// PassKeywords: <None>
-// GraphKeywords: <None>
-
-// Defines
-
-#define _NORMALMAP 1
-#define _NORMAL_DROPOFF_TS 1
-#define FEATURES_GRAPH_VERTEX
-/* WARNING: $splice Could not find named fragment 'PassInstancing' */
-#define SHADERPASS SHADERPASS_MOTION_VECTORS
-
-
-// custom interpolator pre-include
-/* WARNING: $splice Could not find named fragment 'sgci_CustomInterpolatorPreInclude' */
-
-// Includes
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/RenderingLayers.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
-
-// --------------------------------------------------
-// Structs and Packing
-
-// custom interpolators pre packing
-/* WARNING: $splice Could not find named fragment 'CustomInterpolatorPrePacking' */
-
-struct Attributes
-{
- float3 positionOS : POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
- uint instanceID : INSTANCEID_SEMANTIC;
-#endif
-};
-struct Varyings
-{
- float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
- uint instanceID : CUSTOM_INSTANCE_ID;
-#endif
-#if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
- uint stereoTargetEyeIndexAsBlendIdx0 : BLENDINDICES0;
-#endif
-#if (defined(UNITY_STEREO_INSTANCING_ENABLED))
- uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex;
-#endif
-#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
- FRONT_FACE_TYPE cullFace : FRONT_FACE_SEMANTIC;
-#endif
-};
-struct SurfaceDescriptionInputs
-{
-};
-struct VertexDescriptionInputs
-{
- float3 ObjectSpacePosition;
-};
-struct PackedVaryings
-{
- float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
- uint instanceID : CUSTOM_INSTANCE_ID;
-#endif
-#if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
- uint stereoTargetEyeIndexAsBlendIdx0 : BLENDINDICES0;
-#endif
-#if (defined(UNITY_STEREO_INSTANCING_ENABLED))
- uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex;
-#endif
-#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
- FRONT_FACE_TYPE cullFace : FRONT_FACE_SEMANTIC;
-#endif
-};
-
-PackedVaryings PackVaryings (Varyings input)
-{
-PackedVaryings output;
-ZERO_INITIALIZE(PackedVaryings, output);
-output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
-output.instanceID = input.instanceID;
-#endif
-#if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
-output.stereoTargetEyeIndexAsBlendIdx0 = input.stereoTargetEyeIndexAsBlendIdx0;
-#endif
-#if (defined(UNITY_STEREO_INSTANCING_ENABLED))
-output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx;
-#endif
-#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
-output.cullFace = input.cullFace;
-#endif
-return output;
-}
-
-Varyings UnpackVaryings (PackedVaryings input)
-{
-Varyings output;
-output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
-output.instanceID = input.instanceID;
-#endif
-#if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
-output.stereoTargetEyeIndexAsBlendIdx0 = input.stereoTargetEyeIndexAsBlendIdx0;
-#endif
-#if (defined(UNITY_STEREO_INSTANCING_ENABLED))
-output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx;
-#endif
-#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
-output.cullFace = input.cullFace;
-#endif
-return output;
-}
-
-
-// --------------------------------------------------
-// Graph
-
-// Graph Properties
-CBUFFER_START(UnityPerMaterial)
-float4x4 _WireframeShaderMaskData;
-float _Metallic;
-float4 _BaseColorMap_TexelSize;
-float _Smoothness;
-float _Occlusion;
-float4 _Scanner_Glow_Color;
-float4 _NormalMap_TexelSize;
-float4 _MaskMap_TexelSize;
-float _Wireframe_Thickness;
-float4 _Wireframe_Color;
-float _Wireframe_Anti_aliasing;
-float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
-CBUFFER_END
-
-
-// Object and Global properties
-SAMPLER(SamplerState_Linear_Repeat);
-TEXTURE2D(_BaseColorMap);
-SAMPLER(sampler_BaseColorMap);
-TEXTURE2D(_NormalMap);
-SAMPLER(sampler_NormalMap);
-TEXTURE2D(_MaskMap);
-SAMPLER(sampler_MaskMap);
-
-// Graph Includes
-// GraphIncludes: <None>
-
-// -- Property used by ScenePickingPass
-#ifdef SCENEPICKINGPASS
-float4 _SelectionID;
-#endif
-
-// -- Properties used by SceneSelectionPass
-#ifdef SCENESELECTIONPASS
-int _ObjectId;
-int _PassValue;
-#endif
-
-// Graph Functions
-// GraphFunctions: <None>
-
-// Custom interpolators pre vertex
-/* WARNING: $splice Could not find named fragment 'CustomInterpolatorPreVertex' */
-
-// Graph Vertex
-struct VertexDescription
-{
-float3 Position;
-};
-
-VertexDescription VertexDescriptionFunction(VertexDescriptionInputs IN)
-{
-VertexDescription description = (VertexDescription)0;
-description.Position = IN.ObjectSpacePosition;
-return description;
-}
-
-// Custom interpolators, pre surface
-#ifdef FEATURES_GRAPH_VERTEX
-Varyings CustomInterpolatorPassThroughFunc(inout Varyings output, VertexDescription input)
-{
-return output;
-}
-#define CUSTOMINTERPOLATOR_VARYPASSTHROUGH_FUNC
-#endif
-
-// Graph Pixel
-struct SurfaceDescription
-{
-};
-
-SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
-{
-SurfaceDescription surface = (SurfaceDescription)0;
-return surface;
-}
-
-// --------------------------------------------------
-// Build Graph Inputs
-#ifdef HAVE_VFX_MODIFICATION
-#define VFX_SRP_ATTRIBUTES Attributes
-#define VFX_SRP_VARYINGS Varyings
-#define VFX_SRP_SURFACE_INPUTS SurfaceDescriptionInputs
-#endif
-VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
-{
-    VertexDescriptionInputs output;
-    ZERO_INITIALIZE(VertexDescriptionInputs, output);
-
-    output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
-
-    return output;
-}
-SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
-{
-    SurfaceDescriptionInputs output;
-    ZERO_INITIALIZE(SurfaceDescriptionInputs, output);
-
-#ifdef HAVE_VFX_MODIFICATION
-#if VFX_USE_GRAPH_VALUES
-    uint instanceActiveIndex = asuint(UNITY_ACCESS_INSTANCED_PROP(PerInstance, _InstanceActiveIndex));
-    /* WARNING: $splice Could not find named fragment 'VFXLoadGraphValues' */
-#endif
-    /* WARNING: $splice Could not find named fragment 'VFXSetFragInputs' */
-
-#endif
-
-    
-
-
-
-
-
-
-    #if UNITY_UV_STARTS_AT_TOP
-    #else
-    #endif
-
-
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
-#if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
-#define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
-#else
-#define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN
-#endif
-#undef BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN
-
-        return output;
-}
-
-// --------------------------------------------------
-// Main
-
-#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/Varyings.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/MotionVectorPass.hlsl"
 
 // --------------------------------------------------
 // Visual Effect Vertex Invocations
@@ -2259,11 +2060,10 @@ HLSLPROGRAM
 #define _NORMAL_DROPOFF_TS 1
 #define ATTRIBUTES_NEED_NORMAL
 #define ATTRIBUTES_NEED_TANGENT
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_DEPTHONLY
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -2274,12 +2074,9 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
@@ -2294,14 +2091,14 @@ struct Attributes
  float3 positionOS : POSITION;
  float3 normalOS : NORMAL;
  float4 tangentOS : TANGENT;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
 struct Varyings
 {
  float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2326,7 +2123,7 @@ struct VertexDescriptionInputs
 struct PackedVaryings
 {
  float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2345,7 +2142,7 @@ PackedVaryings PackVaryings (Varyings input)
 PackedVaryings output;
 ZERO_INITIALIZE(PackedVaryings, output);
 output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2364,7 +2161,7 @@ Varyings UnpackVaryings (PackedVaryings input)
 {
 Varyings output;
 output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2397,7 +2194,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -2482,9 +2278,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -2514,9 +2307,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     #endif
 
 
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -2580,14 +2370,13 @@ HLSLPROGRAM
 #define ATTRIBUTES_NEED_TANGENT
 #define ATTRIBUTES_NEED_TEXCOORD0
 #define ATTRIBUTES_NEED_TEXCOORD1
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_NORMAL_WS
 #define VARYINGS_NEED_TANGENT_WS
 #define VARYINGS_NEED_TEXCOORD0
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_DEPTHNORMALS
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -2599,12 +2388,9 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
@@ -2621,7 +2407,7 @@ struct Attributes
  float4 tangentOS : TANGENT;
  float4 uv0 : TEXCOORD0;
  float4 uv1 : TEXCOORD1;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -2631,7 +2417,7 @@ struct Varyings
  float3 normalWS;
  float4 tangentWS;
  float4 texCoord0;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2661,7 +2447,7 @@ struct PackedVaryings
  float4 tangentWS : INTERP0;
  float4 texCoord0 : INTERP1;
  float3 normalWS : INTERP2;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2683,7 +2469,7 @@ output.positionCS = input.positionCS;
 output.tangentWS.xyzw = input.tangentWS;
 output.texCoord0.xyzw = input.texCoord0;
 output.normalWS.xyz = input.normalWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2705,7 +2491,7 @@ output.positionCS = input.positionCS;
 output.tangentWS = input.tangentWS.xyzw;
 output.texCoord0 = input.texCoord0.xyzw;
 output.normalWS = input.normalWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -2738,7 +2524,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -2806,10 +2591,8 @@ float3 NormalTS;
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_NormalMap, sampler_NormalMap, _NormalMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_NormalMap);
 float4 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.tex, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.samplerstate, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4, _Property_354f04f299e94eb3aeb99dea1d1e9cb2_Out_0_Texture2D.hdrDecode);
 _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.rgb = UnpackNormal(_SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4);
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_R_4_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.r;
 float _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_G_5_Float = _SampleTexture2D_ee1c94e2e7134f96b17bbdca87acc73f_RGBA_0_Vector4.g;
@@ -2834,9 +2617,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -2868,9 +2648,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 
 
     output.uv0 = input.texCoord0;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -2915,7 +2692,7 @@ Cull Off
 HLSLPROGRAM
 
 // Pragmas
-#pragma target 20,0
+#pragma target 5.0
 #pragma require tessellation
 #pragma vertex Vertex
 #pragma hull Hull
@@ -2941,26 +2718,16 @@ HLSLPROGRAM
 #define ATTRIBUTES_NEED_TEXCOORD1
 #define ATTRIBUTES_NEED_TEXCOORD2
 #define ATTRIBUTES_NEED_TEXCOORD3
-#define ATTRIBUTES_NEED_TEXCOORD4
-#define ATTRIBUTES_NEED_TEXCOORD5
-#define ATTRIBUTES_NEED_TEXCOORD6
-#define ATTRIBUTES_NEED_TEXCOORD7
-#define ATTRIBUTES_NEED_INSTANCEID
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_POSITION_WS
 #define VARYINGS_NEED_TEXCOORD0
 #define VARYINGS_NEED_TEXCOORD1
 #define VARYINGS_NEED_TEXCOORD2
 #define VARYINGS_NEED_TEXCOORD3
-#define VARYINGS_NEED_TEXCOORD4
-#define VARYINGS_NEED_TEXCOORD5
-#define VARYINGS_NEED_TEXCOORD6
-#define VARYINGS_NEED_TEXCOORD7
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_META
 #define _FOG_FRAGMENT 1
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -2970,12 +2737,9 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/MetaInput.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
@@ -2995,11 +2759,7 @@ struct Attributes
  float4 uv1 : TEXCOORD1;
  float4 uv2 : TEXCOORD2;
  float4 uv3 : TEXCOORD3;
- float4 uv4 : TEXCOORD4;
- float4 uv5 : TEXCOORD5;
- float4 uv6 : TEXCOORD6;
- float4 uv7 : TEXCOORD7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -3011,11 +2771,7 @@ struct Varyings
  float4 texCoord1;
  float4 texCoord2;
  float4 texCoord3;
- float4 texCoord4;
- float4 texCoord5;
- float4 texCoord6;
- float4 texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3036,10 +2792,6 @@ struct SurfaceDescriptionInputs
  float4 uv1;
  float4 uv2;
  float4 uv3;
- float4 uv4;
- float4 uv5;
- float4 uv6;
- float4 uv7;
 float3 barycentric;
 };
 struct VertexDescriptionInputs
@@ -3050,18 +2802,14 @@ struct VertexDescriptionInputs
 };
 struct PackedVaryings
 {
-float3 barycentric : INTERP9;
+float3 barycentric : INTERP5;
  float4 positionCS : SV_POSITION;
  float4 texCoord0 : INTERP0;
  float4 texCoord1 : INTERP1;
  float4 texCoord2 : INTERP2;
  float4 texCoord3 : INTERP3;
- float4 texCoord4 : INTERP4;
- float4 texCoord5 : INTERP5;
- float4 texCoord6 : INTERP6;
- float4 texCoord7 : INTERP7;
- float3 positionWS : INTERP8;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+ float3 positionWS : INTERP4;
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3084,12 +2832,8 @@ output.texCoord0.xyzw = input.texCoord0;
 output.texCoord1.xyzw = input.texCoord1;
 output.texCoord2.xyzw = input.texCoord2;
 output.texCoord3.xyzw = input.texCoord3;
-output.texCoord4.xyzw = input.texCoord4;
-output.texCoord5.xyzw = input.texCoord5;
-output.texCoord6.xyzw = input.texCoord6;
-output.texCoord7.xyzw = input.texCoord7;
 output.positionWS.xyz = input.positionWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3113,12 +2857,8 @@ output.texCoord0 = input.texCoord0.xyzw;
 output.texCoord1 = input.texCoord1.xyzw;
 output.texCoord2 = input.texCoord2.xyzw;
 output.texCoord3 = input.texCoord3.xyzw;
-output.texCoord4 = input.texCoord4.xyzw;
-output.texCoord5 = input.texCoord5.xyzw;
-output.texCoord6 = input.texCoord6.xyzw;
-output.texCoord7 = input.texCoord7.xyzw;
 output.positionWS = input.positionWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3152,7 +2892,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -3284,10 +3023,8 @@ float3 Emission;
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_BaseColorMap, sampler_BaseColorMap, _BaseColorMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_BaseColorMap);
 float4 _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.tex, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.samplerstate, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_R_4_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.r;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_G_5_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.g;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_B_6_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.b;
@@ -3300,7 +3037,7 @@ float2 _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vecto
 WireframeRenderer_float(IN.barycentric.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
 float4x4 _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4 = _WireframeShaderMaskData;
 float _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float;
-WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, float(0), _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
+WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, 0, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
 float _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float;
 Unity_Multiply_float_float(_WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float, _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float);
 float4 _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4;
@@ -3342,9 +3079,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -3379,13 +3113,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     output.uv1 = input.texCoord1;
     output.uv2 = input.texCoord2;
     output.uv3 = input.texCoord3;
-    output.uv4 = input.texCoord4;
-    output.uv5 = input.texCoord5;
-    output.uv6 = input.texCoord6;
-    output.uv7 = input.texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -3693,13 +3420,12 @@ HLSLPROGRAM
 #define _NORMAL_DROPOFF_TS 1
 #define ATTRIBUTES_NEED_NORMAL
 #define ATTRIBUTES_NEED_TANGENT
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_DEPTHONLY
 #define SCENESELECTIONPASS 1
 #define ALPHA_CLIP_THRESHOLD 1
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -3709,14 +3435,10 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
 // --------------------------------------------------
@@ -3730,14 +3452,14 @@ struct Attributes
  float3 positionOS : POSITION;
  float3 normalOS : NORMAL;
  float4 tangentOS : TANGENT;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
 struct Varyings
 {
  float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3762,7 +3484,7 @@ struct VertexDescriptionInputs
 struct PackedVaryings
 {
  float4 positionCS : SV_POSITION;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3781,7 +3503,7 @@ PackedVaryings PackVaryings (Varyings input)
 PackedVaryings output;
 ZERO_INITIALIZE(PackedVaryings, output);
 output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3800,7 +3522,7 @@ Varyings UnpackVaryings (PackedVaryings input)
 {
 Varyings output;
 output.positionCS = input.positionCS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -3833,7 +3555,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -3918,9 +3639,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -3950,9 +3668,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     #endif
 
 
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -3997,16 +3712,8 @@ Cull Back
 HLSLPROGRAM
 
 // Pragmas
-#pragma target 20,0
-#pragma require tessellation
-#pragma vertex Vertex
-#pragma hull Hull
-#pragma domain Domain
-#define _WIREFRAME_IS_DYNAMIC
-#pragma shader_feature_local _ _WIREFRAME_SHADER_SHAPE_QUAD
-#pragma shader_feature_local _ _WIREFRAME_SHADER_STYLE_NORMALIZED _WIREFRAME_SHADER_STYLE_SCREEN_SPACE
-#define RENDER_PIPELINE_UNIVERSAL
-
+#pragma target 2.0
+#pragma vertex vert
 #pragma fragment frag
 
 // Keywords
@@ -4019,30 +3726,12 @@ HLSLPROGRAM
 #define _NORMAL_DROPOFF_TS 1
 #define ATTRIBUTES_NEED_NORMAL
 #define ATTRIBUTES_NEED_TANGENT
-#define ATTRIBUTES_NEED_TEXCOORD0
-#define ATTRIBUTES_NEED_TEXCOORD1
-#define ATTRIBUTES_NEED_TEXCOORD2
-#define ATTRIBUTES_NEED_TEXCOORD3
-#define ATTRIBUTES_NEED_TEXCOORD4
-#define ATTRIBUTES_NEED_TEXCOORD5
-#define ATTRIBUTES_NEED_TEXCOORD6
-#define ATTRIBUTES_NEED_TEXCOORD7
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
-#define VARYINGS_NEED_POSITION_WS
-#define VARYINGS_NEED_TEXCOORD0
-#define VARYINGS_NEED_TEXCOORD1
-#define VARYINGS_NEED_TEXCOORD2
-#define VARYINGS_NEED_TEXCOORD3
-#define VARYINGS_NEED_TEXCOORD4
-#define VARYINGS_NEED_TEXCOORD5
-#define VARYINGS_NEED_TEXCOORD6
-#define VARYINGS_NEED_TEXCOORD7
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_DEPTHONLY
 #define SCENEPICKINGPASS 1
 #define ALPHA_CLIP_THRESHOLD 1
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -4052,14 +3741,10 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
 // --------------------------------------------------
@@ -4073,31 +3758,14 @@ struct Attributes
  float3 positionOS : POSITION;
  float3 normalOS : NORMAL;
  float4 tangentOS : TANGENT;
- float4 uv0 : TEXCOORD0;
- float4 uv1 : TEXCOORD1;
- float4 uv2 : TEXCOORD2;
- float4 uv3 : TEXCOORD3;
- float4 uv4 : TEXCOORD4;
- float4 uv5 : TEXCOORD5;
- float4 uv6 : TEXCOORD6;
- float4 uv7 : TEXCOORD7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
 struct Varyings
 {
  float4 positionCS : SV_POSITION;
- float3 positionWS;
- float4 texCoord0;
- float4 texCoord1;
- float4 texCoord2;
- float4 texCoord3;
- float4 texCoord4;
- float4 texCoord5;
- float4 texCoord6;
- float4 texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4109,20 +3777,9 @@ struct Varyings
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
  FRONT_FACE_TYPE cullFace : FRONT_FACE_SEMANTIC;
 #endif
-float3 barycentric;
 };
 struct SurfaceDescriptionInputs
 {
- float3 WorldSpacePosition;
- float4 uv0;
- float4 uv1;
- float4 uv2;
- float4 uv3;
- float4 uv4;
- float4 uv5;
- float4 uv6;
- float4 uv7;
-float3 barycentric;
 };
 struct VertexDescriptionInputs
 {
@@ -4132,18 +3789,8 @@ struct VertexDescriptionInputs
 };
 struct PackedVaryings
 {
-float3 barycentric : INTERP9;
  float4 positionCS : SV_POSITION;
- float4 texCoord0 : INTERP0;
- float4 texCoord1 : INTERP1;
- float4 texCoord2 : INTERP2;
- float4 texCoord3 : INTERP3;
- float4 texCoord4 : INTERP4;
- float4 texCoord5 : INTERP5;
- float4 texCoord6 : INTERP6;
- float4 texCoord7 : INTERP7;
- float3 positionWS : INTERP8;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4162,16 +3809,7 @@ PackedVaryings PackVaryings (Varyings input)
 PackedVaryings output;
 ZERO_INITIALIZE(PackedVaryings, output);
 output.positionCS = input.positionCS;
-output.texCoord0.xyzw = input.texCoord0;
-output.texCoord1.xyzw = input.texCoord1;
-output.texCoord2.xyzw = input.texCoord2;
-output.texCoord3.xyzw = input.texCoord3;
-output.texCoord4.xyzw = input.texCoord4;
-output.texCoord5.xyzw = input.texCoord5;
-output.texCoord6.xyzw = input.texCoord6;
-output.texCoord7.xyzw = input.texCoord7;
-output.positionWS.xyz = input.positionWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4183,7 +3821,6 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
-output.barycentric = input.barycentric;
 return output;
 }
 
@@ -4191,16 +3828,7 @@ Varyings UnpackVaryings (PackedVaryings input)
 {
 Varyings output;
 output.positionCS = input.positionCS;
-output.texCoord0 = input.texCoord0.xyzw;
-output.texCoord1 = input.texCoord1.xyzw;
-output.texCoord2 = input.texCoord2.xyzw;
-output.texCoord3 = input.texCoord3.xyzw;
-output.texCoord4 = input.texCoord4.xyzw;
-output.texCoord5 = input.texCoord5.xyzw;
-output.texCoord6 = input.texCoord6.xyzw;
-output.texCoord7 = input.texCoord7.xyzw;
-output.positionWS = input.positionWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4212,7 +3840,6 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
-output.barycentric = input.barycentric;
 return output;
 }
 
@@ -4234,7 +3861,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -4262,60 +3888,7 @@ int _PassValue;
 #endif
 
 // Graph Functions
-
-void WireframeRenderer_float(float3 barycentric, float3 thickness, float antiAliasing, float renderInScreenSpace, out float OutWireframe, out float2 OutBarycentricUV)
-{
-    #if defined(_WIREFRAME_IS_DYNAMIC)
-        float3 fw = fwidth(barycentric);
-
-        float3 t = thickness.xxx;
-
-        #if defined(_WIREFRAME_IS_DYNAMIC)
-            #if defined(_WIREFRAME_SHADER_STYLE_SCREEN_SPACE)
-                t *= fw * 5;
-            #endif
-        #else
-            t *= lerp(1, fw * 5, saturate(renderInScreenSpace));
-        #endif                    
-
-        float3 df = barycentric - t;
-        df /= fw * antiAliasing * 10 + 1e-6;
-        float e = min(df.x, min(df.y, df.z));
-
-        OutWireframe = 1 - smoothstep(0.0, 1.0, e + 0.5);
-
-        df = barycentric / t;
-        float u = min(df.x, min(df.y, df.z));
-        OutBarycentricUV = float2(saturate(u), 0.5);
-    #else
-        OutWireframe = 0;
-        OutBarycentricUV = float2(0, 0);
-    #endif
-}
-
-void WireframeShaderDynamicMaskPlane_float(float3 vertexPositionWS, float4x4 ShaderData, float Noise, out float Out)
-{
-            float3 planePosition = ShaderData[0].xyz;
-        	float3 planeNormal   = ShaderData[1].xyz;
-        	float fallOff        = ShaderData[3].x;
-        	float intensity      = ShaderData[3].y;
-
-
-            vertexPositionWS = GetAbsolutePositionWS(vertexPositionWS);
-        	float mask = dot(planeNormal, (vertexPositionWS - planePosition)) - Noise;
-
-            Out = saturate(mask / fallOff) * intensity;
-        }
-
-void Unity_Multiply_float_float(float A, float B, out float Out)
-{
-Out = A * B;
-}
-
-void Unity_Lerp_float4(float4 A, float4 B, float4 T, out float4 Out)
-{
-    Out = lerp(A, B, T);
-}
+// GraphFunctions: <None>
 
 // Custom interpolators pre vertex
 /* WARNING: $splice Could not find named fragment 'CustomInterpolatorPreVertex' */
@@ -4349,34 +3922,11 @@ return output;
 // Graph Pixel
 struct SurfaceDescription
 {
-float3 BaseColor;
 };
 
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_BaseColorMap, sampler_BaseColorMap, _BaseColorMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
-float4 _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.tex, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.samplerstate, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode);
-float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_R_4_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.r;
-float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_G_5_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.g;
-float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_B_6_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.b;
-float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_A_7_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.a;
-float4 _Property_fea879b3f3324ecb9cb1e0f2f9890529_Out_0_Vector4 = IsGammaSpace() ? LinearToSRGB(_Wireframe_Color) : _Wireframe_Color;
-float _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float = _Wireframe_Thickness;
-float _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float = _Wireframe_Anti_aliasing;
-float _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float;
-float2 _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2;
-WireframeRenderer_float(IN.barycentric.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
-float4x4 _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4 = _WireframeShaderMaskData;
-float _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float;
-WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, float(0), _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
-float _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float;
-Unity_Multiply_float_float(_WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float, _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float);
-float4 _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4;
-Unity_Lerp_float4(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_fea879b3f3324ecb9cb1e0f2f9890529_Out_0_Vector4, (_Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float.xxxx), _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4);
-surface.BaseColor = (_Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4.xyz);
 return surface;
 }
 
@@ -4395,9 +3945,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -4421,24 +3968,12 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 
 
 
-    output.WorldSpacePosition = input.positionWS;
 
     #if UNITY_UV_STARTS_AT_TOP
     #else
     #endif
 
 
-    output.uv0 = input.texCoord0;
-    output.uv1 = input.texCoord1;
-    output.uv2 = input.texCoord2;
-    output.uv3 = input.texCoord3;
-    output.uv4 = input.texCoord4;
-    output.uv5 = input.texCoord5;
-    output.uv6 = input.texCoord6;
-    output.uv7 = input.texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -4446,7 +3981,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 #endif
 #undef BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN
 
-output.barycentric = input.barycentric;
         return output;
 }
 
@@ -4462,259 +3996,11 @@ output.barycentric = input.barycentric;
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/VisualEffectVertex.hlsl"
 #endif
 
-struct Appdata
-{
-	float3 positionOS : INTERNALTESSPOS;
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		float3 normalOS : NORMAL;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		float4 tangentOS : TANGENT;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		float4 uv0 : TEXCOORD0;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		float4 uv1 : TEXCOORD1;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		float4 uv2 : TEXCOORD2;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		float4 uv3 : TEXCOORD3;
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			float4 uv4 : TEXCOORD4;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			float4 uv5 : TEXCOORD5;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			float4 uv6 : TEXCOORD6;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			float4 uv7 : TEXCOORD7;
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		float4 color : COLOR;
-	#endif
-
-	UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
-Appdata Vertex (Attributes v)
-{
-	Appdata o;
-	UNITY_SETUP_INSTANCE_ID(v);
-	UNITY_TRANSFER_INSTANCE_ID(v, o);
-
-	o.positionOS = v.positionOS;
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		o.normalOS = v.normalOS;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		o.tangentOS = v.tangentOS;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		o.uv0 = v.uv0;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		o.uv1 = v.uv1;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		o.uv2 = v.uv2;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		o.uv3 = v.uv3;
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			o.uv4 = v.uv4;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			o.uv5 = v.uv5;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			o.uv6 = v.uv6;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			o.uv7 = v.uv7;
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		o.color = v.color;
-	#endif
-
-	return o;  
-}
-
-struct TessellationFactors 
-{
-    float edge[3] : SV_TessFactor;
-    float inside : SV_InsideTessFactor;
-};
-
-TessellationFactors PatchConstantFunction (InputPatch<Appdata,3> input)
-{
-	TessellationFactors output;	
-	output.edge[0] = 1;
-	output.edge[1] = 1; 
-	output.edge[2] = 1; 
-	output.inside = 1;
-
-	return output;
-}
-
-[domain("tri")]
-[partitioning("integer")]
-[outputtopology("triangle_cw")]
-[patchconstantfunc("PatchConstantFunction")]
-[outputcontrolpoints(3)]
-Appdata Hull (InputPatch<Appdata,3> patch, uint id : SV_OutputControlPointID) 
-{
-	return patch[id];
-}
-
-void WireframeShaderCalculateBarycentric(float3 vertex1, float3 vertex2, float3 vertex3, out float3 bary1, out float3 bary2, out float3 bary3)
-{	
-	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED) || defined(_WIREFRAME_SHADER_SHAPE_QUAD)
-		float d1 = distance(vertex1, vertex2);
-		float d2 = distance(vertex2, vertex3);
-		float d3 = distance(vertex3, vertex1);		
-	#endif
-
-	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED)
-	 
-		float4 b = float4(0, 
-		                  length(cross(vertex3 - vertex1, vertex3 - vertex2)) / d1, 
-						  length(cross(vertex1 - vertex2, vertex1 - vertex3)) / d2, 
-						  length(cross(vertex2 - vertex1, vertex2 - vertex3)) / d3);
-		b /= min(b.y, min(b.z, b.w));
-
-		bary1 = b.xzx;
-		bary2 = b.xxw;
-		bary3 = b.yxx;	
-
-	#else
-		
-		bary1 = float3(0, 1, 0);
-		bary2 = float3(0, 0, 1);
-		bary3 = float3(1, 0, 0);
-
-	#endif
-
-
-	#if defined(_WIREFRAME_SHADER_SHAPE_QUAD)
-		bary1.x = ((d1 > d2) && (d1 > d3)) ? 10000 : 0;
-		bary1.z = ((d3 >= d1) && (d3 > d2)) ? 10000 : 0;
-		bary2.y = ((d2 >= d1) && (d2 >= d3)) ? 10000 : 0;
-	#endif
-}
-
-#define TESSELLATION_INTERPOLATE(a) patch[0].a * bary.x + patch[1].a * bary.y + patch[2].a * bary.z
-
-[domain("tri")]
-PackedVaryings Domain(TessellationFactors factors, OutputPatch<Appdata, 3> patch, float3 bary : SV_DomainLocation)
-{
-	Attributes output = (Attributes) 0;
-	output.positionOS = TESSELLATION_INTERPOLATE(positionOS);
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		output.normalOS = TESSELLATION_INTERPOLATE(normalOS);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		output.tangentOS = TESSELLATION_INTERPOLATE(tangentOS);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		output.uv0 = TESSELLATION_INTERPOLATE(uv0);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		output.uv1 = TESSELLATION_INTERPOLATE(uv1);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		output.uv2 = TESSELLATION_INTERPOLATE(uv2);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		output.uv3 = TESSELLATION_INTERPOLATE(uv3);
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			output.uv4 = TESSELLATION_INTERPOLATE(uv4);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			output.uv5 = TESSELLATION_INTERPOLATE(uv5);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			output.uv6 = TESSELLATION_INTERPOLATE(uv6);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			output.uv7 = TESSELLATION_INTERPOLATE(uv7);
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		output.color = TESSELLATION_INTERPOLATE(color);
-	#endif
-
-	UNITY_TRANSFER_INSTANCE_ID(patch[0], output);
-
-
-    #if defined(RENDER_PIPELINE_HIGH_DEFINITION) && ((SHADERPASS == SHADERPASS_FORWARD && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_FORWARD_UNLIT && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_MOTION_VECTORS))
-        AttributesPass inputPass = (AttributesPass)0;
-	    PackedVaryings pv = vert(output, inputPass);
-    #else
-        PackedVaryings pv = vert(output);
-    #endif
-
-
-	float3 b0;
-	float3 b1;
-	float3 b2;
-	WireframeShaderCalculateBarycentric(patch[0].positionOS, patch[1].positionOS, patch[2].positionOS, b0, b1, b2);
-
-	pv.barycentric = b0 * bary.x + b1 * bary.y + b2 * bary.z;
-
-
-	return pv;
-}
 ENDHLSL
 }
 Pass
 {
-    Name "Universal 2D"
+    // Name: <None>
     Tags
     {
         "LightMode" = "Universal2D"
@@ -4735,16 +4021,8 @@ ZWrite On
 HLSLPROGRAM
 
 // Pragmas
-#pragma target 20,0
-#pragma require tessellation
-#pragma vertex Vertex
-#pragma hull Hull
-#pragma domain Domain
-#define _WIREFRAME_IS_DYNAMIC
-#pragma shader_feature_local _ _WIREFRAME_SHADER_SHAPE_QUAD
-#pragma shader_feature_local _ _WIREFRAME_SHADER_STYLE_NORMALIZED _WIREFRAME_SHADER_STYLE_SCREEN_SPACE
-#define RENDER_PIPELINE_UNIVERSAL
-
+#pragma target 2.0
+#pragma vertex vert
 #pragma fragment frag
 
 // Keywords
@@ -4761,24 +4039,15 @@ HLSLPROGRAM
 #define ATTRIBUTES_NEED_TEXCOORD1
 #define ATTRIBUTES_NEED_TEXCOORD2
 #define ATTRIBUTES_NEED_TEXCOORD3
-#define ATTRIBUTES_NEED_TEXCOORD4
-#define ATTRIBUTES_NEED_TEXCOORD5
-#define ATTRIBUTES_NEED_TEXCOORD6
-#define ATTRIBUTES_NEED_TEXCOORD7
-#define FEATURES_GRAPH_VERTEX_NORMAL_OUTPUT
-#define FEATURES_GRAPH_VERTEX_TANGENT_OUTPUT
 #define VARYINGS_NEED_POSITION_WS
 #define VARYINGS_NEED_TEXCOORD0
 #define VARYINGS_NEED_TEXCOORD1
 #define VARYINGS_NEED_TEXCOORD2
 #define VARYINGS_NEED_TEXCOORD3
-#define VARYINGS_NEED_TEXCOORD4
-#define VARYINGS_NEED_TEXCOORD5
-#define VARYINGS_NEED_TEXCOORD6
-#define VARYINGS_NEED_TEXCOORD7
 #define FEATURES_GRAPH_VERTEX
 /* WARNING: $splice Could not find named fragment 'PassInstancing' */
 #define SHADERPASS SHADERPASS_2D
+/* WARNING: $splice Could not find named fragment 'DotsInstancingVars' */
 
 
 // custom interpolator pre-include
@@ -4788,12 +4057,9 @@ HLSLPROGRAM
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include_with_pragmas "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRenderingKeywords.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Input.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ShaderGraphFunctions.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Editor/ShaderGraph/Includes/ShaderPass.hlsl"
 
@@ -4812,11 +4078,7 @@ struct Attributes
  float4 uv1 : TEXCOORD1;
  float4 uv2 : TEXCOORD2;
  float4 uv3 : TEXCOORD3;
- float4 uv4 : TEXCOORD4;
- float4 uv5 : TEXCOORD5;
- float4 uv6 : TEXCOORD6;
- float4 uv7 : TEXCOORD7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(ATTRIBUTES_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : INSTANCEID_SEMANTIC;
 #endif
 };
@@ -4828,11 +4090,7 @@ struct Varyings
  float4 texCoord1;
  float4 texCoord2;
  float4 texCoord3;
- float4 texCoord4;
- float4 texCoord5;
- float4 texCoord6;
- float4 texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4844,7 +4102,6 @@ struct Varyings
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
  FRONT_FACE_TYPE cullFace : FRONT_FACE_SEMANTIC;
 #endif
-float3 barycentric;
 };
 struct SurfaceDescriptionInputs
 {
@@ -4853,11 +4110,6 @@ struct SurfaceDescriptionInputs
  float4 uv1;
  float4 uv2;
  float4 uv3;
- float4 uv4;
- float4 uv5;
- float4 uv6;
- float4 uv7;
-float3 barycentric;
 };
 struct VertexDescriptionInputs
 {
@@ -4867,18 +4119,13 @@ struct VertexDescriptionInputs
 };
 struct PackedVaryings
 {
-float3 barycentric : INTERP9;
  float4 positionCS : SV_POSITION;
  float4 texCoord0 : INTERP0;
  float4 texCoord1 : INTERP1;
  float4 texCoord2 : INTERP2;
  float4 texCoord3 : INTERP3;
- float4 texCoord4 : INTERP4;
- float4 texCoord5 : INTERP5;
- float4 texCoord6 : INTERP6;
- float4 texCoord7 : INTERP7;
- float3 positionWS : INTERP8;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+ float3 positionWS : INTERP4;
+#if UNITY_ANY_INSTANCING_ENABLED
  uint instanceID : CUSTOM_INSTANCE_ID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4901,12 +4148,8 @@ output.texCoord0.xyzw = input.texCoord0;
 output.texCoord1.xyzw = input.texCoord1;
 output.texCoord2.xyzw = input.texCoord2;
 output.texCoord3.xyzw = input.texCoord3;
-output.texCoord4.xyzw = input.texCoord4;
-output.texCoord5.xyzw = input.texCoord5;
-output.texCoord6.xyzw = input.texCoord6;
-output.texCoord7.xyzw = input.texCoord7;
 output.positionWS.xyz = input.positionWS;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4918,7 +4161,6 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
-output.barycentric = input.barycentric;
 return output;
 }
 
@@ -4930,12 +4172,8 @@ output.texCoord0 = input.texCoord0.xyzw;
 output.texCoord1 = input.texCoord1.xyzw;
 output.texCoord2 = input.texCoord2.xyzw;
 output.texCoord3 = input.texCoord3.xyzw;
-output.texCoord4 = input.texCoord4.xyzw;
-output.texCoord5 = input.texCoord5.xyzw;
-output.texCoord6 = input.texCoord6.xyzw;
-output.texCoord7 = input.texCoord7.xyzw;
 output.positionWS = input.positionWS.xyz;
-#if UNITY_ANY_INSTANCING_ENABLED || defined(VARYINGS_NEED_INSTANCEID)
+#if UNITY_ANY_INSTANCING_ENABLED
 output.instanceID = input.instanceID;
 #endif
 #if (defined(UNITY_STEREO_MULTIVIEW_ENABLED)) || (defined(UNITY_STEREO_INSTANCING_ENABLED) && (defined(SHADER_API_GLES3) || defined(SHADER_API_GLCORE)))
@@ -4947,7 +4185,6 @@ output.stereoTargetEyeIndexAsRTArrayIdx = input.stereoTargetEyeIndexAsRTArrayIdx
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 output.cullFace = input.cullFace;
 #endif
-output.barycentric = input.barycentric;
 return output;
 }
 
@@ -4969,7 +4206,6 @@ float _Wireframe_Thickness;
 float4 _Wireframe_Color;
 float _Wireframe_Anti_aliasing;
 float _Scanner_Glow_Emission;
-UNITY_TEXTURE_STREAMING_DEBUG_VARS;
 CBUFFER_END
 
 
@@ -5090,10 +4326,8 @@ float3 BaseColor;
 SurfaceDescription SurfaceDescriptionFunction(SurfaceDescriptionInputs IN)
 {
 SurfaceDescription surface = (SurfaceDescription)0;
-UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructInternal(_BaseColorMap, sampler_BaseColorMap, _BaseColorMap_TexelSize, float4(1, 1, 0, 0), float4(0, 0, 0, 0));
+UnityTexture2D _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D = UnityBuildTexture2DStructNoScale(_BaseColorMap);
 float4 _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = SAMPLE_TEXTURE2D(_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.tex, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.samplerstate, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.GetTransformedUV(IN.uv0.xy) );
-if (_Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode.x > 0)
-_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4 = DecodeHDRSample(_SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4, _Property_195081f1ea634199a5f67314d3febc32_Out_0_Texture2D.hdrDecode);
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_R_4_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.r;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_G_5_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.g;
 float _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_B_6_Float = _SampleTexture2D_7699a0563c2a4636b70c794ae6b5420e_RGBA_0_Vector4.b;
@@ -5103,10 +4337,10 @@ float _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float = _Wireframe_Thickn
 float _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float = _Wireframe_Anti_aliasing;
 float _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float;
 float2 _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2;
-WireframeRenderer_float(IN.barycentric.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
+WireframeRenderer_float(IN.uv3.xyz, max(0, _Property_1dc4788b9eca4069baa399efa4413298_Out_0_Float), max(0, _Property_8b57c7d9cbef4037966ba71e85a6a06c_Out_0_Float), 0, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_BarycentricUV_4_Vector2);
 float4x4 _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4 = _WireframeShaderMaskData;
 float _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float;
-WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, float(0), _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
+WireframeShaderDynamicMaskPlane_float(IN.WorldSpacePosition, _Property_c2fcbed1c8b9408fb9e6665d295dd052_Out_0_Matrix4, 0, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float);
 float _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float;
 Unity_Multiply_float_float(_WireframeRenderer_993d0091b2ab4499b7cf814f1a3fc5b1_Wireframe_3_Float, _DynamicMask_1dae5fc869b4483bab43da291d5c03ce_Out_3_Float, _Multiply_b0960d3afcdd41aca8cb2c6f7dc0bb74_Out_2_Float);
 float4 _Lerp_130fe097f09542d1b7fa52dfa8fd1871_Out_3_Vector4;
@@ -5130,9 +4364,6 @@ VertexDescriptionInputs BuildVertexDescriptionInputs(Attributes input)
     output.ObjectSpaceNormal =                          input.normalOS;
     output.ObjectSpaceTangent =                         input.tangentOS.xyz;
     output.ObjectSpacePosition =                        input.positionOS;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 
     return output;
 }
@@ -5167,13 +4398,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
     output.uv1 = input.texCoord1;
     output.uv2 = input.texCoord2;
     output.uv3 = input.texCoord3;
-    output.uv4 = input.texCoord4;
-    output.uv5 = input.texCoord5;
-    output.uv6 = input.texCoord6;
-    output.uv7 = input.texCoord7;
-#if UNITY_ANY_INSTANCING_ENABLED
-#else // TODO: XR support for procedural instancing because in this case UNITY_ANY_INSTANCING_ENABLED is not defined and instanceID is incorrect.
-#endif
 #if defined(SHADER_STAGE_FRAGMENT) && defined(VARYINGS_NEED_CULLFACE)
 #define BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN output.FaceSign =                    IS_FRONT_VFACE(input.cullFace, true, false);
 #else
@@ -5181,7 +4405,6 @@ SurfaceDescriptionInputs BuildSurfaceDescriptionInputs(Varyings input)
 #endif
 #undef BUILD_SURFACE_DESCRIPTION_INPUTS_OUTPUT_FACESIGN
 
-output.barycentric = input.barycentric;
         return output;
 }
 
@@ -5197,254 +4420,6 @@ output.barycentric = input.barycentric;
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/VisualEffectVertex.hlsl"
 #endif
 
-struct Appdata
-{
-	float3 positionOS : INTERNALTESSPOS;
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		float3 normalOS : NORMAL;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		float4 tangentOS : TANGENT;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		float4 uv0 : TEXCOORD0;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		float4 uv1 : TEXCOORD1;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		float4 uv2 : TEXCOORD2;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		float4 uv3 : TEXCOORD3;
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			float4 uv4 : TEXCOORD4;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			float4 uv5 : TEXCOORD5;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			float4 uv6 : TEXCOORD6;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			float4 uv7 : TEXCOORD7;
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		float4 color : COLOR;
-	#endif
-
-	UNITY_VERTEX_INPUT_INSTANCE_ID
-};
-
-Appdata Vertex (Attributes v)
-{
-	Appdata o;
-	UNITY_SETUP_INSTANCE_ID(v);
-	UNITY_TRANSFER_INSTANCE_ID(v, o);
-
-	o.positionOS = v.positionOS;
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		o.normalOS = v.normalOS;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		o.tangentOS = v.tangentOS;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		o.uv0 = v.uv0;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		o.uv1 = v.uv1;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		o.uv2 = v.uv2;
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		o.uv3 = v.uv3;
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			o.uv4 = v.uv4;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			o.uv5 = v.uv5;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			o.uv6 = v.uv6;
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			o.uv7 = v.uv7;
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		o.color = v.color;
-	#endif
-
-	return o;  
-}
-
-struct TessellationFactors 
-{
-    float edge[3] : SV_TessFactor;
-    float inside : SV_InsideTessFactor;
-};
-
-TessellationFactors PatchConstantFunction (InputPatch<Appdata,3> input)
-{
-	TessellationFactors output;	
-	output.edge[0] = 1;
-	output.edge[1] = 1; 
-	output.edge[2] = 1; 
-	output.inside = 1;
-
-	return output;
-}
-
-[domain("tri")]
-[partitioning("integer")]
-[outputtopology("triangle_cw")]
-[patchconstantfunc("PatchConstantFunction")]
-[outputcontrolpoints(3)]
-Appdata Hull (InputPatch<Appdata,3> patch, uint id : SV_OutputControlPointID) 
-{
-	return patch[id];
-}
-
-void WireframeShaderCalculateBarycentric(float3 vertex1, float3 vertex2, float3 vertex3, out float3 bary1, out float3 bary2, out float3 bary3)
-{	
-	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED) || defined(_WIREFRAME_SHADER_SHAPE_QUAD)
-		float d1 = distance(vertex1, vertex2);
-		float d2 = distance(vertex2, vertex3);
-		float d3 = distance(vertex3, vertex1);		
-	#endif
-
-	#if defined(_WIREFRAME_SHADER_STYLE_NORMALIZED)
-	 
-		float4 b = float4(0, 
-		                  length(cross(vertex3 - vertex1, vertex3 - vertex2)) / d1, 
-						  length(cross(vertex1 - vertex2, vertex1 - vertex3)) / d2, 
-						  length(cross(vertex2 - vertex1, vertex2 - vertex3)) / d3);
-		b /= min(b.y, min(b.z, b.w));
-
-		bary1 = b.xzx;
-		bary2 = b.xxw;
-		bary3 = b.yxx;	
-
-	#else
-		
-		bary1 = float3(0, 1, 0);
-		bary2 = float3(0, 0, 1);
-		bary3 = float3(1, 0, 0);
-
-	#endif
-
-
-	#if defined(_WIREFRAME_SHADER_SHAPE_QUAD)
-		bary1.x = ((d1 > d2) && (d1 > d3)) ? 10000 : 0;
-		bary1.z = ((d3 >= d1) && (d3 > d2)) ? 10000 : 0;
-		bary2.y = ((d2 >= d1) && (d2 >= d3)) ? 10000 : 0;
-	#endif
-}
-
-#define TESSELLATION_INTERPOLATE(a) patch[0].a * bary.x + patch[1].a * bary.y + patch[2].a * bary.z
-
-[domain("tri")]
-PackedVaryings Domain(TessellationFactors factors, OutputPatch<Appdata, 3> patch, float3 bary : SV_DomainLocation)
-{
-	Attributes output = (Attributes) 0;
-	output.positionOS = TESSELLATION_INTERPOLATE(positionOS);
-
-	#if defined(ATTRIBUTES_NEED_NORMAL)
-		output.normalOS = TESSELLATION_INTERPOLATE(normalOS);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TANGENT)
-		output.tangentOS = TESSELLATION_INTERPOLATE(tangentOS);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD0)
-		output.uv0 = TESSELLATION_INTERPOLATE(uv0);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD1)
-		output.uv1 = TESSELLATION_INTERPOLATE(uv1);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD2)
-		output.uv2 = TESSELLATION_INTERPOLATE(uv2);
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_TEXCOORD3)
-		output.uv3 = TESSELLATION_INTERPOLATE(uv3);
-	#endif
-
-	#if UNITY_VERSION >= 60030000
-		#if defined(ATTRIBUTES_NEED_TEXCOORD4)
-			output.uv4 = TESSELLATION_INTERPOLATE(uv4);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD5)
-			output.uv5 = TESSELLATION_INTERPOLATE(uv5);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD6)
-			output.uv6 = TESSELLATION_INTERPOLATE(uv6);
-		#endif
-
-		#if defined(ATTRIBUTES_NEED_TEXCOORD7)
-			output.uv7 = TESSELLATION_INTERPOLATE(uv7);
-		#endif
-	#endif
-
-	#if defined(ATTRIBUTES_NEED_COLOR)
-		output.color = TESSELLATION_INTERPOLATE(color);
-	#endif
-
-	UNITY_TRANSFER_INSTANCE_ID(patch[0], output);
-
-
-    #if defined(RENDER_PIPELINE_HIGH_DEFINITION) && ((SHADERPASS == SHADERPASS_FORWARD && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_FORWARD_UNLIT && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)) || (SHADERPASS == SHADERPASS_MOTION_VECTORS))
-        AttributesPass inputPass = (AttributesPass)0;
-	    PackedVaryings pv = vert(output, inputPass);
-    #else
-        PackedVaryings pv = vert(output);
-    #endif
-
-
-	float3 b0;
-	float3 b1;
-	float3 b2;
-	WireframeShaderCalculateBarycentric(patch[0].positionOS, patch[1].positionOS, patch[2].positionOS, b0, b1, b2);
-
-	pv.barycentric = b0 * bary.x + b1 * bary.y + b2 * bary.z;
-
-
-	return pv;
-}
 ENDHLSL
 }
 }

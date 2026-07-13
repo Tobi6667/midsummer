@@ -40,11 +40,10 @@ Material:
   stringTagMap:
     MotionVector: User
   disabledShaderPasses:
-  - MOTIONVECTORS
+  - RayTracingPrepass
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
-  - RayTracingPrepass
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -219,3 +218,4 @@ Material:
     - _Wireframe_Color_Back: {r: 8.47419, g: 1.1979219, b: 7.528947, a: 1}
     - _Wireframe_Color_Front: {r: 1.1749924, g: 8.47419, b: 1.3243089, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

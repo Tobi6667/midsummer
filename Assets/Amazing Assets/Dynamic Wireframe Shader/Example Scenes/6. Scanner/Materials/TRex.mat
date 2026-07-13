@@ -28,10 +28,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - WIREFRAME_DYNAMIC_MASK_PLANE
   - _WIREFRAME_SHADER_SHAPE_QUAD
   - _WIREFRAME_SHADER_STYLE_NORMALIZED
   m_InvalidKeywords:
+  - WIREFRAME_DYNAMIC_MASK_PLANE
   - _DISABLE_SSR_TRANSPARENT
   - _DOUBLESIDED_ON
   - _NORMALMAP_TANGENT_SPACE
@@ -46,7 +46,6 @@ Material:
   - TransparentDepthPostpass
   - TransparentBackface
   - RayTracingPrepass
-  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -310,3 +309,4 @@ Material:
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Wireframe_Color: {r: 1.6616902, g: 11.984315, b: 1.8728557, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
