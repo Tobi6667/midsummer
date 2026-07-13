@@ -16,6 +16,9 @@ public class PlayerGravityReceiver : MonoBehaviour
     public float gravity = 25f;
     public float jumpHeight = 5f;
 
+
+    private bool isActive = true;
+
     [Header("Look")]
     public Transform cameraPivot;
     public float mouseSensitivity = 3f;
@@ -80,6 +83,9 @@ public class PlayerGravityReceiver : MonoBehaviour
 
     void Update()
     {
+
+        if (!isActive) return;
+
         if (input == null)
             return;
 
@@ -99,12 +105,19 @@ public class PlayerGravityReceiver : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!isActive) return;
         UpdateTransition();
         ApplyYaw();
         UpdateGrounded();
         ApplyMove();
     }
 
+
+
+    public void SetActiveMove(bool act)
+    {
+        isActive = act;
+    }
 
     // ---- Gravity zones ----
 

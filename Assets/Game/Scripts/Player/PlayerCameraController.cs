@@ -6,13 +6,21 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField] private PlayerInputController input;
 
     [SerializeField] private float sensitivity = 0.15f;
+    private bool _isActive = true;
 
     private float pitch;
 
     void Update()
     {
+        if (!_isActive) return;
         Look();
     }
+
+    internal void SetActiveMove(bool act)
+    {
+        _isActive = act;
+    }
+
 
     void Look()
     {

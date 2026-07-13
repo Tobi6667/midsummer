@@ -18,10 +18,7 @@ public class BombPickUp : PickUpBase
 
     private void Update()
     {
-        if (GameManager.Instance.PlayerController.InputController.OnInteracted)
-        {
-            //EXPLOOOODE
-        }
+
     }
 
 }
