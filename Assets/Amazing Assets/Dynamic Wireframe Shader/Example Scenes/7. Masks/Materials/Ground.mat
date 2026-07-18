@@ -45,10 +45,9 @@ Material:
     MotionVector: User
   disabledShaderPasses:
   - RayTracingPrepass
-  - MOTIONVECTORS
+  - TransparentBackface
   - TransparentDepthPrepass
   - TransparentDepthPostpass
-  - TransparentBackface
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -58,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 394ef94a17794b74fa4386e32f4409bf, type: 3}
+        m_Texture: {fileID: 2800000, guid: 31c3e109bedb9bd4b8b91ae7352858f7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -98,11 +97,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
-        m_Texture: {fileID: 2800000, guid: ba2bb141f793a7a44bfe89394308f617, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: a3382d1c52961db4d86423d8456a880e, type: 3}
+        m_Texture: {fileID: 2800000, guid: ac030eabd63b7b54d9d937ae562f64a9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -270,12 +269,12 @@ Material:
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
-    - _Wireframe_Anti_aliasing: 0.2
+    - _Wireframe_Anti_aliasing: 0.357
     - _Wireframe_Emission: 1
     - _Wireframe_Shader_Shape: 0
     - _Wireframe_Shader_Style: 2
     - _Wireframe_Smoothness: 0.2
-    - _Wireframe_Thickness: 0.01
+    - _Wireframe_Thickness: 0.703
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
@@ -299,3 +298,4 @@ Material:
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Wireframe_Color: {r: 0.38183314, g: 0.87917453, b: 2.996079, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

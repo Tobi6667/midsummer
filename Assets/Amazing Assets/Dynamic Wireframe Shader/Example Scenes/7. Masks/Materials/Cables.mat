@@ -45,10 +45,9 @@ Material:
     MotionVector: User
   disabledShaderPasses:
   - RayTracingPrepass
-  - MOTIONVECTORS
+  - TransparentBackface
   - TransparentDepthPrepass
   - TransparentDepthPostpass
-  - TransparentBackface
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -299,3 +298,4 @@ Material:
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
     - _Wireframe_Color: {r: 0.381833, g: 0.87917423, b: 2.996078, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
