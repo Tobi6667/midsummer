@@ -10,6 +10,7 @@ Actions_MainInputClass _mainInputClass;
     public event Action OnScanPressed;
     public event Action OnScanReleased;
     public event Action OnInteracted;
+    public event Action OnItem1Clicked;
 
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
@@ -108,5 +109,13 @@ Actions_MainInputClass _mainInputClass;
 
         if (context.canceled)
             OnScanReleased?.Invoke();
+    }
+
+    public void OnItem1(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnItem1Clicked?.Invoke();
+        }
     }
 }

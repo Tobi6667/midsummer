@@ -15,6 +15,7 @@ public abstract class TrapItemBase : MonoBehaviour
 
     public virtual void TriggerTrap(EnemyController enemy, Action<bool> onFinished)
     {
+        Debug.Log("trigger trap");
         foreach (var effect in statusEffects)
         {
             enemy.ApplyTrapEffect(effect);

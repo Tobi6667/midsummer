@@ -1,12 +1,16 @@
+using System;
 using UnityEngine;
 
 public class ActorController : EnemyBase, IInteractable
 {
 
     private NPCInteractionComponent _interactComponent;
+    private ActorPatrolState _state;
+
     private void Start()
     {
         _interactComponent = GetComponent<NPCInteractionComponent>();
+
     }
 
     private void Update()
@@ -14,14 +18,20 @@ public class ActorController : EnemyBase, IInteractable
         TickState(Time.deltaTime);
     }
 
-
-    internal void StartActing()
+    public void Interact(Action onFinished)
     {
-        ChangeState(new ActorPatrolState(this));
+        _interactComponent.SelectInterAction(onFinished);
     }
 
-    public void Interact()
+    public override void StartActing()
     {
-        _interactComponent.SelectInterAction();
+        Debug.Log("dfdfdf STTTT");
+        _state = new ActorPatrolState(this);
+
+        ChangeState(_state);
+    }
+
+    public override void Initialize()
+    {
     }
 }

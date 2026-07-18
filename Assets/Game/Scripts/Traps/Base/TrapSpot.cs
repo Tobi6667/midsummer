@@ -4,7 +4,7 @@ using UnityEngine;
 public class TrapSpot : MonoBehaviour, ITrapPlace
 {
    [SerializeField] private TrapItemBase currentTrap;
-
+   
     public void PlaceTrap(TrapItemBase trap)
     {
         currentTrap = trap;
@@ -27,7 +27,7 @@ public class TrapSpot : MonoBehaviour, ITrapPlace
         if (currentTrap != null)
         {
             currentTrap.TriggerTrap(enemy, onFinished);
-            
+            currentTrap = null;
         }
         else
         {
@@ -42,7 +42,10 @@ public class TrapSpot : MonoBehaviour, ITrapPlace
         if (enemy != null)
         {
             Debug.Log("Trigger Trap");
-            TriggerTrap(enemy, (hasTrap) => { });
+           TriggerTrap(enemy, (hasTrap) => { });
         }
     }
+
+    
+
 }

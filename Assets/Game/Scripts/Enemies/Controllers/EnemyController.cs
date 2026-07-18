@@ -1,12 +1,16 @@
 using UnityEngine;
 
-
 public class EnemyController : EnemyBase
 {
     private EnemyAwarenessComponent _enemyAwarenessComponent;
     private EnemyPatrollingComponent _enemyPatrollingComponent;
-    private EEnemyState _currentState = EEnemyState.Patrolling;
-    private INPCStateBehavior _stateBehavior;
+
+    public override void Initialize()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void StartActing() { }
 
     private void Awake()
     {
@@ -17,18 +21,11 @@ public class EnemyController : EnemyBase
     private void Start()
     {
         _enemyPatrollingComponent.Initialize();
-        _stateBehavior = new PatrolState(this);
-        _stateBehavior.Enter(); // <-- you're missing this currently
-
+        ChangeState(new PatrolState(this)); // goes through EnemyBase, calls Enter()
     }
 
     private void Update()
     {
-
-        if(_stateBehavior != null) _stateBehavior.Tick(Time.deltaTime);
-
-
+        TickState(Time.deltaTime); // ticks EnemyBase._currentState
     }
-
-
 }

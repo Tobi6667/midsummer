@@ -1,12 +1,18 @@
 using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : PlayerBase
 {
+    public static PlayerController Instance;
     private PlayerInputController _inputController;
     private PlayerMovementController _movementController;
     private AnimationActionComponent _actionComponent;
     private PlayerGravityReceiver _gravityReceiver;
+    
+    
+
+
+
     [SerializeField] private LayerMask _interactMask;
     [SerializeField] private PlayerCameraController _cameraController;
 
@@ -19,10 +25,12 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         _movementController = GetComponent<PlayerMovementController>();
         _inputController = GetComponent<PlayerInputController>();
         _actionComponent = GetComponent<AnimationActionComponent>();
         _gravityReceiver = GetComponent<PlayerGravityReceiver>();
+        DetectionValue = 50;
 
     }
 
@@ -37,7 +45,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("interacttttt "+_isActive);
         if (!_isActive)
         {
-            var hits = Physics.OverlapSphere(transform.position, 5f, _interactMask);
+            var hits = Physics.OverlapSphere(transform.position, 2f, _interactMask);
 
             foreach (var hit in hits)
             {
@@ -52,6 +60,7 @@ public class PlayerController : MonoBehaviour
                         Debug.Log("angekommen");
                         _isTransitioning = true;
                         _isActive = true;
+                        ActManager.Instance.PlayAct();
                         _actionComponent.PlayAnimations(interaction.TransitionClip, () => {
                             _isTransitioning = false;
 
@@ -60,7 +69,6 @@ public class PlayerController : MonoBehaviour
 
 
                             StartMovement();
-
                         }, interaction.LoopClip);
                     });
                     break;
@@ -70,14 +78,22 @@ public class PlayerController : MonoBehaviour
                 if (hit.TryGetComponent<GuardController>(out var interAct) && !_isTransitioning)
                 {
                     Debug.Log("wtf guard");
-                    interAct.Interact();
+                    StopMovement();
+                    interAct.Interact(() =>
+                    {
+                        StartMovement();
+                    });
                     break;
                 }
 
                 if (hit.TryGetComponent<ActorController>(out var interActor) && !_isTransitioning)
                 {
-                    Debug.Log("wtf guard");
-                    interActor.Interact();
+                    Debug.Log("wtf actor");
+                    StopMovement();
+                    interActor.Interact(() =>
+                    {
+                        StartMovement();
+                    });
                     break;
                 }
 
@@ -89,6 +105,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            ActManager.Instance.StopAct();
             Debug.Log("stop loop");
             _actionComponent.StopLooping();
             _isTransitioning = false;
@@ -101,16 +118,26 @@ public class PlayerController : MonoBehaviour
     {
         _gravityReceiver.SetActiveMove(false);
         _cameraController.SetActiveMove(false);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
     }
 
     private void StartMovement()
     {
         _gravityReceiver.SetActiveMove(true);
         _cameraController.SetActiveMove(true);
+
     }
 
     private void OnDisable()
     {
         _inputController.OnInteracted -= OnInteract;
+    }
+
+
+    public void ResetDetectValue()
+    {
+        DetectionValue = 90;
     }
 }
