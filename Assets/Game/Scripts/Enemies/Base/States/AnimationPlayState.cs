@@ -1,34 +1,38 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationPlayState : INPCStateBehavior
 {
 
-    private EnemyAnimationActionComponent _actionComponent;
+    private AnimationActionComponent _actionComponent;
+    private AnimationClip[] _clips;
+    private EnemyController _enemy;
 
-    void INPCStateBehavior.Enter()
+    public AnimationPlayState(EnemyController enemy, List<AnimationClip> clips)
     {
-        _actionComponent?.PlayAnimation();
+        _enemy = enemy;
+        _actionComponent = enemy.GetComponent<AnimationActionComponent>();
+        _clips = clips.ToArray();
     }
 
-    void INPCStateBehavior.Exit()
+    public void Enter()
+    {
+        _actionComponent.PlayAnimations(_clips, () => { 
+            
+            _enemy.ChangeState(new PatrolState(_enemy));
+        });
+    }
+
+    public void Exit()
     {
        // _actionComponent?.StopAnimation();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public void Tick(float dt)
     {
-        
     }
 
-    void INPCStateBehavior.Tick(float dt)
-    {
-        throw new System.NotImplementedException();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

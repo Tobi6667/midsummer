@@ -1,92 +1,25 @@
+using DG.Tweening;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovementController : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private PlayerInputController input;
-    [SerializeField] private PlayerCameraController cameraController;
-    [SerializeField] private PlayerGravityController gravity;
-    [SerializeField] private PlayerRotationController rotation;
-    [SerializeField] private PlayerGroundDetector ground;
-
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float sprintMultiplier = 1.5f;
-
-    private bool isMoving = true;
-    private CharacterController controller;
-
-    private void Awake()
+    internal void MoveTo(Transform target, float duration, Action onArrive)
     {
-        controller = GetComponent<CharacterController>();
-
-        if (input == null)
-            input = GetComponent<PlayerInputController>();
-
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
-    }
-
-    void Update()
-    {
-
-        if (!isMoving) return;
-        ground.Tick();
-
-        if (ground.IsGrounded)
+        Tween moveTween = transform.DOMove(target.position, duration).SetEase(Ease.InOutQuad).OnComplete(() =>
         {
-           // gravity.SetUp(ground.SurfaceNormal);
-        }
+            onArrive?.Invoke();
+        });
 
-        gravity.Tick(ground.IsGrounded);
-
-        rotation.Tick();
-
-        Move();
-    }
-
-
-    internal void StopMovement()
-    {
-        isMoving = false;
-    }
-
-    private void Move()
-    {
-       Vector3 forward = Vector3.ProjectOnPlane(
-    cameraController.Forward,
-    gravity.Up
-).normalized;
-
-
-Vector3 right = Vector3.ProjectOnPlane(
-    cameraController.Right,
-    gravity.Up
-).normalized;
-
-
-Vector3 move =
-    forward * input.MoveInput.y +
-    right * input.MoveInput.x;
-
-        if (move.sqrMagnitude > 1f)
-            move.Normalize();
-
-        float speed = moveSpeed;
-
-     /*   if (input.SprintHeld)
-            speed *= sprintMultiplier;
-     */
-        Vector3 velocity =
-            move * speed +
-            gravity.Velocity;
-
-        controller.Move(velocity * Time.deltaTime);
-
-     /*   if (input.ConsumeJump())
+        moveTween.OnUpdate(() =>
         {
-            gravity.Jump();
-        }*/
+            Vector3 direction = (target.position - transform.position).normalized;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+            }
+        });
     }
 }

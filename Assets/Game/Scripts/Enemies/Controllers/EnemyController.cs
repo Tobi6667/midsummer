@@ -30,11 +30,5 @@ public class EnemyController : EnemyBase
 
     }
 
-    internal void ChangeState(INPCStateBehavior newState)
-    {
-        _stateBehavior?.Exit();
-        _stateBehavior = newState;
-        _stateBehavior.Enter();
-    }
 
 }

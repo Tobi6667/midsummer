@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,10 +7,12 @@ public class PlayerInputController : MonoBehaviour, Actions_MainInputClass.IPlay
 Actions_MainInputClass _mainInputClass;
     public static PlayerInputController Instance;
 
+    public event Action OnScanPressed;
+    public event Action OnScanReleased;
+    public event Action OnInteracted;
+
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
-
-    public bool OnInteracted { get; private set; }
 
     private bool _isActive = true;
 
@@ -29,7 +32,8 @@ Actions_MainInputClass _mainInputClass;
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        OnInteracted = true;
+        if (!context.performed) return;
+        OnInteracted?.Invoke();
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -77,6 +81,7 @@ Actions_MainInputClass _mainInputClass;
     {
         _mainInputClass.Player.Disable();
         _mainInputClass?.Dispose();
+        _mainInputClass = null;
     }
 
     public void OnMouseClick(InputAction.CallbackContext context)
@@ -92,5 +97,16 @@ Actions_MainInputClass _mainInputClass;
     public void Deactivate()
     {
         _isActive = false;
-    }   
+    }
+
+    public void OnScan(InputAction.CallbackContext context)
+    {
+        if (!_isActive) return;
+
+        if (context.started)
+            OnScanPressed?.Invoke();
+
+        if (context.canceled)
+            OnScanReleased?.Invoke();
+    }
 }

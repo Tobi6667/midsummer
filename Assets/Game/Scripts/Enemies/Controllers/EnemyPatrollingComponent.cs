@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+
 public class EnemyPatrollingComponent : MonoBehaviour
 {
     [SerializeField] private Transform[] _patrolPoints;
     [SerializeField] private float _pointWaitTime = 2f;
+
+    public event Action<Transform> OnWaypointReached;
 
     private EnemyStats _enemyStats;
     private NavMeshAgent _navAgent;
@@ -29,7 +33,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
         if (!_isPatroling)
             return;
 
-        _navAgent.speed = _enemyStats.MoveSpeed.Value;
+       // _navAgent.speed = _enemyStats.MoveSpeed.Value;
         Patrol();
     }
 
@@ -63,8 +67,21 @@ public class EnemyPatrollingComponent : MonoBehaviour
 
         if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance)
         {
+            Transform reached = _patrolPoints[ReachedIndex()];
+            OnWaypointReached?.Invoke(reached);
+
+            // if it's an animation waypoint, PatrolState takes over (froze us via StopPatroling
+            // by the time this returns) — don't start the normal timed wait on top of that
+            if (!_isPatroling || reached.GetComponent<InteractionPoint>() != null)
+                return;
+
             _waitRoutine = StartCoroutine(CoWaitAtPoint());
         }
+    }
+
+    private int ReachedIndex()
+    {
+        return (_currentPatrolIndex - 1 + _patrolPoints.Length) % _patrolPoints.Length;
     }
 
     private IEnumerator CoWaitAtPoint()
@@ -90,4 +107,3 @@ public class EnemyPatrollingComponent : MonoBehaviour
         _navAgent.speed = speed;
     }
 }
-
