@@ -23,7 +23,6 @@ Material:
   m_CustomRenderQueue: 2750
   stringTagMap:
     MotionVector: User
-    RenderType: Transparent
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
@@ -147,7 +146,7 @@ Material:
     - _OutlineWidth: 0
     - _PerPixelSorting: 0
     - _PerspectiveFilter: 0.875
-    - _QueueControl: -1
+    - _QueueControl: 1
     - _QueueOffset: 0
     - _RayTracing: 0
     - _ReceivesSSR: 1
