@@ -45,7 +45,7 @@ public class ItemScript : MonoBehaviour {
     void Start()
     {
        // gameObject.GetComponent<MeshFilter>().mesh = cubeMesh;
-        transform.localScale = new Vector3(20, 20, 20);
+       // transform.localScale = new Vector3(20, 20, 20);
     }
 
 }

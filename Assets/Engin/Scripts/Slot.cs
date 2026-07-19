@@ -46,7 +46,7 @@ public class Slot: MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDrag
         get {return items.Peek();}
     }
 	void Start(){
-        playerRef = GameObject.Find("PlayerEko");
+        playerRef = GameObject.Find("Playernew");
         if (transform.parent!=null)
         {
             canvasGroup = transform.parent.GetComponent<CanvasGroup>();
@@ -112,7 +112,7 @@ public class Slot: MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDrag
             {
                 float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
                 Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                v *= 25;
+                v *= 2;
 
                 GameObject tmpDrop = Instantiate(
                     InventoryManager.Instance.trapItem,
@@ -126,10 +126,10 @@ public class Slot: MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDrag
             {
                 float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
                 Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                v *= 25;
+                v *= 2;
 
                 GameObject tmpDrop = Instantiate( InventoryManager.Instance.dropItem, playerRef.transform.position - v, Quaternion.identity ) as GameObject;
-
+               // tmpDrop.transform.localScale=new Vector3(.1f, .1f, .1f);
                 tmpDrop.GetComponent<ItemScript>().Item = item.Item;
             }
         }

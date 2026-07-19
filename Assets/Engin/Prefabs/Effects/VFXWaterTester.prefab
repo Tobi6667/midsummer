@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7671417606514121403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4906198409464164105}
+  - component: {fileID: 5319040975096801878}
+  m_Layer: 0
+  m_Name: VFXWaterTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4906198409464164105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7671417606514121403}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.5157003, y: -0.9058664, z: 0.6589613}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5319040975096801878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7671417606514121403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34c90761894663a459ee1d0c0af7f53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Data:
+  - Name: WaterBeam
+    clip: {fileID: 0}
+    VfxSpawnDelay: 0
+    Source: 4
+    _Duration: 1.5
+    _Radius: 0.5
+    VFX: {fileID: 8369116964179515067, guid: 7991163288cb15946b0a74466d801d12, type: 3}
+  _Character: {fileID: 0}
+  _CurrentData: WaterAoeBody
+  _ActivateButton: {fileID: 0}
