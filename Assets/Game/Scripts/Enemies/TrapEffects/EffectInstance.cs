@@ -8,6 +8,7 @@ public class EffectInstance
 
     public EnemyStats Stats;
     public EnemyPatrollingComponent PatrollingComponent;
+    public AnimationActionComponent AnimationAction;
 
     public float RemainingTime;
 
@@ -20,7 +21,7 @@ public class EffectInstance
 
         Stats = target.GetComponent<EnemyStats>();
         PatrollingComponent = target.GetComponent<EnemyPatrollingComponent>();
-
+        AnimationAction = target.GetComponent<AnimationActionComponent>();
         RemainingTime = effect.duration;
     }
 

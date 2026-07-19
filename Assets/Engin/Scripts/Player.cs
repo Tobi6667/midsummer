@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
-    static Player instance;
+    static Player Instance;
 	//public float speed;
 	  public Inventory inventory;
     public Inventory charPanel;
@@ -19,52 +19,41 @@ public class Player : MonoBehaviour {
     //public int baseStrength;
     //public int baseStamina;
 
-    public static Player Instance
-    {
-        get
-        {
-            if(instance==null)
-            {
-                instance = GameObject.FindObjectOfType<Player>();
 
-            }
-            return instance;
-        }
-
-        set
-        {
-            instance = value;
-        }
-    }
     //private void Start()
     //{
     //    SetStats(0, 0, 0, 0);
 
     //}
- //   void Update()
-	//{
+    //   void Update()
+    //{
 
-	//	HandleMovement();
- //       if(Input.GetKeyDown(KeyCode.B))
- //       {
- //           inventory.Open();
- //       }
- //       if (Input.GetKeyDown(KeyCode.E))
- //       {
- //           if (chest != null)
- //               chest.Open();
- //       }
- //       if (Input.GetKeyDown(KeyCode.C))
- //       {
- //           if (charPanel != null)
- //               charPanel.Open();
- //       }
- //   }
+    //	HandleMovement();
+    //       if(Input.GetKeyDown(KeyCode.B))
+    //       {
+    //           inventory.Open();
+    //       }
+    //       if (Input.GetKeyDown(KeyCode.E))
+    //       {
+    //           if (chest != null)
+    //               chest.Open();
+    //       }
+    //       if (Input.GetKeyDown(KeyCode.C))
+    //       {
+    //           if (charPanel != null)
+    //               charPanel.Open();
+    //       }
+    //   }
 
-	//private void HandleMovement(){
-	//	float translation=speed*Time.deltaTime;
-	//	transform.Translate(new Vector3(Input.GetAxis("Horizontal")*translation, 0, Input.GetAxis("Vertical")*translation));}
-	private void OnTriggerEnter(Collider other)
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    //private void HandleMovement(){
+    //	float translation=speed*Time.deltaTime;
+    //	transform.Translate(new Vector3(Input.GetAxis("Horizontal")*translation, 0, Input.GetAxis("Vertical")*translation));}
+    private void OnTriggerEnter(Collider other)
 	{
         if (other.tag == "Item")
         {

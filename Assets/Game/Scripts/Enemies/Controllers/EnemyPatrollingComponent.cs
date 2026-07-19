@@ -50,6 +50,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
 
     internal void StopPatroling()
     {
+        Debug.Log("stop patrol");
         _isPatroling = false;
         _navAgent.isStopped = true;
 

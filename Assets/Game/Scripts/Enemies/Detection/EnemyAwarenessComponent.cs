@@ -37,6 +37,8 @@ public class EnemyAwarenessComponent : MonoBehaviour
         if (_awarenessLevel >= _alertThreshold)
         {
             CurrentState = AwarenessState.Alerted;
+              
+
         }
         else if (_awarenessLevel >= _suspicionThreshold)
         {

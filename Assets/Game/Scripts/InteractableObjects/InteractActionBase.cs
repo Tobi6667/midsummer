@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class InteractActionBase : MonoBehaviour, IInteractable
+public abstract class InteractActionBase : MonoBehaviour
 {
 
     [SerializeField] protected Transform _interactPoint;
@@ -14,10 +14,7 @@ public abstract class InteractActionBase : MonoBehaviour, IInteractable
 
     public AnimationClip[] TransitionClip => _transitionClip;
 
-    public void Interact()
-    {
-        Debug.Log("interaction act");
-    }
+
 
 
 }

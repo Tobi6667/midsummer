@@ -16,6 +16,9 @@ public class Inventory : MonoBehaviour
     private float hoverOffset;
     public float slotSize;
 
+
+
+
     private List<GameObject> allSlots;
 
     int emptySlots;
