@@ -16,7 +16,7 @@ public class Inventory : MonoBehaviour
     private float hoverOffset;
     public float slotSize;
 
-
+    [SerializeField] private PlayerInputController InputController_Drop;
 
 
     private List<GameObject> allSlots;
@@ -49,18 +49,17 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-        playerRef = GameObject.Find("Player");
-
+        playerRef = GameObject.Find("Playernew");
+        InputController_Drop.OnItem1Clicked += On1Clicked;
         CreateLayout();
         InventoryManager.Instance.MovingSlot = GameObject.Find("MovingSlot").GetComponent<Slot>();
     }
 
-    void Update()
+    private void On1Clicked()
     {
-        if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame)
+
+        if (!mouseInside && InventoryManager.Instance.From != null)
         {
-            if (!mouseInside && InventoryManager.Instance.From != null)
-            {
             //    InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;
 
             //    foreach (ItemScript item in InventoryManager.Instance.From.Items)
@@ -100,46 +99,46 @@ public class Inventory : MonoBehaviour
 
             //    InventoryManager.Instance.To = null;
             //    InventoryManager.Instance.From = null;
-            }
-            else if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject()
-                     && !InventoryManager.Instance.MovingSlot.IsEmpty)
-            {
-                foreach (ItemScript item in InventoryManager.Instance.MovingSlot.Items)
-                {
-                    if (item.tag == "Item")
-                    {
-                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
-                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                        v *= 25;
-
-                        GameObject tmpDrop = Instantiate(
-                            InventoryManager.Instance.dropItem,
-                            playerRef.transform.position - v,
-                            Quaternion.identity
-                        ) as GameObject;
-
-                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
-                    }
-                    else if (item.tag == "Trap")
-                    {
-                        float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
-                        Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                        v *= 25;
-
-                        GameObject tmpDrop = Instantiate(
-                            InventoryManager.Instance.trapItem,
-                            playerRef.transform.position - v,
-                            Quaternion.identity
-                        ) as GameObject;
-
-                        tmpDrop.GetComponent<ItemScript>().Item = item.Item;
-                    }
-                }
-
-                InventoryManager.Instance.MovingSlot.ClearSlot();
-                Destroy(GameObject.Find("Hover"));
-            }
         }
+        else if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject()
+                 && !InventoryManager.Instance.MovingSlot.IsEmpty)
+        {
+            foreach (ItemScript item in InventoryManager.Instance.MovingSlot.Items)
+            {
+                if (item.tag == "Item")
+                {
+                    float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+                    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+                    v *= 25;
+
+                    GameObject tmpDrop = Instantiate(
+                        InventoryManager.Instance.dropItem,
+                        playerRef.transform.position - v,
+                        Quaternion.identity
+                    ) as GameObject;
+
+                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                }
+                else if (item.tag == "Trap")
+                {
+                    float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+                    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+                    v *= 25;
+
+                    GameObject tmpDrop = Instantiate(
+                        InventoryManager.Instance.trapItem,
+                        playerRef.transform.position - v,
+                        Quaternion.identity
+                    ) as GameObject;
+
+                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+                }
+            }
+
+            InventoryManager.Instance.MovingSlot.ClearSlot();
+            Destroy(GameObject.Find("Hover"));
+        }
+
 
         if (InventoryManager.Instance.HoverObject != null && Mouse.current != null)
         {
@@ -159,6 +158,113 @@ public class Inventory : MonoBehaviour
                 InventoryManager.Instance.canvas.transform.TransformPoint(position);
         }
     }
+
+
+
+    //void Update()
+    //{
+    //    if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame)
+    //    {
+    //        if (!mouseInside && InventoryManager.Instance.From != null)
+    //        {
+    //        //    InventoryManager.Instance.From.GetComponent<Image>().color = Color.white;
+
+    //        //    foreach (ItemScript item in InventoryManager.Instance.From.Items)
+    //        //    {
+    //        //        if (item.spriteHighlighted.name == "Items00_4")
+    //        //        {
+    //        //            float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //        //            Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //        //            v *= 25;
+
+    //        //            GameObject tmpDrop = Instantiate(
+    //        //                InventoryManager.Instance.trapItem,
+    //        //                playerRef.transform.position - v,
+    //        //                Quaternion.identity
+    //        //            ) as GameObject;
+
+    //        //            tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //        //        }
+    //        //        else if (item.spriteHighlighted.name == "Items00_11")
+    //        //        {
+    //        //            float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //        //            Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //        //            v *= 25;
+
+    //        //            GameObject tmpDrop = Instantiate(
+    //        //                InventoryManager.Instance.dropItem,
+    //        //                playerRef.transform.position - v,
+    //        //                Quaternion.identity
+    //        //            ) as GameObject;
+
+    //        //            tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //        //        }
+    //        //    }
+
+    //        //    InventoryManager.Instance.From.ClearSlot();
+    //        //    Destroy(GameObject.Find("Hover"));
+
+    //        //    InventoryManager.Instance.To = null;
+    //        //    InventoryManager.Instance.From = null;
+    //        }
+    //        else if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject()
+    //                 && !InventoryManager.Instance.MovingSlot.IsEmpty)
+    //        {
+    //            foreach (ItemScript item in InventoryManager.Instance.MovingSlot.Items)
+    //            {
+    //                if (item.tag == "Item")
+    //                {
+    //                    float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //                    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //                    v *= 25;
+
+    //                    GameObject tmpDrop = Instantiate(
+    //                        InventoryManager.Instance.dropItem,
+    //                        playerRef.transform.position - v,
+    //                        Quaternion.identity
+    //                    ) as GameObject;
+
+    //                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //                }
+    //                else if (item.tag == "Trap")
+    //                {
+    //                    float angle = UnityEngine.Random.Range(0.00f, Mathf.PI * 2);
+    //                    Vector3 v = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
+    //                    v *= 25;
+
+    //                    GameObject tmpDrop = Instantiate(
+    //                        InventoryManager.Instance.trapItem,
+    //                        playerRef.transform.position - v,
+    //                        Quaternion.identity
+    //                    ) as GameObject;
+
+    //                    tmpDrop.GetComponent<ItemScript>().Item = item.Item;
+    //                }
+    //            }
+
+    //            InventoryManager.Instance.MovingSlot.ClearSlot();
+    //            Destroy(GameObject.Find("Hover"));
+    //        }
+    //    }
+
+    //    if (InventoryManager.Instance.HoverObject != null && Mouse.current != null)
+    //    {
+    //        Vector2 position;
+    //        Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+    //        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+    //            InventoryManager.Instance.canvas.transform as RectTransform,
+    //            mousePosition,
+    //            InventoryManager.Instance.canvas.worldCamera,
+    //            out position
+    //        );
+
+    //        position.Set(position.x, position.y - hoverOffset);
+
+    //        InventoryManager.Instance.HoverObject.transform.position =
+    //            InventoryManager.Instance.canvas.transform.TransformPoint(position);
+    //    }
+    //}
 
     public virtual void SaveInventory()
     {

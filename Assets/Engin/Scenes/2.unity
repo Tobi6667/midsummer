@@ -2928,6 +2928,17 @@ Transform:
   - {fileID: 1610298742}
   m_Father: {fileID: 968960249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &339095450 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 290093806922958507, guid: 7894b57213f783942ad6543dd3d2ef76, type: 3}
+  m_PrefabInstance: {fileID: 1931654084}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 324f806bcb7f9bc4db6f2dce510fe1fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &340955602
 GameObject:
   m_ObjectHideFlags: 0
@@ -10231,6 +10242,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5323139190096836096, guid: 4837990a2bb2e6f459eda130bd0a1cbf, type: 3}
   m_PrefabInstance: {fileID: 6030317933950575146}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1261258796 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5002137143764814113, guid: 4837990a2bb2e6f459eda130bd0a1cbf, type: 3}
+  m_PrefabInstance: {fileID: 6030317933950575146}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 104669a74dc195340968b17045711f5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1 &1273244315
 GameObject:
   m_ObjectHideFlags: 0
@@ -15425,6 +15447,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 290093806922958507, guid: 7894b57213f783942ad6543dd3d2ef76, type: 3}
+      propertyPath: InputController_Drop
+      value: 
+      objectReference: {fileID: 1261258796}
     - target: {fileID: 380089280400631709, guid: 7894b57213f783942ad6543dd3d2ef76, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -19151,14 +19177,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3261084148093354299, guid: f6a4c1de9bb72dd42972567d81e6dd90, type: 3}
-      propertyPath: canvas
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3261084148093354299, guid: f6a4c1de9bb72dd42972567d81e6dd90, type: 3}
-      propertyPath: eventSystem
-      value: 
-      objectReference: {fileID: 1596657641}
     - target: {fileID: 3261084148093354299, guid: 2a96817ff40a98c42a4101f62c174eab, type: 3}
       propertyPath: canvas
       value: 
@@ -19211,6 +19229,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: InventoryManagerNew
       objectReference: {fileID: 0}
+    - target: {fileID: 3261084148093354299, guid: f6a4c1de9bb72dd42972567d81e6dd90, type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3261084148093354299, guid: f6a4c1de9bb72dd42972567d81e6dd90, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 1596657641}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20586,10 +20612,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6096962169299849737, guid: 7ffafc83443b0aa459616a549a7229b4, type: 3}
-      propertyPath: inventory
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5323139190096836096, guid: 4837990a2bb2e6f459eda130bd0a1cbf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -20630,9 +20652,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6096962169299849737, guid: 4837990a2bb2e6f459eda130bd0a1cbf, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 339095450}
     - target: {fileID: 8583198223109030437, guid: 4837990a2bb2e6f459eda130bd0a1cbf, type: 3}
       propertyPath: m_Name
       value: Playernew
+      objectReference: {fileID: 0}
+    - target: {fileID: 6096962169299849737, guid: 7ffafc83443b0aa459616a549a7229b4, type: 3}
+      propertyPath: inventory
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
