@@ -11,7 +11,10 @@ Actions_MainInputClass _mainInputClass;
     public event Action OnScanReleased;
     public event Action OnInteracted;
     public event Action OnItem1Clicked;
-
+    public event Action OnItem2Clicked;
+    public event Action OnItem3Clicked;
+    public event Action OnItem4Clicked;
+   
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
 
@@ -118,4 +121,26 @@ Actions_MainInputClass _mainInputClass;
             OnItem1Clicked?.Invoke();
         }
     }
+
+    public void OnItem2(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnItem2Clicked?.Invoke();
+        }
+    }
+
+    public void OnItem3(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnItem3Clicked?.Invoke();
+        }
+    }
+
+        public void OnItem4(InputAction.CallbackContext context)
+    {
+            OnItem4Clicked?.Invoke();
+        }
+
 }

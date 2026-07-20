@@ -100,8 +100,7 @@ public class Inventory : MonoBehaviour
             //    InventoryManager.Instance.To = null;
             //    InventoryManager.Instance.From = null;
         }
-        else if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject()
-                 && !InventoryManager.Instance.MovingSlot.IsEmpty)
+        else if (!InventoryManager.Instance.MovingSlot.IsEmpty)
         {
             foreach (ItemScript item in InventoryManager.Instance.MovingSlot.Items)
             {
