@@ -1230,6 +1230,7 @@ Transform:
   m_Children:
   - {fileID: 2122003301}
   - {fileID: 296376192}
+  - {fileID: 7986632255477060400}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &108252551
@@ -2611,6 +2612,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCInteractionComponent
   _spawnChar: {fileID: 0}
   _spawnPos: {fileID: 0}
+  _item: {fileID: 0}
+  _dropPoint: {fileID: 0}
   _interactDataList: []
 --- !u!1 &227750981
 GameObject:
@@ -8877,7 +8880,7 @@ Transform:
   m_GameObject: {fileID: 749902872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.3, y: -27.24, z: 7.04}
+  m_LocalPosition: {x: -5.8, y: 7.8, z: -12.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14081,7 +14084,7 @@ Transform:
   m_GameObject: {fileID: 1226227435}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.3, y: -27.24, z: 7.04}
+  m_LocalPosition: {x: -5.8, y: 7.8, z: -12.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14615,7 +14618,7 @@ Transform:
   m_GameObject: {fileID: 1261258780}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.8, y: -28.64, z: 10.04}
+  m_LocalPosition: {x: -6.3, y: 6.4, z: -9.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15532,7 +15535,7 @@ Transform:
   m_GameObject: {fileID: 1332747023}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.3, y: -28.64, z: 8.04}
+  m_LocalPosition: {x: -5.8, y: 6.4, z: -11.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20828,6 +20831,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GuardInteractionComponent
   _spawnChar: {fileID: 0}
   _spawnPos: {fileID: 0}
+  _item: {fileID: 0}
+  _dropPoint: {fileID: 0}
   _interactDataList: []
 --- !u!1 &1741623379
 GameObject:
@@ -33506,8 +33511,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be393199410d7f54d837d0326ea619c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardInteractionComponent
-  _spawnChar: {fileID: 1339455758929978496, guid: 80aadf1ec797e5841920e3f233507e6f, type: 3}
+  _spawnChar: {fileID: 1339455758929978496, guid: acb7489091c91c8499ded5b4c51b0040, type: 3}
   _spawnPos: {fileID: 471385460}
+  _item: {fileID: 0}
+  _dropPoint: {fileID: 0}
   _interactDataList:
   - interactionType: 2
     dialogText: hallo test 1
@@ -34477,7 +34484,7 @@ Transform:
   - {fileID: 4352140089401988751}
   - {fileID: 1606620788}
   - {fileID: 319153347760390330}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 105634965}
   m_LocalEulerAnglesHint: {x: 0, y: 268.357, z: 0}
 --- !u!1 &8022515958249055357
 GameObject:
@@ -35653,7 +35660,6 @@ SceneRoots:
   - {fileID: 566785446}
   - {fileID: 743248280}
   - {fileID: 2004835866}
-  - {fileID: 7986632255477060400}
   - {fileID: 1460284112}
   - {fileID: 105634965}
   - {fileID: 1088880699}

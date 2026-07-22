@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
         _inventoryPanel = _rootElement.Q<VisualElement>("inventory-panel");
 
         _rootSelectElement = _selectDocument.rootVisualElement;
-        _selectionPanel = _rootSelectElement.Q<VisualElement>("select");
+        _selectionPanel = _rootSelectElement.Q<VisualElement>("select-container");
 
 
         _detectionBar = _rootElement.Q<ProgressBar>("detection-bar");
@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
         slotElement.userData = item;
 
         slotElement.RegisterCallback<ClickEvent>(evt => OnItemClicked(evt, onSelected));
-        _inventoryPanel.Add(slotElement);
+       // _inventoryPanel.Add(slotElement);
     }
 
     private void OnCloseClicked()
@@ -86,7 +86,7 @@ public class UIManager : MonoBehaviour
 
             slotElement.RegisterCallback<ClickEvent>(evt => OnActionClicked(evt, onSelectedInter));
 
-            _inventoryPanel.Add(slotElement);
+            _selectionPanel.Add(slotElement);
         }
     }
 
@@ -104,9 +104,10 @@ public class UIManager : MonoBehaviour
     {
         var clicked = evt.currentTarget as VisualElement;
         var so = clicked.userData as SoInteractionAction;
-
         if (so == null) return;
         onSelectedInter?.Invoke(so); 
+        _selectionPanel.style.display = DisplayStyle.None;
+        
     }
 
     public void UpdateDetectionBar(float _value)

@@ -37,6 +37,7 @@ public class PlayerController : PlayerBase
 
     private void Start()
     {
+        
         _inputController.OnInteracted += OnInteract;
     }
 
@@ -125,6 +126,8 @@ public class PlayerController : PlayerBase
 
     private void StartMovement()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _gravityReceiver.SetActiveMove(true);
         _cameraController.SetActiveMove(true);
 

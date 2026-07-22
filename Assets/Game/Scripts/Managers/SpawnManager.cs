@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
     private void Start()
     {
         StoryEventBus.Subscribe<GuardTalkedEvent>(SpawnCharacter);
+        StoryEventBus.Subscribe<SpawnItemEvent>(SpawnItem);
     }
 
     private void SpawnCharacter(GuardTalkedEvent @event)
@@ -22,8 +23,17 @@ public class SpawnManager : MonoBehaviour
         e.Initialize();
     }
 
+private void SpawnItem(SpawnItemEvent @event)
+{
+    var ite = Instantiate(@event.Item, @event.SpawnPosition, Quaternion.identity);
+
+}
+
+
     private void OnDisable()
     {
         StoryEventBus.Unsubscribe<GuardTalkedEvent>(SpawnCharacter);
     }
+
+
 }

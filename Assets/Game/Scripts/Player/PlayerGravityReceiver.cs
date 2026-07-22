@@ -96,7 +96,7 @@ public class PlayerGravityReceiver : MonoBehaviour
         if (cameraPivot != null)
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0, 0);
 
-        //pendingYaw += input.LookInput.x * mouseSensitivity;
+        pendingYaw += input.LookInput.x * mouseSensitivity * 0.1f;
 
       //  if (input.JumpPressed) // rename to match your actual PlayerController field
         //    jumpQueued = true;
