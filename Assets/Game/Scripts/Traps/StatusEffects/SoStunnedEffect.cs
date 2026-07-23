@@ -4,6 +4,7 @@ using UnityEngine;
 public class SoStunnedEffect : StatusEffectBase
 {
     public AnimationClip[] clip;
+
     public override void OnApply(EffectInstance instance)
     {
         instance.PatrollingComponent.StopPatroling();

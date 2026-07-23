@@ -50,7 +50,7 @@ public class Inventory : MonoBehaviour
     void Start()
     {
         playerRef = GameObject.Find("Playernew");
-        InputController_Drop.OnItem1Clicked += On1Clicked;
+       // InputController_Drop.OnItem1Clicked += On1Clicked;
         CreateLayout();
         InventoryManager.Instance.MovingSlot = GameObject.Find("MovingSlot").GetComponent<Slot>();
     }

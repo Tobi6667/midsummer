@@ -1,3 +1,28 @@
 :root {
 
 }
+
+.inventory-item 
+{
+    width: 100px;
+    height: 100px;
+    background-color: black;
+    margin: 8px;
+}
+
+.inventory-container {
+        display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: red;
+}
+
+.inventory-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.inventory-label {
+    color: white;
+    font-size: 18px;
+}

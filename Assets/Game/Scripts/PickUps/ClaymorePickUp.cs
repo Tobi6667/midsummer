@@ -1,24 +1,16 @@
-using System;
 using UnityEngine;
 
-public class BombPickUp : TrapItemBase
+public class ClaymorePickUp : PickUpBase
 {
-
-
-    internal void Initialize(Action onExplode)
-    {
-
-    }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
-
+        
     }
-
 }

@@ -2,20 +2,22 @@
     <ui:Template name="InventoryItem" src="project://database/Assets/Game/UI/Inventory/InventoryItem.uxml?fileID=9197481963319205126&amp;guid=657c8f3d0a82ab14fb3ed17efa10d2e3&amp;type=3#InventoryItem"/>
     <Style src="project://database/Assets/Game/UI/InGameStyle.uss?fileID=7433441132597879392&amp;guid=216194d0746671245bcebd06b167b8ae&amp;type=3#InGameStyle"/>
     <ui:VisualElement name="VisualElement" picking-mode="Ignore" style="flex-grow: 1;">
+        <ui:VisualElement name="inventory-panel" picking-mode="Ignore">
+            <ui:VisualElement name="inventory-container" class="inventory-container"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="select-action-panel" style="flex-grow: 1; display: none;">
+            <ui:Instance template="InventoryItem"/>
+        </ui:VisualElement>
         <ui:VisualElement name="dialog-panel" style="flex-grow: 1; position: absolute; justify-content: flex-start; align-items: auto; align-self: center; align-content: auto; flex-direction: column; flex-wrap: wrap; -unity-text-align: upper-left; flex-basis: auto; bottom: 200px;">
             <ui:Label text="tzrtzurtzutzu tztzu tzu tzu " name="dialog-label" style="font-size: 28px; color: rgb(255, 0, 0); justify-content: flex-start; align-items: auto; align-self: auto;"/>
             <ui:Button text="Button" name="close-btn"/>
         </ui:VisualElement>
-        <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: column;">
-            <ui:VisualElement name="select-action-panel" style="flex-grow: 1;">
-                <ui:Instance template="InventoryItem"/>
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" picking-mode="Ignore" style="flex-grow: 1; flex-direction: column;"/>
         <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-self: auto; align-items: flex-end; margin-bottom: 0; padding-bottom: 50px; padding-left: 50px; margin-right: 50px;">
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:ProgressBar value="60" title="my-progress" name="detection-bar"/>
             </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row;">
                 <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>
                 <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>
                 <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>

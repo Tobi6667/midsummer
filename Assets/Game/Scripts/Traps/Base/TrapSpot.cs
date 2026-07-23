@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class TrapSpot : MonoBehaviour, ITrapPlace
+public class TrapSpot : MonoBehaviour
 {
    [SerializeField] private TrapItemBase currentTrap;
    
-    public void PlaceTrap(TrapItemBase trap)
+   /* public void PlaceTrap(TrapItemBase trap)
     {
         currentTrap = trap;
 
@@ -47,5 +47,5 @@ public class TrapSpot : MonoBehaviour, ITrapPlace
     }
 
     
-
+*/
 }

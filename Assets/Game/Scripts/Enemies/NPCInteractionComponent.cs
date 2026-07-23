@@ -90,6 +90,7 @@ public class NPCInteractionComponent : MonoBehaviour
 
                 _selectedAction = interAct;
                 onFinish?.Invoke();
+                
             });
         
     }
