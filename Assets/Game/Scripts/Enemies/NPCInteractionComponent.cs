@@ -9,6 +9,8 @@ public class NPCInteractionComponent : MonoBehaviour
     private SoInteractionAction _selectedAction;
     [SerializeField] private EnemyBase _spawnChar;
     [SerializeField] private Transform _spawnPos;
+    [SerializeField] private PickUpBase _item;
+    [SerializeField] private Transform _dropPoint;
     private Action _onFinished;
     //[SerializeField] private List<SoInteractionAction> _interactions;
     private int _actionIndexer = 0;
@@ -47,6 +49,12 @@ public class NPCInteractionComponent : MonoBehaviour
                     _onFinished?.Invoke();
                 });
                 break;
+
+            case EInteractionType.DropItem:
+                Instantiate(_item,_dropPoint.position,Quaternion.identity);
+
+
+            break;
         }
     }
 
@@ -82,6 +90,7 @@ public class NPCInteractionComponent : MonoBehaviour
 
                 _selectedAction = interAct;
                 onFinish?.Invoke();
+                
             });
         
     }

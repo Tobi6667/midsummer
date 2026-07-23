@@ -10,10 +10,8 @@ Actions_MainInputClass _mainInputClass;
     public event Action OnScanPressed;
     public event Action OnScanReleased;
     public event Action OnInteracted;
-    public event Action OnItem1Clicked;
-    public event Action OnItem2Clicked;
-    public event Action OnItem3Clicked;
-    public event Action OnItem4Clicked;
+    public event Action<int> OnItemSelected;
+
    
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
@@ -114,33 +112,23 @@ Actions_MainInputClass _mainInputClass;
             OnScanReleased?.Invoke();
     }
 
-    public void OnItem1(InputAction.CallbackContext context)
-    {
-        if (context.started)
+        public void OnItemSelect(InputAction.CallbackContext context)
         {
-            OnItem1Clicked?.Invoke();
-        }
-    }
-
-    public void OnItem2(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            OnItem2Clicked?.Invoke();
-        }
-    }
-
-    public void OnItem3(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            OnItem3Clicked?.Invoke();
-        }
-    }
-
-        public void OnItem4(InputAction.CallbackContext context)
-    {
-            OnItem4Clicked?.Invoke();
+                    if (context.started)
+                    {
+                        switch (context.control.name)
+                        {
+                            case "1":
+                                OnItemSelected?.Invoke(0);
+                            break;
+                            case "2":
+                                OnItemSelected?.Invoke(1);
+                            break;
+                            case "3":
+                                OnItemSelected?.Invoke(2);
+                            break;
+}
+                    }
         }
 
 }

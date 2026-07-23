@@ -15,10 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIDocument _uiDocument;
     [SerializeField] private VisualTreeAsset _inventoryItemTemplate;
 
+
+
    // [SerializeField] private List<SoInventoryItem> _inventoryItems;
 
     private VisualElement _rootElement;
     private VisualElement _inventoryPanel;
+    private VisualElement _inventoryContainer;
 
     private VisualElement _dialogPanel;
     private Button _closeBtn;
@@ -30,14 +33,18 @@ public class UIManager : MonoBehaviour
     private ProgressBar _detectionBar;
 
     private Action _onclosed;
+private List<VisualElement> _inventorySlots = new();
+
+
     private void Awake()
     {
         Instance = this;
         _rootElement = _uiDocument.rootVisualElement;
         _inventoryPanel = _rootElement.Q<VisualElement>("inventory-panel");
+        _inventoryContainer = _inventoryPanel.Q<VisualElement>("inventory-container");
 
         _rootSelectElement = _selectDocument.rootVisualElement;
-        _selectionPanel = _rootSelectElement.Q<VisualElement>("select");
+        _selectionPanel = _rootSelectElement.Q<VisualElement>("select-container");
 
 
         _detectionBar = _rootElement.Q<ProgressBar>("detection-bar");
@@ -45,18 +52,67 @@ public class UIManager : MonoBehaviour
         _dialogLabel = _dialogPanel.Q<Label>("dialog-label");
         _closeBtn = _dialogPanel.Q<Button>("close-btn");
 
+
+
     }
 
 
 
-    public void AddInventoryItem(SoInventoryItem item, Action<SoInventoryItem> onSelected)
+public void RefreshInventory(List<InventorySlotData> items)
+{
+    for (int i = 0; i < _inventorySlots.Count; i++)
     {
-        var slotElement = _inventoryItemTemplate.Instantiate();
-        slotElement.userData = item;
-
-        slotElement.RegisterCallback<ClickEvent>(evt => OnItemClicked(evt, onSelected));
-        _inventoryPanel.Add(slotElement);
+        if (i < items.Count)
+        {
+            UpdateInventorySlot(i, items[i]);
+        }
+        else
+        {
+            ClearInventorySlot(i);
+        }
     }
+}
+
+private void Start()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        var slot = new VisualElement();
+        slot.AddToClassList("inventory-item");
+
+        Image icon = new Image();
+        icon.AddToClassList("inventory-icon");
+
+        Label amount = new Label();
+        amount.AddToClassList("inventory-label");
+        amount.text = "0";
+
+        slot.Add(icon);
+        slot.Add(amount);
+
+        _inventorySlots.Add(slot);
+        _inventoryContainer.Add(slot);
+    }
+}
+
+
+public void ClearInventorySlot(int index)
+{
+    VisualElement slot = _inventorySlots[index];
+
+    slot.Q<Image>().image = null;
+    slot.Q<Label>().text = "0";
+}
+
+
+public void UpdateInventorySlot(int index, InventorySlotData data)
+{
+    VisualElement slot = _inventorySlots[index];
+
+    slot.Q<Image>().image = data.item.icon.texture;
+
+    slot.Q<Label>().text = data.amount.ToString();
+}
 
     private void OnCloseClicked()
     {
@@ -86,7 +142,7 @@ public class UIManager : MonoBehaviour
 
             slotElement.RegisterCallback<ClickEvent>(evt => OnActionClicked(evt, onSelectedInter));
 
-            _inventoryPanel.Add(slotElement);
+            _selectionPanel.Add(slotElement);
         }
     }
 
@@ -104,13 +160,23 @@ public class UIManager : MonoBehaviour
     {
         var clicked = evt.currentTarget as VisualElement;
         var so = clicked.userData as SoInteractionAction;
-
         if (so == null) return;
         onSelectedInter?.Invoke(so); 
+        _selectionPanel.style.display = DisplayStyle.None;
+        
     }
 
     public void UpdateDetectionBar(float _value)
     {
         _detectionBar.value = _value;
     }
+
+
+    public void AddInventoryItem(InventorySlotData data, int index)
+{
+    VisualElement slot = _inventorySlots[index];
+
+    slot.Q<Image>().image = data.item.icon.texture;
+    slot.Q<Label>().text = data.amount.ToString();
+}
 }

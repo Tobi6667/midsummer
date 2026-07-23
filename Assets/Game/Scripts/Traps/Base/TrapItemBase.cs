@@ -1,37 +1,53 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
-public abstract class TrapItemBase : MonoBehaviour
+public abstract class TrapItemBase : PickUpBase
 {
-    [SerializeField] protected ParticleSystem particles;
-    [SerializeField] protected Transform trapPosition;
     [SerializeField] protected List<StatusEffectBase> statusEffects;
+    [SerializeField] protected ParticleSystem triggerEffect;
+    private ParticleSystem partObj;
+    private bool isTriggered = false;
 
-
-    public bool IsPlaced { get; protected set; }
-    public bool IsArmed { get; protected set; }
-
-
-    public virtual void TriggerTrap(EnemyController enemy, Action<bool> onFinished)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("trigger trap");
-        foreach (var effect in statusEffects)
+        Debug.Log("collided");
+        if(collision.gameObject.CompareTag("Enemy"))
         {
-            enemy.ApplyTrapEffect(effect);
+            Debug.Log("enemy hit trap");
         }
     }
 
-    public virtual void PlaceTrap()
-    {
-        IsPlaced = true;
-        IsArmed = true;
+    private void OnTriggerEnter(Collider collider)
+    {     
+
+        if(collider.gameObject.CompareTag("Enemy") && !isTriggered)
+        {
+            Debug.Log("enemy hit trap");
+            isTriggered = true;
+            EnemyController enemy = collider.gameObject.GetComponent<EnemyController>();
+            foreach (var effect in statusEffects)
+            {
+                enemy.ApplyTrapEffect(effect);
+
+            }
+
+           partObj = Instantiate(triggerEffect,this.transform.position,Quaternion.identity);
+           partObj.Play();
+            StartCoroutine(CoDestroySelf());
+
+
+Destroy(partObj.gameObject, partObj.main.duration);
+        }
     }
 
-    public virtual void RemoveTrap()
-    {
-        IsPlaced = false;
-        IsArmed = false;
-    }
+private IEnumerator CoDestroySelf()
+{
+    yield return new WaitForSeconds(3f);
+    Destroy(gameObject);
+
+}
+
 
 }
