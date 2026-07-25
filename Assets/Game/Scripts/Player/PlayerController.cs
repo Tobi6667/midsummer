@@ -51,6 +51,10 @@ public class PlayerController : PlayerBase
             foreach (var hit in hits)
             {
 
+
+                Debug.Log("hit: " + hit.name);
+
+
                 if (hit.TryGetComponent<InteractActionBase>(out var interaction) && !_isTransitioning)
                 {
                     StopMovement();
@@ -98,10 +102,15 @@ public class PlayerController : PlayerBase
                     break;
                 }
 
-                /*if (hit.TryGetComponent<IInteractable>(out var interactable))
+               if (hit.TryGetComponent<IInteractable>(out var interactable))
                 {
-                    interactable.Interact();
-                }*/
+                    StopMovement();
+                    interactable.Interact(() =>
+                    {
+                        StartMovement();
+                    });
+                    break;
+                }
             }
         }
         else
