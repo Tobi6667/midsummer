@@ -55,10 +55,15 @@ public abstract class EnemyBase : MonoBehaviour
 
 
     public abstract void StartActing();
-    public void StopAct()
-    {
-        _currentState?.Exit();
-        _currentState = null;
-        MoveTo(_startPosition);
-    }
+public void StopAct()
+{
+        Debug.Log("stop acter fucker");
+    _currentState?.Exit();
+    _currentState = null;
+
+    var actingController = GetComponent<ActorActingController>();
+    actingController?.StopActing();
+
+    transform.position = _startPosition;
+}
 }

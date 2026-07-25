@@ -6,10 +6,12 @@ public class ActorController : EnemyBase, IInteractable
 
     private NPCInteractionComponent _interactComponent;
     private ActorPatrolState _state;
+    private ActorActingController _actingController;
 
     private void Start()
     {
         _interactComponent = GetComponent<NPCInteractionComponent>();
+        _actingController = GetComponent<ActorActingController>();
 
     }
 
@@ -27,9 +29,13 @@ public class ActorController : EnemyBase, IInteractable
     {
         Debug.Log("dfdfdf STTTT");
         _state = new ActorPatrolState(this);
-
-        ChangeState(_state);
+        _actingController.StartActing();
+        //ChangeState(_state);
     }
+
+
+
+    
 
     public override void Initialize()
     {

@@ -33,6 +33,11 @@ public class AnimationActionComponent : MonoBehaviour
         if (_sequenceRoutine != null)
             StopCoroutine(_sequenceRoutine);
 
+
+        _animator.SetBool("isActing", false);
+        _animator.SetBool("isLooping", false);
+        _animator.Update(0f);
+
         _onComplete = onComplete;
         _animator.SetBool("isActing", true);
         _useA = true;
@@ -41,8 +46,13 @@ public class AnimationActionComponent : MonoBehaviour
 
     private IEnumerator PlaySequence(AnimationClip[] clips, AnimationClip loopClip)
     {
-        if (clips.Length == 0)
+        if (clips == null || clips.Length == 0)
+        {
+            _animator.SetBool("isActing", false);
+            _onComplete?.Invoke();
+            _sequenceRoutine = null;
             yield break;
+        }
 
         // pre-apply the first clip's override before anything plays
         ApplyOverride(_useA, clips[0]);
@@ -71,6 +81,8 @@ public class AnimationActionComponent : MonoBehaviour
 
             if (loopClip != null && i == clips.Length - 1)
             {
+                Debug.Log("shall replace lop"+loopClip);
+                // _animatorOverrideController[_placeholderClipLoop] = loopClip;
                 _animatorOverrideController[_placeholderClipLoop] = loopClip;
                 _animator.Update(0f);
                 // hand off to the animator's own No/No2 -> LoopAnim transition
@@ -82,6 +94,7 @@ public class AnimationActionComponent : MonoBehaviour
 
         if (loopClip == null)
         {
+            Debug.Log("shall STOP");
             _onComplete?.Invoke();
             _animator.SetBool("isActing", false);
             _animator.SetBool("isLooping", false);
@@ -108,6 +121,20 @@ public class AnimationActionComponent : MonoBehaviour
 
         _animator.SetBool("isActing", false);
         _animator.SetBool("isLooping", false);
+        _onComplete?.Invoke();
+    }
+
+    internal void StopAnimations()
+    {
+        if (_sequenceRoutine != null)
+        {
+            StopCoroutine(_sequenceRoutine);
+            _sequenceRoutine = null;
+        }
+
+        _animator.SetBool("isActing", false);
+        _animator.SetBool("isLooping", false);
+
         _onComplete?.Invoke();
     }
 }

@@ -105,15 +105,8 @@ public class NPCInteractionComponent : MonoBehaviour
     }
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    internal SoInteractionAction GetSelection()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return _selectedAction;
     }
 }
