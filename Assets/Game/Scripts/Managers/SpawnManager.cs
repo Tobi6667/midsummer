@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -16,6 +17,8 @@ public class SpawnManager : MonoBehaviour
         StoryEventBus.Subscribe<GuardTalkedEvent>(SpawnCharacter);
         StoryEventBus.Subscribe<SpawnItemEvent>(SpawnItem);
     }
+
+
 
     private void SpawnCharacter(GuardTalkedEvent @event)
     {

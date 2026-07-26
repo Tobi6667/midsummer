@@ -117,6 +117,12 @@ public class ActorActingController : MonoBehaviour
         }
     }
 
+
+    private void OnDisable()
+    {
+        StoryEventBus.Unsubscribe<WaitForTurnEvent>(OnTurn);
+
+    }
     private IEnumerator Speak(ActorActions action)
     {
         if (action.animation != null && action.animation.Length > 0)

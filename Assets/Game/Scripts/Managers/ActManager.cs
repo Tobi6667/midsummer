@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 
 public  class ActManager : MonoBehaviour
@@ -7,10 +5,21 @@ public  class ActManager : MonoBehaviour
     public static ActManager Instance;
 
     [SerializeField] private ActPlayData _actData;
+    [SerializeField] private Transform _curtainBlockade;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        StoryEventBus.Subscribe<RemoveCurtainEvent>(RemoveCurtain);
+    }
+
+    private void RemoveCurtain(RemoveCurtainEvent @event)
+    {
+        _curtainBlockade.gameObject.SetActive(false);
     }
 
     public void PlayAct()
@@ -32,6 +41,11 @@ public  class ActManager : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        StoryEventBus.Unsubscribe<RemoveCurtainEvent>(RemoveCurtain);
+
+    }
 
 
 }
