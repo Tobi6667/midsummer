@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class AudioManager : MonoBehaviour
 
     private List<AudioSource> sfxPool;
     private Coroutine musicFadeRoutine;
+    private Coroutine voiceLineRoutine;
 
     private void Awake()
     {
@@ -133,16 +135,41 @@ public class AudioManager : MonoBehaviour
 
     // ---------- VOICE / LINES ----------
 
-    public void PlayVoiceLine(AudioClip clip, float volume = 1f)
+    public void PlayVoiceLine(AudioClip clip, float volume = 1f, Action onFinished = null)
     {
         if (clip == null) return;
+
+        if (voiceLineRoutine != null)
+            StopCoroutine(voiceLineRoutine);
+
         voiceSource.Stop();
         voiceSource.clip = clip;
         voiceSource.volume = volume;
         voiceSource.Play();
+
+        if (onFinished != null)
+            voiceLineRoutine = StartCoroutine(WaitForVoiceLineEnd(clip.length, onFinished));
     }
 
-    public void StopVoiceLine() => voiceSource.Stop();
+    private IEnumerator WaitForVoiceLineEnd(float clipLength, Action onFinished)
+    {
+        // account for pitch so we don't fire early/late
+        float remaining = clipLength / Mathf.Max(voiceSource.pitch, 0.01f);
+        yield return new WaitForSeconds(remaining);
+
+        voiceLineRoutine = null;
+        onFinished?.Invoke();
+    }
+
+    public void StopVoiceLine()
+    {
+        if (voiceLineRoutine != null)
+        {
+            StopCoroutine(voiceLineRoutine);
+            voiceLineRoutine = null;
+        }
+        voiceSource.Stop();
+    }
 
     public bool IsVoiceLinePlaying => voiceSource.isPlaying;
 
