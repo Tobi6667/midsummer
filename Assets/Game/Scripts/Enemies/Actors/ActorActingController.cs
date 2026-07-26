@@ -66,7 +66,17 @@ public class ActorActingController : MonoBehaviour
                 break;
 
             case EActorAction.PlayAnimation:
-                yield return PlayAnimation(actorAction.animation);
+                if (!actorAction.needsItem)
+                {
+                    yield return PlayAnimation(actorAction.animation);
+                }
+                else
+                {
+                    if(interactionComponent.HasItem())
+                    {
+                        yield return PlayAnimation(actorAction.animation);
+                    }
+                }
                 break;
 
             case EActorAction.Speak:

@@ -14,6 +14,9 @@ public class NPCInteractionComponent : MonoBehaviour
     private Action _onFinished;
     //[SerializeField] private List<SoInteractionAction> _interactions;
     private int _actionIndexer = 0;
+    [SerializeField] private Transform _itemTransform;
+    private bool _hasItem = false;
+
 
     public SoInteractionAction AssignedAction => _selectedAction;
 
@@ -29,6 +32,7 @@ public class NPCInteractionComponent : MonoBehaviour
                 //ExecuteInteraction(_interactions[_actionIndex]);
                 if (dataInter.actions[0].needsItem)
                 {
+
                     if (InventoryManagerNEW.Instance.HasItem(dataInter.actions[0].inventoryItem))
                     {
                         CompleteInteraction(dataInter);
@@ -42,20 +46,28 @@ public class NPCInteractionComponent : MonoBehaviour
                 break;
 
             case EInteractionType.PlayText:
-                UIManager.Instance.ShowDialog(dataInter.dialogText, () =>
-                {
+                AudioManager.Instance.PlayVoiceLine(dataInter.actions[0].voiceLine);
                     _actionIndexer++;
                     CompleteInteraction(dataInter);
                     _onFinished?.Invoke();
-                });
+
                 break;
 
             case EInteractionType.DropItem:
                 Instantiate(_item,_dropPoint.position,Quaternion.identity);
+                _onFinished?.Invoke();
+
+                break;
 
 
-            break;
+
         }
+    }
+
+
+    private void Start()
+    {
+        _enemyBase = GetComponent<EnemyBase>();
     }
 
     private void CompleteInteraction(InteractData data)
@@ -89,12 +101,27 @@ public class NPCInteractionComponent : MonoBehaviour
             {
 
                 _selectedAction = interAct;
+
+                if(_selectedAction.interactionType == EInteractionType.HandItem)
+                {
+                    if(InventoryManagerNEW.Instance.HasItem(_selectedAction.inventoryItem))
+                    {
+                        RevealItem();
+                        _hasItem = true;
+                    }
+                }
+
                 onFinish?.Invoke();
                 
             });
         
     }
 
+
+   private void RevealItem()
+    {
+        _itemTransform.gameObject.SetActive(true);
+    }
 
 
     private void ExecuteInteraction(SoInteractionAction interactData)
@@ -107,6 +134,12 @@ public class NPCInteractionComponent : MonoBehaviour
 
     internal SoInteractionAction GetSelection()
     {
+
         return _selectedAction;
+    }
+
+    internal bool HasItem()
+    {
+        return _hasItem;
     }
 }
