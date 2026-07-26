@@ -21,16 +21,16 @@ public class InventoryManagerNEW : MonoBehaviour
 
     public bool HasItem(SoInventoryItem _item)
     {
-       /* foreach(SoInventoryItem item in _inventoryItems)
+        foreach(InventorySlotData item in _inventorySlots)
         {
 
-            if (item == _item)
+            if (item.item == _item)
             {
                 return true;
             }
 
 
-        }*/
+        }
         return false;
     }
 

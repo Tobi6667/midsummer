@@ -9,7 +9,7 @@ public class ChaseState : INPCStateBehavior
 
     public ChaseState(EnemyController enemy)
     {
-        Debug.Log("chase state");
+      //  Debug.Log("chase state");
         _enemyController = enemy;
         _enemyAwarenessComponent = enemy.GetComponent<EnemyAwarenessComponent>();
     }
@@ -31,7 +31,7 @@ public class ChaseState : INPCStateBehavior
     public void Tick(float dt)
     {
 
-        Debug.Log("ChaseState Tick");
+//        Debug.Log("ChaseState Tick");
         PlayerController.Instance.UpdateStats(0.1f);
         if (_enemyAwarenessComponent.CurrentState == EnemyAwarenessComponent.AwarenessState.Idle)
         {

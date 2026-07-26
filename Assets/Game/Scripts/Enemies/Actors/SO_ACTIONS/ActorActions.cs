@@ -9,4 +9,5 @@ public class ActorActions
     public AudioClip voice;
     public bool sendEvent;
     public float waitTime;
+    public bool needsItem;
 }

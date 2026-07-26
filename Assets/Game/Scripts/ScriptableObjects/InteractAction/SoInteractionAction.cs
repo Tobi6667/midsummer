@@ -10,4 +10,6 @@ public class SoInteractionAction : ScriptableObject
     public int interactionToReplace;
     public AnimationClip[] animationClips; // the branch tail — "do A" vs "do B"
     public AnimationClip loopClip;         // optional, passed through to PlayAnimations
+    public AudioClip voiceLine;
+    
 }

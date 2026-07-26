@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7478fc53027a06748b568c19386ea992, type: 3}
-  m_Name: Interaction1
+  m_Name: GuardFirstInteraction
   m_EditorClassIdentifier: Assembly-CSharp::SoInteractionAction
-  actionName: ChangeBook
-  inventoryItem: {fileID: 0}
+  actionName: Fuckit
+  inventoryItem: {fileID: 11400000, guid: bf72ed30560b37b4b8c2eafe88b0e148, type: 2}
   needsItem: 0
-  interactionType: 0
-  interactionToReplace: 1
+  interactionType: 2
+  interactionToReplace: 0
   animationClips:
-  - {fileID: -203655887218126122, guid: fdc0b1a11ba51224cbe6525c0386cd5f, type: 3}
+  - {fileID: -203655887218126122, guid: 9f137739d2c690e4b8d7bcf8ec5658e9, type: 3}
   loopClip: {fileID: 0}
+  voiceLine: {fileID: 8300000, guid: d19c86efed7da41458606321bfad1113, type: 3}

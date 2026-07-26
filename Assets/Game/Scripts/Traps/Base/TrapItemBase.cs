@@ -35,16 +35,16 @@ public abstract class TrapItemBase : PickUpBase
 
            partObj = Instantiate(triggerEffect,this.transform.position,Quaternion.identity);
            partObj.Play();
-            StartCoroutine(CoDestroySelf());
+            StartCoroutine(CoDestroySelf(statusEffects[0].duration));
 
 
 Destroy(partObj.gameObject, partObj.main.duration);
         }
     }
 
-private IEnumerator CoDestroySelf()
+private IEnumerator CoDestroySelf(float _duration)
 {
-    yield return new WaitForSeconds(3f);
+    yield return new WaitForSeconds(_duration);
     Destroy(gameObject);
 
 }
