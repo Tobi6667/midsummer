@@ -1,26 +1,96 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="InventoryItem" src="project://database/Assets/Game/UI/Inventory/InventoryItem.uxml?fileID=9197481963319205126&amp;guid=657c8f3d0a82ab14fb3ed17efa10d2e3&amp;type=3#InventoryItem"/>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Game/UI/InGameStyle.uss?fileID=7433441132597879392&amp;guid=216194d0746671245bcebd06b167b8ae&amp;type=3#InGameStyle"/>
-    <ui:VisualElement name="VisualElement" picking-mode="Ignore" style="flex-grow: 1;">
-        <ui:VisualElement name="inventory-panel" picking-mode="Ignore">
-            <ui:VisualElement name="inventory-container" class="inventory-container"/>
-        </ui:VisualElement>
-        <ui:VisualElement name="select-action-panel" style="flex-grow: 1; display: none;">
-            <ui:Instance template="InventoryItem"/>
-        </ui:VisualElement>
-        <ui:VisualElement name="dialog-panel" style="flex-grow: 1; position: absolute; justify-content: flex-start; align-items: auto; align-self: center; align-content: auto; flex-direction: column; flex-wrap: wrap; -unity-text-align: upper-left; flex-basis: auto; bottom: 200px;">
-            <ui:Label text="tzrtzurtzutzu tztzu tzu tzu " name="dialog-label" style="font-size: 28px; color: rgb(255, 0, 0); justify-content: flex-start; align-items: auto; align-self: auto;"/>
-            <ui:Button text="Button" name="close-btn"/>
-        </ui:VisualElement>
-        <ui:VisualElement name="VisualElement" picking-mode="Ignore" style="flex-grow: 1; flex-direction: column;"/>
-        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-self: auto; align-items: flex-end; margin-bottom: 0; padding-bottom: 50px; padding-left: 50px; margin-right: 50px;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:ProgressBar value="60" title="my-progress" name="detection-bar"/>
+    <ui:VisualElement name="hud-root" class="hud-root">
+        <ui:VisualElement name="quest-panel" class="quest-panel">
+            <ui:Label name="act-scene-label" text="Act I, Scene II" class="act-scene-label"/>
+            <ui:Label name="scene-title-label" text="Fragments in the Code" class="scene-title-label"/>
+            <ui:VisualElement name="objectives-list" class="objectives-list">
+                <ui:VisualElement class="objective-row">
+                    <ui:VisualElement class="objective-bullet"/>
+                    <ui:Label text="Scan Titania to reveal her true nature" class="objective-label"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="objective-row">
+                    <ui:VisualElement class="objective-bullet"/>
+                    <ui:Label text="Find a way past the Athenian Gate" class="objective-label"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row;">
-                <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>
-                <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>
-                <ui:Image source="project://database/Assets/UModelerX/Editor/Resources/AI/Asset_Delete.png?fileID=2800000&amp;guid=37393e6172d0ebe42acde54143da33f4&amp;type=3#Asset_Delete"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="top-right-panel" class="top-right-panel">
+            <ui:VisualElement name="resource-counter" class="resource-counter">
+                <ui:VisualElement class="resource-content">
+                    <ui:Label text="Code Fragments" class="resource-label"/>
+                    <ui:Label name="resource-count-label" text="3 / 16" class="resource-count-label"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="resource-icon" class="resource-icon"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="timed-objective" class="timed-objective">
+                <ui:VisualElement name="timed-objective-icon" class="timed-objective-icon"/>
+                <ui:VisualElement class="timed-objective-text">
+                    <ui:Label name="timed-objective-title" text="Steal an Athenian Identity" class="timed-objective-title"/>
+                    <ui:Label name="timed-objective-timer" text="48m" class="timed-objective-timer"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="dialogue-box" class="dialogue-box">
+            <ui:VisualElement name="dialogue-portrait" class="dialogue-portrait"/>
+            <ui:VisualElement class="dialogue-body">
+                <ui:Label name="dialogue-speaker" text="Wm. Shakespeare.exe" class="dialogue-speaker"/>
+                <ui:Label name="dialogue-text" text="Welcome, Puck. This is one of my tinker&apos;d worlds within the dreaming cube. Use wit, not steel. The play favors those who bend before they break." class="dialogue-text"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="scan-readout" class="scan-readout">
+            <ui:Label name="scan-status-label" text="Scanning..." class="scan-status-label"/>
+            <ui:Label name="scan-target-name" text="AI_Entity: Titania" class="scan-target-name"/>
+            <ui:VisualElement class="scan-stat-row">
+                <ui:Label text="Faction:" class="scan-stat-key"/>
+                <ui:Label name="scan-faction-value" text="Court of Dreams" class="scan-stat-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="scan-stat-row">
+                <ui:Label text="Role:" class="scan-stat-key"/>
+                <ui:Label name="scan-role-value" text="Sovereign" class="scan-stat-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="scan-stat-row">
+                <ui:Label text="Logic Core:" class="scan-stat-key"/>
+                <ui:Label name="scan-logic-value" text="Poetic" class="scan-stat-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="scan-stat-row">
+                <ui:Label text="Emotional Matrix:" class="scan-stat-key"/>
+                <ui:Label name="scan-emotion-value" text="Affectionate" class="scan-stat-value"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="scan-stat-row">
+                <ui:Label text="Threat Level:" class="scan-stat-key"/>
+                <ui:Label name="scan-threat-value" text="Low" class="scan-stat-value scan-threat-low"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="disguise-panel" class="disguise-panel">
+            <ui:VisualElement name="disguise-icon" class="disguise-icon"/>
+            <ui:VisualElement class="disguise-info">
+                <ui:Label name="disguise-label" text="Disguise: Athenian Attendant" class="disguise-label"/>
+                <ui:VisualElement name="disguise-bar-bg" class="disguise-bar-bg">
+                    <ui:VisualElement name="disguise-bar-fill" class="disguise-bar-fill" style="width: 70%;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ability-hotbar" class="ability-hotbar" style="transform-origin: center; translate: 0% 0; right: 24px;">
+            <ui:VisualElement name="inventory-slot-1" class="ability-slot">
+                <ui:Image name="inventory-slot-1-icon" class="ability-icon"/>
+                <ui:Label name="inventory-slot-1-count" text="" class="inventory-count"/>
+                <ui:Label text="1" class="ability-key"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="inventory-slot-2" class="ability-slot">
+                <ui:Image name="inventory-slot-2-icon" class="ability-icon"/>
+                <ui:Label name="inventory-slot-2-count" text="" class="inventory-count"/>
+                <ui:Label text="2" class="ability-key"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="inventory-slot-3" class="ability-slot">
+                <ui:Image name="inventory-slot-3-icon" class="ability-icon"/>
+                <ui:Label name="inventory-slot-3-count" text="" class="inventory-count"/>
+                <ui:Label text="3" class="ability-key"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="inventory-slot-4" class="ability-slot">
+                <ui:Image name="inventory-slot-4-icon" class="ability-icon"/>
+                <ui:Label name="inventory-slot-4-count" text="" class="inventory-count"/>
+                <ui:Label text="4" class="ability-key"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

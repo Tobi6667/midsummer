@@ -1,0 +1,221 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &430918518670657135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2947555683598452024}
+  - component: {fileID: 6217573020214363872}
+  m_Layer: 0
+  m_Name: Mask Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2947555683598452024
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430918518670657135}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 889040028013629483}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6217573020214363872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430918518670657135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025cdf27d12bbb6478e1fc0b6b684f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maskType: 4
+  maskPlaneTransform: {fileID: 0}
+  maskPlanePosition: {x: 0, y: 0, z: 0}
+  maskPlaneNormal: {x: 0, y: 1, z: 0}
+  maskSphereTransform: {fileID: 0}
+  maskSpherePosition: {x: 0, y: 0, z: 0}
+  maskSphereRadius: 2
+  maskSphereUsePointLight: 0
+  maskSpherePointLight: {fileID: 0}
+  maskCubeTransform: {fileID: 0}
+  maskCubePosition: {x: 0, y: 0, z: 0}
+  maskCubeRotation: {x: 0, y: 0, z: 0}
+  maskCubeScale: {x: 1, y: 1, z: 1}
+  maskCapsuleStartTransform: {fileID: 0}
+  maskCapsuleEndTransform: {fileID: 0}
+  maskCapsuleStartPosition: {x: 0, y: 0, z: 0}
+  maskCapsuleEndPosition: {x: 10, y: 0, z: 0}
+  maskCapsuleRadius: 2
+  maskConeStartTransform: {fileID: 0}
+  maskConeEndTransform: {fileID: 0}
+  maskConeStartPosition: {x: 38.11, y: 7.15, z: -38.83}
+  maskConeEndPosition: {x: 36.160122, y: -7.1305566, z: -53.240562}
+  maskConeRadius: 2
+  maskConeUseSpotLight: 1
+  maskConeSpotLight: {fileID: 0}
+  edgeFalloff: 1
+  shaderVariableReferenceName: _WireframeShaderMaskData
+  shaderVariableScope: 0
+  updateMode: 1
+  drawGizmos: 2
+  listMaterials:
+  - {fileID: 2100000, guid: e56e06d679ac99942ad719807271ed3f, type: 2}
+  - {fileID: 2100000, guid: 759447a63cfbe094f9cf351f1cd4b474, type: 2}
+  - {fileID: 2100000, guid: 1469033ef44cd8b4190c281be140d56d, type: 2}
+  - {fileID: 2100000, guid: 9dc2654788bc7d44e9aee0a08170369c, type: 2}
+--- !u!1 &6092685372544722620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4821094961221746664}
+  - component: {fileID: 5201998319158321300}
+  m_Layer: 0
+  m_Name: Mask Controller (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4821094961221746664
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092685372544722620}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.4165916, y: -0.6654457, z: -22.407015}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 889040028013629483}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5201998319158321300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092685372544722620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025cdf27d12bbb6478e1fc0b6b684f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maskType: 1
+  maskPlaneTransform: {fileID: 0}
+  maskPlanePosition: {x: 47.5, y: -0.7718, z: -21.58}
+  maskPlaneNormal: {x: 0, y: 1, z: 0}
+  maskSphereTransform: {fileID: 0}
+  maskSpherePosition: {x: 41.72, y: 0.06, z: -26.81}
+  maskSphereRadius: 2
+  maskSphereUsePointLight: 1
+  maskSpherePointLight: {fileID: 0}
+  maskCubeTransform: {fileID: 0}
+  maskCubePosition: {x: 48.42, y: 0.135, z: -19.43}
+  maskCubeRotation: {x: -0, y: 180.00005, z: 0}
+  maskCubeScale: {x: 7.327582, y: 7.327582, z: 7.327582}
+  maskCapsuleStartTransform: {fileID: 0}
+  maskCapsuleEndTransform: {fileID: 0}
+  maskCapsuleStartPosition: {x: 0, y: 0, z: 0}
+  maskCapsuleEndPosition: {x: 10, y: 0, z: 0}
+  maskCapsuleRadius: 2
+  maskConeStartTransform: {fileID: 0}
+  maskConeEndTransform: {fileID: 0}
+  maskConeStartPosition: {x: -2.11, y: 7.69, z: 5.84}
+  maskConeEndPosition: {x: -3.2511454, y: -8.164215, z: -6.917056}
+  maskConeRadius: 2
+  maskConeUseSpotLight: 0
+  maskConeSpotLight: {fileID: 0}
+  edgeFalloff: 0.03
+  shaderVariableReferenceName: _WireframeShaderMaskData
+  shaderVariableScope: 0
+  updateMode: 1
+  drawGizmos: 2
+  listMaterials:
+  - {fileID: 2100000, guid: 0b79a7d3219943c42b46fdcf21a60535, type: 2}
+  - {fileID: 2100000, guid: 82dd43cf2976b60498f0fe8d96764f6e, type: 2}
+  - {fileID: 2100000, guid: 5f276ffceb1fdc340a0c6674d4bc8346, type: 2}
+  - {fileID: 2100000, guid: fa11b33cd9beebc4cb917b63cddc2fa0, type: 2}
+  - {fileID: 2100000, guid: fd6b5b5ddb4e53a47afa008bccb8377d, type: 2}
+  - {fileID: 2100000, guid: 5535c7817a7b8044fb8f8c1c9d3a059f, type: 2}
+  - {fileID: 2100000, guid: bdf4e9969717b134c879d741850111b4, type: 2}
+  - {fileID: 2100000, guid: fd7afda1316bf7e4e8e61586558d2d71, type: 2}
+  - {fileID: 2100000, guid: 92d498f3a506ea947805432341cd6647, type: 2}
+  - {fileID: 2100000, guid: a94d4efb4f8eef84c88ec922087b6e68, type: 2}
+  - {fileID: 2100000, guid: 73bb9c29a49c485479cdae4d61d2c87f, type: 2}
+  - {fileID: 2100000, guid: b7d14d1db5994414dbcdf4b4d02110ae, type: 2}
+  - {fileID: 2100000, guid: 089cba4a8f406d044a1545add85c09d5, type: 2}
+  - {fileID: 2100000, guid: 8ff98628e1b7f9545b7c2898400a93f1, type: 2}
+  - {fileID: 2100000, guid: 05ba0cd1f6964dd489a550590e752b7c, type: 2}
+  - {fileID: 2100000, guid: b1166fce7f79214419a29cecbde14995, type: 2}
+  - {fileID: 2100000, guid: c5371c0dab9c76345a58f4d34bbd26e2, type: 2}
+  - {fileID: 2100000, guid: b697ee8e4e7409a47bce1673deba8ab6, type: 2}
+  - {fileID: 2100000, guid: 03047d0429a605847835fab0f02bc61b, type: 2}
+  - {fileID: 2100000, guid: 61038d23412668c449eeefb5694fd682, type: 2}
+  - {fileID: 2100000, guid: 04d63c0ceec03064b844f6a9c96c33e8, type: 2}
+  - {fileID: 2100000, guid: 3104c80ec0094084f9aff03df7fdf9fe, type: 2}
+  - {fileID: 2100000, guid: 7cad781de6900984ab88f5cd0876fb07, type: 2}
+  - {fileID: 2100000, guid: a743f1862e6fdc0419b6f68173e14857, type: 2}
+  - {fileID: 2100000, guid: dde3103d9d3420148b3d70835f91797e, type: 2}
+  - {fileID: 2100000, guid: 175f51055d4f03541b31b7fb76c52486, type: 2}
+  - {fileID: 2100000, guid: f4410b2b7b35e0e47a1403663efdb8dc, type: 2}
+  - {fileID: 2100000, guid: 966efaeccb8909142bdfee110c4dc4ca, type: 2}
+  - {fileID: 2100000, guid: b58df7646620b4b41802464c7ebb101f, type: 2}
+  - {fileID: 2100000, guid: a6442a1e2bacb1340a985ee4aec57552, type: 2}
+  - {fileID: 2100000, guid: 226708e6dcfdd22479e9dee721aad007, type: 2}
+  - {fileID: 2100000, guid: 5f3dec0c19ce7da448d725c37be910d8, type: 2}
+--- !u!1 &8345258191773585243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 889040028013629483}
+  m_Layer: 0
+  m_Name: SCANCONTROLLERS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &889040028013629483
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345258191773585243}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 41.78041, y: 0.9754457, z: -24.382986}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2947555683598452024}
+  - {fileID: 4821094961221746664}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

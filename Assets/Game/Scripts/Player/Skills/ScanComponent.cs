@@ -1,3 +1,4 @@
+using DG.Tweening;
 using PixPlays.ElementalVFX;
 using System;
 using System.Collections;
@@ -12,6 +13,8 @@ public class ScanComponent : MonoBehaviour
     [SerializeField] private LayerMask _scanMask;
     [SerializeField] private VFXTester _vfxTester;
     [SerializeField] private Transform _target;
+    [SerializeField] private Light _scanLight;
+    private Sequence _scanSequence;
 
     private GuardController _currentGuard;
 
@@ -23,8 +26,12 @@ public class ScanComponent : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _inputController.OnScanPressed += StartScanning;
-        _inputController.OnScanReleased += StopScanning;
+        CreateScanSequence();
+
+        _inputController.OnScanPressed += ExpandScanLight;
+        _inputController.OnScanReleased += CollapseScanLight;
+        // _inputController.OnScanPressed += StartScanning;
+        // _inputController.OnScanReleased += StopScanning;
     }
 
     private void StopScanning()
@@ -34,8 +41,10 @@ public class ScanComponent : MonoBehaviour
 
     private void OnDisable()
     {
-        _inputController.OnScanPressed -= StartScanning;
-        _inputController.OnScanReleased -= StopScanning;
+        _inputController.OnScanPressed -= ExpandScanLight;
+        _inputController.OnScanReleased -= CollapseScanLight;
+        // _inputController.OnScanPressed -= StartScanning;
+        // _inputController.OnScanReleased -= StopScanning;
     }
 
     private const float scanRadius = 5f;
@@ -90,4 +99,31 @@ public class ScanComponent : MonoBehaviour
         }
     }
 
+
+    private void CreateScanSequence()
+    {
+        _scanLight.range = 0f;
+        _scanLight.intensity = 1f;
+
+        _scanSequence = DOTween.Sequence()
+
+            .Join(DOTween.To(
+                () => _scanLight.range,
+                x => _scanLight.range = x,
+                3f,
+                0.5f))
+            .SetEase(Ease.OutQuad)
+            .Pause()
+            .SetAutoKill(false);
+    }
+
+    private void ExpandScanLight()
+    {
+        _scanSequence.PlayForward();
+    }
+
+    private void CollapseScanLight()
+    {
+        _scanSequence.PlayBackwards();
+    }
 }

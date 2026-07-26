@@ -1,28 +1,339 @@
 :root {
-
+    --col-cyan: rgb(88, 224, 232);
+    --col-cyan-dim: rgba(88, 224, 232, 0.5);
+    --col-gold: rgb(214, 178, 96);
+    --col-purple: rgb(178, 130, 224);
+    --col-text: rgb(230, 235, 240);
+    --col-text-dim: rgb(160, 170, 180);
+    --col-panel-bg: rgba(10, 16, 24, 0.55);
+    --col-panel-border: rgba(120, 200, 220, 0.25);
+    --col-threat-low: rgb(120, 220, 140);
 }
 
-.inventory-item 
-{
-    width: 100px;
-    height: 100px;
-    background-color: black;
-    margin: 8px;
+.hud-root {
+    flex-grow: 1;
+    -unity-font-definition: none;
+    color: var(--col-text);
 }
 
-.inventory-container {
-        display: flex;
+/* ---------- Shared panel look ---------- */
+.quest-panel,
+.resource-counter,
+.timed-objective,
+.dialogue-box,
+.scan-readout,
+.disguise-panel,
+.ability-slot,
+.inventory-slot {
+    background-color: var(--col-panel-bg);
+    border-width: 1px;
+    border-color: var(--col-panel-border);
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+/* ---------- Top left: quest panel ---------- */
+.quest-panel {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 320px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    padding: 0;
+}
+
+.act-scene-label {
+    color: var(--col-gold);
+    font-size: 13px;
+    -unity-font-style: italic;
+    letter-spacing: 1px;
+}
+
+.scene-title-label {
+    color: var(--col-text);
+    font-size: 26px;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+    -unity-text-outline-width: 0.5px;
+    -unity-text-outline-color: rgba(0,0,0,0.6);
+}
+
+.objectives-list {
+    margin-top: 4px;
+}
+
+.objective-row {
     flex-direction: row;
-    flex-wrap: wrap;
-    background-color: red;
+    align-items: center;
+    margin-bottom: 4px;
 }
 
-.inventory-icon {
-    width: 100%;
-    height: 100%;
+.objective-bullet {
+    width: 8px;
+    height: 8px;
+    rotate: 45deg;
+    background-color: var(--col-gold);
+    margin-right: 10px;
+    margin-left: 2px;
 }
 
-.inventory-label {
-    color: white;
+.objective-label {
+    font-size: 14px;
+    color: var(--col-text);
+}
+
+/* ---------- Top right ---------- */
+.top-right-panel {
+    display: none;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    align-items: flex-end;
+}
+
+.resource-counter {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 220px;
+    margin-bottom: 10px;
+}
+
+.resource-content {
+    align-items: flex-end;
+}
+
+.resource-label {
+    font-size: 12px;
+    color: var(--col-text-dim);
+}
+
+.resource-count-label {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: var(--col-cyan);
+}
+
+.resource-icon {
+    width: 22px;
+    height: 22px;
+    margin-left: 10px;
+    background-color: var(--col-cyan-dim);
+    border-radius: 4px;
+}
+
+.timed-objective {
+    flex-direction: row;
+    align-items: center;
+    width: 220px;
+    border-color: var(--col-gold);
+}
+
+.timed-objective-icon {
+    width: 18px;
+    height: 18px;
+    rotate: 45deg;
+    background-color: var(--col-gold);
+    margin-right: 10px;
+}
+
+.timed-objective-text {
+    flex-grow: 1;
+}
+
+.timed-objective-title {
+    font-size: 12px;
+    color: var(--col-gold);
+    white-space: normal;
+}
+
+.timed-objective-timer {
+    font-size: 12px;
+    color: var(--col-text-dim);
+}
+
+/* ---------- Dialogue box (Shakespeare.exe) ---------- */
+.dialogue-box {
+    display: none;
+    position: absolute;
+    left: 24px;
+    top: 150px;
+    width: 320px;
+    flex-direction: row;
+    border-color: var(--col-cyan-dim);
+}
+
+.dialogue-portrait {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    background-color: rgba(88, 224, 232, 0.15);
+    border-width: 1px;
+    border-color: var(--col-cyan-dim);
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.dialogue-body {
+    flex-grow: 1;
+}
+
+.dialogue-speaker {
+    color: var(--col-cyan);
+    font-size: 13px;
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+}
+
+.dialogue-text {
+    color: var(--col-text-dim);
+    font-size: 12px;
+    white-space: normal;
+    -unity-text-align: upper-left;
+}
+
+/* ---------- Center scan readout ---------- */
+.scan-readout {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 210px;
+    width: 260px;
+    translate: -30% 0;
+    border-color: var(--col-cyan);
+    background-color: rgba(8, 20, 26, 0.45);
+}
+
+.scan-status-label {
+    color: var(--col-cyan);
+    font-size: 13px;
+    -unity-font-style: italic;
+    margin-bottom: 4px;
+}
+
+.scan-target-name {
+    color: var(--col-text);
     font-size: 18px;
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.scan-stat-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.scan-stat-key {
+    font-size: 12px;
+    color: var(--col-text-dim);
+}
+
+.scan-stat-value {
+    font-size: 12px;
+    color: var(--col-text);
+    -unity-font-style: bold;
+}
+
+.scan-threat-low {
+    color: var(--col-threat-low);
+}
+
+/* ---------- Bottom left: disguise meter ---------- */
+.disguise-panel {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    width: 300px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0,0,0,0.4);
+    border-width: 0;
+    padding: 16;
+}
+
+.disguise-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: rgba(255,255,255,0.08);
+    border-width: 1px;
+    border-color: var(--col-panel-border);
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.disguise-info {
+    flex-grow: 1;
+}
+
+.disguise-label {
+    font-size: 12px;
+    color: var(--col-text);
+    margin-bottom: 4px;
+}
+
+.disguise-bar-bg {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.disguise-bar-fill {
+    height: 100%;
+    background-color: var(--col-cyan);
+}
+
+/* ---------- Bottom center: ability hotbar ---------- */
+.ability-hotbar {
+
+    position: absolute;
+    right: 0px;
+    bottom: 24px;
+    translate: -50% 0;
+    flex-direction: row;
+}
+
+.ability-slot {
+    width: 76px;
+    align-items: center;
+    margin-left: 6px;
+    margin-right: 6px;
+    position: relative;
+}
+
+.ability-slot:hover {
+    border-color: var(--col-cyan);
+}
+
+.ability-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    border-width: 2px;
+    border-color: var(--col-cyan-dim);
+    background-color: rgba(255, 255, 255, 0.06);
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.ability-key {
+    font-size: 10px;
+    color: var(--col-text);
+    background-color: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 0 4px;
+    margin-top: 2px;
+}
+
+/* ---------- Item count badge (merged into ability-slot) ---------- */
+.inventory-count {
+    position: absolute;
+    right: 6px;
+    bottom: 22px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: var(--col-text);
 }

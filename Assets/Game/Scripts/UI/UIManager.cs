@@ -17,102 +17,81 @@ public class UIManager : MonoBehaviour
 
 
 
-   // [SerializeField] private List<SoInventoryItem> _inventoryItems;
+    // [SerializeField] private List<SoInventoryItem> _inventoryItems;
 
     private VisualElement _rootElement;
-    private VisualElement _inventoryPanel;
-    private VisualElement _inventoryContainer;
+    private VisualElement _abilityHotbar;
 
-    private VisualElement _dialogPanel;
     private Button _closeBtn;
 
     private VisualElement _rootSelectElement;
     private VisualElement _selectionPanel;
-    private Label _dialogLabel;
+
 
     private ProgressBar _detectionBar;
 
     private Action _onclosed;
-private List<VisualElement> _inventorySlots = new();
+
+    // One entry per slot (1-4), holding direct refs to that slot's icon + count label
+    // so we never have to guess which Label/Image belongs to which slot.
+    private readonly List<Image> _inventoryIcons = new();
+    private readonly List<Label> _inventoryCounts = new();
 
 
     private void Awake()
     {
         Instance = this;
         _rootElement = _uiDocument.rootVisualElement;
-        _inventoryPanel = _rootElement.Q<VisualElement>("inventory-panel");
-        _inventoryContainer = _inventoryPanel.Q<VisualElement>("inventory-container");
+        _abilityHotbar = _rootElement.Q<VisualElement>("ability-hotbar");
 
         _rootSelectElement = _selectDocument.rootVisualElement;
         _selectionPanel = _rootSelectElement.Q<VisualElement>("select-container");
 
-
         _detectionBar = _rootElement.Q<ProgressBar>("detection-bar");
-        _dialogPanel = _rootElement.Q<VisualElement>("dialog-panel");
-        _dialogLabel = _dialogPanel.Q<Label>("dialog-label");
-        _closeBtn = _dialogPanel.Q<Button>("close-btn");
 
-
-
-    }
-
-
-
-public void RefreshInventory(List<InventorySlotData> items)
-{
-    for (int i = 0; i < _inventorySlots.Count; i++)
-    {
-        if (i < items.Count)
+        for (int i = 1; i <= 4; i++)
         {
-            UpdateInventorySlot(i, items[i]);
-        }
-        else
-        {
-            ClearInventorySlot(i);
+            _inventoryIcons.Add(_rootElement.Q<Image>($"inventory-slot-{i}-icon"));
+            _inventoryCounts.Add(_rootElement.Q<Label>($"inventory-slot-{i}-count"));
         }
     }
-}
 
-private void Start()
-{
-    for (int i = 0; i < 4; i++)
+
+    public void RefreshInventory(List<InventorySlotData> items)
     {
-        var slot = new VisualElement();
-        slot.AddToClassList("inventory-item");
-
-        Image icon = new Image();
-        icon.AddToClassList("inventory-icon");
-
-        Label amount = new Label();
-        amount.AddToClassList("inventory-label");
-        amount.text = "0";
-
-        slot.Add(icon);
-        slot.Add(amount);
-
-        _inventorySlots.Add(slot);
-        _inventoryContainer.Add(slot);
+        for (int i = 0; i < _inventoryIcons.Count; i++)
+        {
+            if (i < items.Count)
+            {
+                UpdateInventorySlot(i, items[i]);
+            }
+            else
+            {
+                ClearInventorySlot(i);
+            }
+        }
     }
-}
 
 
-public void ClearInventorySlot(int index)
-{
-    VisualElement slot = _inventorySlots[index];
-
-    slot.Q<Image>().image = null;
-    slot.Q<Label>().text = "0";
-}
+    public void ClearInventorySlot(int index)
+    {
+        _inventoryIcons[index].image = null;
+        _inventoryCounts[index].text = "";
+    }
 
 
-public void UpdateInventorySlot(int index, InventorySlotData data)
-{
-    VisualElement slot = _inventorySlots[index];
+    public void UpdateInventorySlot(int index, InventorySlotData data)
+    {
+        _inventoryIcons[index].image = data.item.icon.texture;
+        _inventoryCounts[index].text = data.amount > 1 ? $"x{data.amount}" : "";
+    }
 
-    slot.Q<Image>().image = data.item.icon.texture;
 
-    slot.Q<Label>().text = data.amount.ToString();
-}
+    public void AddInventoryItem(InventorySlotData data, int index)
+    {
+        UpdateInventorySlot(index, data);
+    }
+
 
     private void OnCloseClicked()
     {
@@ -133,8 +112,10 @@ public void UpdateInventorySlot(int index, InventorySlotData data)
     }
 
 
-    public void OpenSelection(List<SoInteractionAction> interactions, Action<SoInteractionAction> onSelectedInter )
+    public void OpenSelection(List<SoInteractionAction> interactions, Action<SoInteractionAction> onSelectedInter)
     {
+        _selectionPanel.Clear();
+        _selectionPanel.style.display = DisplayStyle.Flex;
         foreach (var action in interactions)
         {
             var slotElement = _selectPrefabBtn.Instantiate();
@@ -149,10 +130,8 @@ public void UpdateInventorySlot(int index, InventorySlotData data)
 
     public void ShowDialog(string textValue, Action onClose)
     {
-        _dialogLabel.text = textValue;
         _onclosed = onClose;
         _closeBtn.RegisterCallback<ClickEvent>(evt => OnCloseClicked());
-
     }
 
 
@@ -161,22 +140,12 @@ public void UpdateInventorySlot(int index, InventorySlotData data)
         var clicked = evt.currentTarget as VisualElement;
         var so = clicked.userData as SoInteractionAction;
         if (so == null) return;
-        onSelectedInter?.Invoke(so); 
+        onSelectedInter?.Invoke(so);
         _selectionPanel.style.display = DisplayStyle.None;
-        
     }
 
     public void UpdateDetectionBar(float _value)
     {
         _detectionBar.value = _value;
     }
-
-
-    public void AddInventoryItem(InventorySlotData data, int index)
-{
-    VisualElement slot = _inventorySlots[index];
-
-    slot.Q<Image>().image = data.item.icon.texture;
-    slot.Q<Label>().text = data.amount.ToString();
-}
 }

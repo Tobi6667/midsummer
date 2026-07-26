@@ -65,10 +65,6 @@ public class NPCInteractionComponent : MonoBehaviour
     }
 
 
-    private void Start()
-    {
-        _enemyBase = GetComponent<EnemyBase>();
-    }
 
     private void CompleteInteraction(InteractData data)
     {
@@ -96,6 +92,7 @@ public class NPCInteractionComponent : MonoBehaviour
 
     internal void SelectInterAction(Action onFinish)
     {
+        Debug.Log("inter actor");
 
         UIManager.Instance.OpenSelection(_interactDataList[_actionIndexer].actions, (interAct) =>
             {

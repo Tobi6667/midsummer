@@ -103,10 +103,13 @@ Actions_MainInputClass _mainInputClass;
 
     public void OnScan(InputAction.CallbackContext context)
     {
-        if (!_isActive) return;
+        //if (!_isActive) return;
 
         if (context.started)
+        {
             OnScanPressed?.Invoke();
+            Debug.Log("SCAAAAAAAAAN");
+        }
 
         if (context.canceled)
             OnScanReleased?.Invoke();

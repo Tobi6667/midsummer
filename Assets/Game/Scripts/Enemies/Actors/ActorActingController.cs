@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ActorActingController : MonoBehaviour
@@ -59,6 +60,12 @@ public class ActorActingController : MonoBehaviour
     private IEnumerator ExecuteAction(ActorActions actorAction)
     {
         Debug.Log(actorAction.action);
+
+        if (actorAction.needsItem && !interactionComponent.HasItem())
+        {
+            yield break;
+        }
+
         switch (actorAction.action)
         {
             case EActorAction.MoveTo:
@@ -66,17 +73,7 @@ public class ActorActingController : MonoBehaviour
                 break;
 
             case EActorAction.PlayAnimation:
-                if (!actorAction.needsItem)
-                {
-                    yield return PlayAnimation(actorAction.animation);
-                }
-                else
-                {
-                    if(interactionComponent.HasItem())
-                    {
                         yield return PlayAnimation(actorAction.animation);
-                    }
-                }
                 break;
 
             case EActorAction.Speak:
