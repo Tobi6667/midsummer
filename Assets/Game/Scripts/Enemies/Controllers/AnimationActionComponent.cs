@@ -33,7 +33,7 @@ public class AnimationActionComponent : MonoBehaviour
         if (_sequenceRoutine != null)
             StopCoroutine(_sequenceRoutine);
 
-
+        _animator.SetBool("isWalking", false);
         _animator.SetBool("isActing", false);
         _animator.SetBool("isLooping", false);
         _animator.Update(0f);
@@ -42,6 +42,12 @@ public class AnimationActionComponent : MonoBehaviour
         _animator.SetBool("isActing", true);
         _useA = true;
         _sequenceRoutine = StartCoroutine(PlaySequence(clips, loopClip));
+    }
+
+
+    internal void SetWalking(bool walk)
+    {
+        _animator.SetBool("isWalking", walk);
     }
 
     private IEnumerator PlaySequence(AnimationClip[] clips, AnimationClip loopClip)

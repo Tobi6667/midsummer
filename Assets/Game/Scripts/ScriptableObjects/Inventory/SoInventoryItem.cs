@@ -7,4 +7,5 @@ public class SoInventoryItem : ScriptableObject
     public Sprite icon;
     public int maxStack = 99;
     public PickUpBase worldPrefab;
+    public bool isAbility;
 }

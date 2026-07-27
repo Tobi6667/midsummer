@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : EnemyBase
 {
     private EnemyAwarenessComponent _enemyAwarenessComponent;
     private EnemyPatrollingComponent _enemyPatrollingComponent;
+ 
+    private AnimationActionComponent _actionComponent;
 
     public override void Initialize()
     {
@@ -26,6 +29,17 @@ public class EnemyController : EnemyBase
 
     private void Update()
     {
+
+
+        if (_agent)
+        {
+            if(_agent.desiredVelocity.sqrMagnitude>0.001f)
+            {
+                _actionComponent.SetWalking(true);
+            }
+            Debug.Log("speee " + _agent.desiredVelocity.sqrMagnitude);
+        }
+
         TickState(Time.deltaTime); // ticks EnemyBase._currentState
     }
 }
