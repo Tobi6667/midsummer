@@ -15,6 +15,7 @@ public class PatrolState : INPCStateBehavior
 
     public void Enter()
     {
+        Debug.Log("chase State");
         _patrolling.StartPatrolling();
         _patrolling.OnWaypointReached += HandleWaypointReached;
     }
@@ -29,8 +30,7 @@ public class PatrolState : INPCStateBehavior
     {
         if (_enemyAwarenessComponent.CurrentState == EnemyAwarenessComponent.AwarenessState.Alerted)
         {
-            _enemyController.ChangeState(new ChaseState(_enemyController));
-            Exit();
+            _enemyController.ChangeState(new EnemyChaseState(_enemyController));
             return;
         }
 

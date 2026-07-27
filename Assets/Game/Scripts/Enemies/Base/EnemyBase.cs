@@ -4,10 +4,9 @@ using UnityEngine.AI;
 
 public abstract class EnemyBase : MonoBehaviour
 {
-
-
     private EnemyEffectController _effectController;
-    private NavMeshAgent _agent;
+    internal NavMeshAgent _agent;
+    private AnimationActionComponent _actionComponent;
     private INPCStateBehavior _currentState;
     private Vector3 _startPosition;
 
@@ -15,9 +14,9 @@ public abstract class EnemyBase : MonoBehaviour
     {
         _effectController = GetComponent<EnemyEffectController>();
         _agent = GetComponent<NavMeshAgent>();
+        _actionComponent = GetComponent<AnimationActionComponent>();
         _startPosition = transform.position;
     }
-
 
     public abstract void Initialize();
 
@@ -40,7 +39,6 @@ public abstract class EnemyBase : MonoBehaviour
         _agent.SetDestination(destination);
     }
 
-
     public void ChangeState(INPCStateBehavior newState)
     {
         _currentState?.Exit();
@@ -51,23 +49,21 @@ public abstract class EnemyBase : MonoBehaviour
     protected void TickState(float dt)
     {
         _currentState?.Tick(dt);
+
+
     }
 
 
     public abstract void StartActing();
-public void StopAct()
-{
-        Debug.Log("stop acter fucker");
-    _currentState?.Exit();
-    _currentState = null;
 
-    var actingController = GetComponent<ActorActingController>();
-    actingController?.StopActing();
+    public void StopAct()
+    {
+        _currentState?.Exit();
+        _currentState = null;
 
-    transform.position = _startPosition;
-}
+        var actingController = GetComponent<ActorActingController>();
+        actingController?.StopActing();
 
-
-
-
+        transform.position = _startPosition;
+    }
 }

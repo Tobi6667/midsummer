@@ -8,8 +8,8 @@ public class PlayerController : PlayerBase
     private PlayerMovementController _movementController;
     private AnimationActionComponent _actionComponent;
     private PlayerGravityReceiver _gravityReceiver;
-    
-    
+
+    [SerializeField] private Transform _wings;
 
 
 
@@ -122,6 +122,11 @@ public class PlayerController : PlayerBase
             _isActive = false;
         }
 
+    }
+
+    public void ShowWings(bool show)
+    {
+        _wings.gameObject.SetActive(show);
     }
 
     internal void StopMovement()

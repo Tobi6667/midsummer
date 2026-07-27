@@ -5,6 +5,7 @@ public class AnimationPlayState : INPCStateBehavior
 {
     private readonly AnimationActionComponent _actionComponent;
     private readonly EnemyController _enemy;
+    private readonly EnemyAwarenessComponent _awareness;
     private readonly AnimationClip[] _clips;
     private readonly AnimationClip _loopClip;
 
@@ -13,6 +14,7 @@ public class AnimationPlayState : INPCStateBehavior
     {
         _enemy = enemy;
         _actionComponent = enemy.GetComponent<AnimationActionComponent>();
+        _awareness = enemy.GetComponent<EnemyAwarenessComponent>();
         _clips = clips.ToArray();
     }
 
@@ -21,6 +23,7 @@ public class AnimationPlayState : INPCStateBehavior
     {
         _enemy = enemy;
         _actionComponent = enemy.GetComponent<AnimationActionComponent>();
+        _awareness = enemy.GetComponent<EnemyAwarenessComponent>();
 
         var npcInteraction = enemy.GetComponent<NPCInteractionComponent>();
         var assignedAction = npcInteraction != null ? npcInteraction.AssignedAction : null;
@@ -48,5 +51,12 @@ public class AnimationPlayState : INPCStateBehavior
     }
 
     public void Exit() { }
-    public void Tick(float dt) { }
+
+    public void Tick(float dt)
+    {
+        if (_awareness.CurrentState == EnemyAwarenessComponent.AwarenessState.Alerted)
+        {
+            _enemy.ChangeState(new ChaseState(_enemy));
+        }
+    }
 }
