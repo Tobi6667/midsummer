@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerBase : MonoBehaviour
 {
     public float DetectionValue;
-    public Transform CurrentCheckpoint;
+    public Checkpoint CurrentCheckpoint;
 
     public virtual void UpdateStats(float _val)
     {
@@ -17,22 +17,26 @@ public class PlayerBase : MonoBehaviour
         UIManager.Instance.UpdateDetectionBar(DetectionValue);
     }
 
-    public virtual void SetCheckpoint(Transform checkP)
-    {
-        CurrentCheckpoint = checkP;
-    }
+
 
     private void ResetToCheckpoint()
     {
-        transform.position = CurrentCheckpoint.position;
+        transform.position = CurrentCheckpoint.SpawnPoint.position;
+        StoryEventBus.Publish(new SpawnCharacterEvent());
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent<Checkpoint>(out var check))
         {
-            Debug.Log("checkpoint");
-            CurrentCheckpoint = check.spawnPoint;
+            if (check != CurrentCheckpoint)
+            {
+                Debug.Log("checkpoint");
+
+                CurrentCheckpoint = check;
+                AudioManager.Instance.PlayMusic(check.CheckpointData.areaAudio);
+                
+            }
         }
     }
 

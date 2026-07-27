@@ -13,8 +13,8 @@ public class EnemyAwarenessComponent : MonoBehaviour
     public AwarenessState CurrentState { get; private set; }
     [SerializeField] private float _gainRate = 1f;
     [SerializeField] private float _decayRate = 0.5f;
-    [SerializeField] private float _suspicionThreshold = 0.5f;
-    [SerializeField] private float _alertThreshold = 1f;
+    [SerializeField] private float _suspicionThreshold = 0.4f;
+    [SerializeField] private float _alertThreshold = 0.9f;
     private float _awarenessLevel = 0f;
     public Vector3 _lastKnownPosition { get; private set; }
 

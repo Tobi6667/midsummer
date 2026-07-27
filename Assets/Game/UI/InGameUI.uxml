@@ -65,6 +65,7 @@
         <ui:VisualElement name="disguise-panel" class="disguise-panel">
             <ui:VisualElement name="disguise-icon" class="disguise-icon"/>
             <ui:VisualElement class="disguise-info">
+                <ui:ProgressBar value="22" title="my-progress" name="detection-bar"/>
                 <ui:Label name="disguise-label" text="Disguise: Athenian Attendant" class="disguise-label"/>
                 <ui:VisualElement name="disguise-bar-bg" class="disguise-bar-bg">
                     <ui:VisualElement name="disguise-bar-fill" class="disguise-bar-fill" style="width: 70%;"/>

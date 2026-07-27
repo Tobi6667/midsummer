@@ -36,7 +36,22 @@ public class PlayerInventoryComponent : MonoBehaviour {
             //inventory.AddItem(other.GetComponent<ItemScript>());
             var it = other.GetComponent<PickUpBase>();
 
-            InventoryManagerNEW.Instance.AddItem(it.GetItem());
+
+                InventoryManagerNEW.Instance.AddItem(it.GetItem());
+            
+
+            if(other.TryGetComponent<WingsPickUp>(out var wing))
+            {
+                wing.ShowWings();
+            }
+
+            if(other.TryGetComponent<TrapItemBase>(out var itter))
+            {
+                var ev = new TrapPickupEvent();
+                ev.TrapPickup = itter;
+                StoryEventBus.Publish(ev);
+            }
+
             Destroy(other.gameObject);
         }
 

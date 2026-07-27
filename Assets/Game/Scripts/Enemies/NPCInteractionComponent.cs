@@ -35,6 +35,7 @@ public class NPCInteractionComponent : MonoBehaviour
 
                     if (InventoryManagerNEW.Instance.HasItem(dataInter.actions[0].inventoryItem))
                     {
+
                         CompleteInteraction(dataInter);
                     }
                 }
@@ -42,6 +43,13 @@ public class NPCInteractionComponent : MonoBehaviour
                 {
                     CompleteInteraction(dataInter);
                 }
+
+                if (dataInter.actions[0].voiceLine)
+                {
+                    AudioManager.Instance.PlayVoiceLine(dataInter.actions[0].voiceLine);
+
+                }
+
                 _onFinished?.Invoke();
                 break;
 
@@ -55,6 +63,14 @@ public class NPCInteractionComponent : MonoBehaviour
 
             case EInteractionType.DropItem:
                 Instantiate(_item,_dropPoint.position,Quaternion.identity);
+                if (dataInter.actions[0].interactionType == EInteractionType.PlayText)
+                {
+                    AudioManager.Instance.PlayVoiceLine(dataInter.actions[0].voiceLine);
+
+                }
+
+               
+
                 _onFinished?.Invoke();
 
                 break;
