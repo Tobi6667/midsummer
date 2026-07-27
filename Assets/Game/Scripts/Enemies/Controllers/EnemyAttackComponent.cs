@@ -4,14 +4,23 @@ public class EnemyAttackComponent : MonoBehaviour
 {
     [SerializeField] private float _attackRange = 2f;
     [SerializeField] private float _attackCooldown = 1.5f;
+    private AnimationActionComponent _animationActionComponent;
+    [SerializeField] private AnimationClip _attackClip;
 
     private Transform _target;
     private float _cooldownRemaining;
+
+
+    private void Start()
+    {
+        _animationActionComponent = GetComponent<AnimationActionComponent>();
+    }
 
     internal void StartAttacking(Transform target)
     {
         _target = target;
         _cooldownRemaining = 0f;
+        _animationActionComponent.TriggerAttack(_attackClip);
     }
 
     internal void StopAttacking()
@@ -38,5 +47,6 @@ public class EnemyAttackComponent : MonoBehaviour
         Debug.Log("Enemy attacks player!");
 
         _cooldownRemaining = _attackCooldown;
+        StartAttacking(PlayerController.Instance.transform);
     }
 }

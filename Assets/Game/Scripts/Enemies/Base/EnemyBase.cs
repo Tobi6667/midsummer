@@ -36,6 +36,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     internal void MoveTo(Vector3 destination)
     {
+        _actionComponent.SetWalking(true);
         _agent.SetDestination(destination);
     }
 

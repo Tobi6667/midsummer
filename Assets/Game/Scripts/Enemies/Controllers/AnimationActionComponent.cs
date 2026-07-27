@@ -14,6 +14,8 @@ public class AnimationActionComponent : MonoBehaviour
 
     static readonly int PlaceholderHashA = Animator.StringToHash("No");
     static readonly int PlaceholderHashB = Animator.StringToHash("No2");
+    static readonly int _placeholderClipAttack = Animator.StringToHash("StabAttack1");
+
 
     private Action _onComplete;
     private bool _useA = true;
@@ -33,7 +35,7 @@ public class AnimationActionComponent : MonoBehaviour
         if (_sequenceRoutine != null)
             StopCoroutine(_sequenceRoutine);
 
-        _animator.SetBool("isWalking", false);
+        //_animator.SetBool("isWalking", false);
         _animator.SetBool("isActing", false);
         _animator.SetBool("isLooping", false);
         _animator.Update(0f);
@@ -47,7 +49,17 @@ public class AnimationActionComponent : MonoBehaviour
 
     internal void SetWalking(bool walk)
     {
+        //Debug.Log("WAAAAAAAAAAAAALK"+walk);
         _animator.SetBool("isWalking", walk);
+    }
+
+
+    internal void TriggerAttack(AnimationClip attackClip)
+    {
+        _animatorOverrideController["StabAttack1"] = attackClip;
+        _animator.Update(0f);
+        _animator.SetTrigger("isAttacking");
+        _animator.SetBool("isWalking", false);
     }
 
     private IEnumerator PlaySequence(AnimationClip[] clips, AnimationClip loopClip)

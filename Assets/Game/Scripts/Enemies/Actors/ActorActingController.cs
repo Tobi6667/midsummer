@@ -96,7 +96,7 @@ public class ActorActingController : MonoBehaviour
     private IEnumerator MoveTo(Vector3 target)
     {
         float speed = 2f;
-
+        actionComponent.SetWalking(true);
         while (Vector3.Distance(transform.position, target) > 0.1f)
         {
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);

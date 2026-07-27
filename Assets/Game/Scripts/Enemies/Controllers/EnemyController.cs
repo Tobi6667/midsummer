@@ -31,14 +31,6 @@ public class EnemyController : EnemyBase
     {
 
 
-        if (_agent)
-        {
-            if(_agent.desiredVelocity.sqrMagnitude>0.001f)
-            {
-                _actionComponent.SetWalking(true);
-            }
-            Debug.Log("speee " + _agent.desiredVelocity.sqrMagnitude);
-        }
 
         TickState(Time.deltaTime); // ticks EnemyBase._currentState
     }

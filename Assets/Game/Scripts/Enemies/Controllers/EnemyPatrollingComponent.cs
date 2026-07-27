@@ -9,6 +9,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
     [SerializeField] private float _pointWaitTime = 2f;
 
     public event Action<Transform> OnWaypointReached;
+    private AnimationActionComponent _AnimAction;
 
     private EnemyStats _enemyStats;
     private NavMeshAgent _navAgent;
@@ -21,6 +22,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
     {
         _navAgent = GetComponent<NavMeshAgent>();
         _enemyStats = GetComponent<EnemyStats>();
+        _AnimAction = GetComponent<AnimationActionComponent>();
     }
 
     internal void Initialize()
@@ -42,7 +44,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
         if (_isPatroling) return;
         _isPatroling = true;
         _navAgent.isStopped = false;
-
+        _AnimAction.SetWalking(true);
         // resume: if agent has no destination yet (first entry), pick one
         if (!_isWaiting && _navAgent.remainingDistance <= 0f)
             GoToNextPoint();

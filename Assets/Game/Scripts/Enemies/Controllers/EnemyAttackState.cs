@@ -30,12 +30,14 @@ public class EnemyAttackState : INPCStateBehavior
     {
         if (_enemyAwarenessComponent.CurrentState == EnemyAwarenessComponent.AwarenessState.Idle)
         {
+            Debug.Log("goes to idle");
             _enemyController.ChangeState(new PatrolState(_enemyController));
             return;
         }
 
         if (!_attackComponent.IsInRange(_playerController.transform))
         {
+            Debug.Log("goes out of range");
             _enemyController.ChangeState(new ChaseState(_enemyController));
             return;
         }

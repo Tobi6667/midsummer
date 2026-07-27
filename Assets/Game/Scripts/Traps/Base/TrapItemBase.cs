@@ -39,6 +39,8 @@ public abstract class TrapItemBase : PickUpBase
 
 
 Destroy(partObj.gameObject, partObj.main.duration);
+            OnTrapTriggered(enemy); // <-- this line is missing in your version
+
         }
     }
 
@@ -48,6 +50,10 @@ private IEnumerator CoDestroySelf(float _duration)
     Destroy(gameObject);
 
 }
+
+    protected virtual void OnTrapTriggered(EnemyController enemy)
+    {
+    }
 
 
 }

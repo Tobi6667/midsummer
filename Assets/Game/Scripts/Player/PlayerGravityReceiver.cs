@@ -35,6 +35,8 @@ public class PlayerGravityReceiver : MonoBehaviour
     [Header("References")]
     public PlayerInputController input;
 
+    private AnimationActionComponent animActionComp;
+
     private Rigidbody rb;
     private CapsuleCollider capsule;
 
@@ -62,7 +64,7 @@ public class PlayerGravityReceiver : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
-
+        animActionComp = GetComponent<AnimationActionComponent>();
         // Kinematic: we move it ourselves via MovePosition/MoveRotation,
         // Unity's physics engine won't apply forces/gravity to it and
         // won't auto-resolve collisions for us — that's why we do our
@@ -222,6 +224,10 @@ public class PlayerGravityReceiver : MonoBehaviour
         Vector3 planarMove = forward * moveInput.y + right * moveInput.x;
         float speed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
 
+        bool isWalking = planarMove.sqrMagnitude > 0.0001f && isGrounded;
+
+        animActionComp.SetWalking(isWalking);
+
         if (isGrounded)
         {
             if (verticalSpeed <= 0f)
@@ -284,5 +290,14 @@ public class PlayerGravityReceiver : MonoBehaviour
     public void SetSprint(bool sprint)
     {
         isSprinting = sprint;
+    }
+
+
+    public void Teleport(Vector3 position)
+    {
+        rb.position = position;
+        transform.position = position; // keep transform in sync for anything reading it this frame
+        verticalSpeed = 0f;
+        isTransitioning = false;
     }
 }

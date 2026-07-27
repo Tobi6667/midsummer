@@ -25,6 +25,7 @@ public class PlayerController : PlayerBase
 
     private void Awake()
     {
+        base.Awake();
         Instance = this;
         _movementController = GetComponent<PlayerMovementController>();
         _inputController = GetComponent<PlayerInputController>();
