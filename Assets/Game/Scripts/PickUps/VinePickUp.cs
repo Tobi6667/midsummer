@@ -32,5 +32,6 @@ public class VinePickUp : TrapItemBase
             seq.Append(vine.transform.DOScale(Vector3.one, growDuration).SetEase(Ease.OutBack));
             seq.Append(vine.transform.DOShakePosition(shakeDuration, shakeStrength, 10, 90f));
         }
+        effectAudio.Play();
     }
 }

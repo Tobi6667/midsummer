@@ -4,6 +4,7 @@ public class ShootArrowComponent : MonoBehaviour
 {
     [SerializeField] private GameObject _arrowPrefab;
     [SerializeField] private Transform _arrowSpawnPoint;
+    [SerializeField] private AudioSource _shootAudio;
     private Transform _target;
 
     void Start()
@@ -34,6 +35,7 @@ public class ShootArrowComponent : MonoBehaviour
 
         var arrowObj = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, _arrowSpawnPoint.rotation);
         arrowObj.GetComponent<ArrowProjectile>().Launch(_target.position);
+        _shootAudio.Play();
     }
 
     public void DisableArrow()

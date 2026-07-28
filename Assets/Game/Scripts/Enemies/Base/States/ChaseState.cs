@@ -32,7 +32,6 @@ public class ChaseState : INPCStateBehavior
     {
 
 //        Debug.Log("ChaseState Tick");
-        PlayerController.Instance.UpdateStats(0.1f);
         if (_enemyAwarenessComponent.CurrentState == EnemyAwarenessComponent.AwarenessState.Idle)
         {
             _enemyController.ChangeState(new PatrolState(_enemyController));

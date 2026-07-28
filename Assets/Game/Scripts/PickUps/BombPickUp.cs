@@ -21,4 +21,9 @@ public class BombPickUp : TrapItemBase
 
     }
 
+    protected override void OnTrapTriggered(EnemyController enemy)
+    {
+        effectAudio.Play();
+    }
+
 }

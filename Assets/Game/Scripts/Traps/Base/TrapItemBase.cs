@@ -8,6 +8,7 @@ public abstract class TrapItemBase : PickUpBase
     [SerializeField] protected List<StatusEffectBase> statusEffects;
     [SerializeField] protected ParticleSystem triggerEffect;
     [SerializeField] protected bool onlyPickup;
+    [SerializeField] protected AudioSource effectAudio;
     private ParticleSystem partObj;
 
 
@@ -56,5 +57,7 @@ private IEnumerator CoDestroySelf(float _duration)
     {
     }
 
+
+ 
 
 }

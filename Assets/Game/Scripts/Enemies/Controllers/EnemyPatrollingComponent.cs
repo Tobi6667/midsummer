@@ -44,7 +44,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
         if (_isPatroling) return;
         _isPatroling = true;
         _navAgent.isStopped = false;
-        _AnimAction.SetWalking(true);
+
         // resume: if agent has no destination yet (first entry), pick one
         if (!_isWaiting && _navAgent.remainingDistance <= 0f)
             GoToNextPoint();
@@ -72,7 +72,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
         {
             Transform reached = _patrolPoints[ReachedIndex()];
             OnWaypointReached?.Invoke(reached);
-
+            _AnimAction.SetWalking(false);
             // if it's an animation waypoint, PatrolState takes over (froze us via StopPatroling
             // by the time this returns) — don't start the normal timed wait on top of that
             if (!_isPatroling || reached.GetComponent<InteractionPoint>() != null)
@@ -101,6 +101,7 @@ public class EnemyPatrollingComponent : MonoBehaviour
 
     private void GoToNextPoint()
     {
+        _AnimAction.SetWalking(true);
         _navAgent.SetDestination(_patrolPoints[_currentPatrolIndex].position);
         _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
     }

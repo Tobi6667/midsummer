@@ -4,6 +4,7 @@ public class PlayerBase : MonoBehaviour
 {
     public float DetectionValue;
     public Checkpoint CurrentCheckpoint;
+    [SerializeField] private AudioSource HitAudio;
 
     private PlayerGravityReceiver _baseGravityReceiver;
 
@@ -15,6 +16,7 @@ public class PlayerBase : MonoBehaviour
     public virtual void UpdateStats(float _val)
     {
         Debug.Log("hit "+_val);
+        HitAudio.Play();
         DetectionValue -= _val;
         if (DetectionValue <= 0)
         {

@@ -31,7 +31,7 @@ public class PlayerController : PlayerBase
         _inputController = GetComponent<PlayerInputController>();
         _actionComponent = GetComponent<AnimationActionComponent>();
         _gravityReceiver = GetComponent<PlayerGravityReceiver>();
-        DetectionValue = 50;
+        DetectionValue = 90;
 
     }
 

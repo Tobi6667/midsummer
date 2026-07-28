@@ -7,12 +7,6 @@ public class SoStunnedEffect : StatusEffectBase
 
     public override void OnApply(EffectInstance instance)
     {
-        instance.PatrollingComponent.StopPatroling();
-        instance.AnimationAction.PlayAnimations(clip, () => {
-        
-            instance.PatrollingComponent.StartPatrolling();
-        
-        });
+        instance.Target.ChangeState(new EnemyInTrapState(instance.Target, clip));
     }
-
 }
