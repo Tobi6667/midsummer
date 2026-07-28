@@ -6,11 +6,17 @@ public class EnemyDetectionController : MonoBehaviour
 
     [SerializeField] private EnemyAwarenessComponent _awarenessComponent;
     [SerializeField] private EnemyVisionComponent _visionComponent;
-    [SerializeField] private Transform _targetPlayer;
+    private Transform _targetPlayer;
     private float _scanInterval = 0.1f;
 
     private void OnEnable()
     {
+
+    }
+
+    private void Start()
+    {
+        _targetPlayer = PlayerController.Instance.transform;
         StartCoroutine(CoScanRoutine());
     }
 
