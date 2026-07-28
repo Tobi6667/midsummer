@@ -3159,7 +3159,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 711646007}
-  - {fileID: 1295458072}
   - {fileID: 730417011}
   m_Father: {fileID: 6561455705984758670}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -3182,7 +3181,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.11, y: 1.7547905, z: 1.18}
+  m_Size: {x: 2.11, y: 2.74, z: 1.18}
   m_Center: {x: 1.65, y: 1.1676294, z: -0.88}
 --- !u!65 &149173909
 BoxCollider:
@@ -3203,7 +3202,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2057202, y: 1.7547905, z: 3.0537167}
+  m_Size: {x: 1.2057202, y: 2.55, z: 3.0537167}
   m_Center: {x: -0.39507234, y: 1.1676294, z: -0.026709557}
 --- !u!65 &149173910
 BoxCollider:
@@ -4870,6 +4869,63 @@ MonoBehaviour:
   saveDataAssetGuid: 68f9998996952a543a0be52bdd5eabc3
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!1001 &248852712
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 31.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 32.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.84168
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840419587004072693, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7714063817607278888, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
+      propertyPath: m_Name
+      value: DustPickUp (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
 --- !u!1 &251022950
 GameObject:
   m_ObjectHideFlags: 0
@@ -12133,6 +12189,7 @@ GameObject:
   - component: {fileID: 775795468}
   - component: {fileID: 775795467}
   - component: {fileID: 775795466}
+  - component: {fileID: 775795470}
   m_Layer: 7
   m_Name: Stand (5)
   m_TagString: Untagged
@@ -12297,6 +12354,27 @@ MonoBehaviour:
   saveDataAssetGuid: 4b58d0be12f50f144a3616bf6c8f99dc
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &775795470
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775795464}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.03002149, y: 0.053056836, z: 0.023031402}
+  m_Center: {x: 0.0034950525, y: -0.026669398, z: -2.0832072e-10}
 --- !u!1 &777535492
 GameObject:
   m_ObjectHideFlags: 0
@@ -19212,6 +19290,63 @@ Transform:
   - {fileID: 2129481402}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &962907354
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 24.195784
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 34.4506
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.274224
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604533164915053725, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466769894279463279, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
+      propertyPath: m_Name
+      value: VineTrap (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 21e9b9bc3bc4b544a8f3426b94265e37, type: 3}
 --- !u!1 &970269324
 GameObject:
   m_ObjectHideFlags: 0
@@ -24676,84 +24811,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06191be0bfbc1714980b3d47fcd02080, type: 3}
---- !u!1001 &1295458071
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 149173907}
-    m_Modifications:
-    - target: {fileID: 2912487587478762892, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_Name
-      value: Bush2 Reworked (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2.2506
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.39706
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.11
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
---- !u!4 &1295458072 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
-  m_PrefabInstance: {fileID: 1295458071}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1305144863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25117,7 +25174,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 65
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -25143,8 +25200,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320657827}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.087938115, y: 0, z: 0, w: 0.99612594}
-  m_LocalPosition: {x: -23.446001, y: -4.1357975, z: 13.260013}
+  m_LocalRotation: {x: -0.26392198, y: 0.54535216, z: -0.1860668, w: -0.77350855}
+  m_LocalPosition: {x: 9.518808, y: -2.3005104, z: 41.68531}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -32328,7 +32385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1394662352164622571, guid: ca4f4a091af4f4b478a43b716468b1af, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 1394662352164622571, guid: ca4f4a091af4f4b478a43b716468b1af, type: 3}
       propertyPath: m_LocalPosition.z
@@ -35969,7 +36026,7 @@ Transform:
   m_GameObject: {fileID: 1966217465}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.000000029802322, z: -0, w: 1}
-  m_LocalPosition: {x: -9.91, y: 0, z: 18.4}
+  m_LocalPosition: {x: -9.91, y: 0, z: 18.91}
   m_LocalScale: {x: 1, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -42294,7 +42351,8 @@ GameObject:
   - component: {fileID: 6327072318121483174}
   - component: {fileID: 4259339102395947655}
   - component: {fileID: 5074648389400732679}
-  m_Layer: 0
+  - component: {fileID: 6982760402998288016}
+  m_Layer: 7
   m_Name: Bush2 Reworked (53)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50049,7 +50107,8 @@ GameObject:
   - component: {fileID: 6481943360002281486}
   - component: {fileID: 7473856309274072108}
   - component: {fileID: 5331188369811434647}
-  m_Layer: 0
+  - component: {fileID: 7473856309274072109}
+  m_Layer: 7
   m_Name: Bush2 Reworked (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52538,8 +52597,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 11.822847, y: 3.4100003, z: 1.583971}
-  m_Center: {x: -1.8534174, y: 1.2858477, z: -0.015368462}
+  m_Size: {x: 11.666788, y: 3.4100003, z: 1.583971}
+  m_Center: {x: -1.931447, y: 1.2858477, z: -0.015368462}
 --- !u!1 &372745103709866901
 GameObject:
   m_ObjectHideFlags: 0
@@ -56401,7 +56460,8 @@ GameObject:
   - component: {fileID: 5819618752271587285}
   - component: {fileID: 759145986919690268}
   - component: {fileID: 3135976398824189284}
-  m_Layer: 0
+  - component: {fileID: 5819618752271587286}
+  m_Layer: 7
   m_Name: Bush2 Reworked (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57616,7 +57676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 2.93
       objectReference: {fileID: 0}
     - target: {fileID: 5582054556478414578, guid: e77987dadf5c3d44e8852a64ffc51afd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -58970,7 +59030,8 @@ GameObject:
   - component: {fileID: 6195833549952482253}
   - component: {fileID: 1635671440691047392}
   - component: {fileID: 4742016921944508086}
-  m_Layer: 0
+  - component: {fileID: 6195833549952482254}
+  m_Layer: 7
   m_Name: Bush2 Reworked (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59312,7 +59373,8 @@ GameObject:
   - component: {fileID: 4963365624433540650}
   - component: {fileID: 1971211717642347920}
   - component: {fileID: 1395963733243256676}
-  m_Layer: 0
+  - component: {fileID: 4963365624433540651}
+  m_Layer: 7
   m_Name: Bush2 Reworked (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61499,7 +61561,8 @@ GameObject:
   - component: {fileID: 4311113507275154008}
   - component: {fileID: 7499817122489995153}
   - component: {fileID: 6025199382055414582}
-  m_Layer: 0
+  - component: {fileID: 7499817122489995154}
+  m_Layer: 7
   m_Name: Bush2 Reworked (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65884,7 +65947,8 @@ GameObject:
   - component: {fileID: 7071393910494825398}
   - component: {fileID: 8015855655102140299}
   - component: {fileID: 5289519862252632063}
-  m_Layer: 0
+  - component: {fileID: 8015855655102140300}
+  m_Layer: 7
   m_Name: Bush2 Reworked (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67298,7 +67362,8 @@ GameObject:
   - component: {fileID: 4279095729126388469}
   - component: {fileID: 5971982007835380006}
   - component: {fileID: 5583614241294245444}
-  m_Layer: 0
+  - component: {fileID: 5971982007835380007}
+  m_Layer: 7
   m_Name: Bush2 Reworked (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67725,7 +67790,8 @@ GameObject:
   - component: {fileID: 3055298690022665122}
   - component: {fileID: 3234819151682817961}
   - component: {fileID: 942379088650758823}
-  m_Layer: 0
+  - component: {fileID: 3234819151682817962}
+  m_Layer: 7
   m_Name: Bush2 Reworked (45)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75557,7 +75623,8 @@ GameObject:
   - component: {fileID: 2712777374452298271}
   - component: {fileID: 2542309226408971840}
   - component: {fileID: 2786125167235738374}
-  m_Layer: 0
+  - component: {fileID: 6444368348590906821}
+  m_Layer: 7
   m_Name: Bush2 Reworked (40)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84636,7 +84703,8 @@ GameObject:
   - component: {fileID: 858594235205294909}
   - component: {fileID: 1321826607628138215}
   - component: {fileID: 2368154015960179783}
-  m_Layer: 0
+  - component: {fileID: 2368154015960179784}
+  m_Layer: 7
   m_Name: Bush2 Reworked (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85746,7 +85814,8 @@ GameObject:
   - component: {fileID: 8162010375223246473}
   - component: {fileID: 6278572111896167744}
   - component: {fileID: 8243188361183006277}
-  m_Layer: 0
+  - component: {fileID: 8243188361183006278}
+  m_Layer: 7
   m_Name: Bush2 Reworked (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86175,7 +86244,8 @@ GameObject:
   - component: {fileID: 2847099213515606307}
   - component: {fileID: 1433856523834361009}
   - component: {fileID: 5284275280861210643}
-  m_Layer: 0
+  - component: {fileID: 7063890074362135710}
+  m_Layer: 7
   m_Name: Bush2 Reworked (37)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87638,7 +87708,8 @@ GameObject:
   - component: {fileID: 6801595936621859591}
   - component: {fileID: 7068209644777509006}
   - component: {fileID: 5699749343603488270}
-  m_Layer: 0
+  - component: {fileID: 7068209644777509007}
+  m_Layer: 7
   m_Name: Bush2 Reworked
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100984,7 +101055,8 @@ GameObject:
   - component: {fileID: 7931496884149030911}
   - component: {fileID: 7741046122019674377}
   - component: {fileID: 8877917935089135400}
-  m_Layer: 0
+  - component: {fileID: 8877917935089135401}
+  m_Layer: 7
   m_Name: Bush2 Reworked (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103253,6 +103325,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2368154015960179784
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805054324619333104}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029464662, y: 0.008038014, z: -0.028381228}
 --- !u!4 &2369576892890753555
 Transform:
   m_ObjectHideFlags: 0
@@ -104043,7 +104136,8 @@ GameObject:
   - component: {fileID: 6716876904276250932}
   - component: {fileID: 1295533953208281853}
   - component: {fileID: 8408218525064870006}
-  m_Layer: 0
+  - component: {fileID: 8408218525064870007}
+  m_Layer: 7
   m_Name: Bush2 Reworked (43)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118062,7 +118156,8 @@ GameObject:
   - component: {fileID: 4380848895319030}
   - component: {fileID: 486236014461088161}
   - component: {fileID: 7604622333123842945}
-  m_Layer: 0
+  - component: {fileID: 9210024025180438672}
+  m_Layer: 7
   m_Name: Bush2 Reworked (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120320,7 +120415,8 @@ GameObject:
   - component: {fileID: 2017598660762683658}
   - component: {fileID: 3157696732224908385}
   - component: {fileID: 7430947396659643307}
-  m_Layer: 0
+  - component: {fileID: 7430947396659643308}
+  m_Layer: 7
   m_Name: Bush2 Reworked (42)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120383,7 +120479,8 @@ GameObject:
   - component: {fileID: 5342686830430831200}
   - component: {fileID: 1793616306516375212}
   - component: {fileID: 6647456451683151187}
-  m_Layer: 0
+  - component: {fileID: 6647456451683151188}
+  m_Layer: 7
   m_Name: Bush2 Reworked (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120618,7 +120715,8 @@ GameObject:
   - component: {fileID: 8380394873664647617}
   - component: {fileID: 8842421105370142989}
   - component: {fileID: 5978529748666526867}
-  m_Layer: 0
+  - component: {fileID: 8842421105370142990}
+  m_Layer: 7
   m_Name: Bush2 Reworked (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121452,6 +121550,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1351208405823554870}
   m_Mesh: {fileID: 4300000, guid: 324ad508c20fccb44be2a903b3dd1722, type: 2}
+--- !u!65 &3234819151682817962
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351208405823554870}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029474199, y: 0.008038014, z: -0.028382182}
 --- !u!4 &3236056474217332472
 Transform:
   m_ObjectHideFlags: 0
@@ -121722,7 +121841,8 @@ GameObject:
   - component: {fileID: 3647161146257196751}
   - component: {fileID: 1495547539331132120}
   - component: {fileID: 5318395301466517636}
-  m_Layer: 0
+  - component: {fileID: 6519979252269791944}
+  m_Layer: 7
   m_Name: Bush2 Reworked (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127864,7 +127984,8 @@ GameObject:
   - component: {fileID: 6227976225527528685}
   - component: {fileID: 8499767219661448355}
   - component: {fileID: 3283231900416796762}
-  m_Layer: 0
+  - component: {fileID: 8499767219661448356}
+  m_Layer: 7
   m_Name: Bush2 Reworked (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128381,7 +128502,7 @@ Transform:
   m_GameObject: {fileID: 6547509329334173018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.03, y: 0, z: 1.66}
   m_LocalScale: {x: 2.6, y: 2.6, z: 2.6}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -141948,7 +142069,8 @@ GameObject:
   - component: {fileID: 7655130510739890933}
   - component: {fileID: 3789334445349586376}
   - component: {fileID: 4966032376218980117}
-  m_Layer: 0
+  - component: {fileID: 7655130510739890934}
+  m_Layer: 7
   m_Name: Bush2 Reworked (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142360,7 +142482,7 @@ Transform:
   m_GameObject: {fileID: 6934386469613807432}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.01, y: 0, z: -0.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143870,7 +143992,8 @@ GameObject:
   - component: {fileID: 5015621880615703418}
   - component: {fileID: 4916012455029394662}
   - component: {fileID: 2552063488753243001}
-  m_Layer: 0
+  - component: {fileID: 5015621880615703419}
+  m_Layer: 7
   m_Name: Bush2 Reworked (39)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149685,7 +149808,8 @@ GameObject:
   - component: {fileID: 5275403582842546444}
   - component: {fileID: 4937337614985073080}
   - component: {fileID: 1224799309010575668}
-  m_Layer: 0
+  - component: {fileID: 5275403582842546445}
+  m_Layer: 7
   m_Name: Bush2 Reworked (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157493,7 +157617,8 @@ GameObject:
   - component: {fileID: 4674132721077132523}
   - component: {fileID: 8388415239192185498}
   - component: {fileID: 7867480676514645474}
-  m_Layer: 0
+  - component: {fileID: 8388415239192185499}
+  m_Layer: 7
   m_Name: Bush2 Reworked (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157697,7 +157822,8 @@ GameObject:
   - component: {fileID: 9024789029205526723}
   - component: {fileID: 8788164504161336950}
   - component: {fileID: 2840041997811528525}
-  m_Layer: 0
+  - component: {fileID: 9024789029205526724}
+  m_Layer: 7
   m_Name: Bush2 Reworked (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161184,7 +161310,8 @@ GameObject:
   - component: {fileID: 5914921201723090083}
   - component: {fileID: 4815500107128146507}
   - component: {fileID: 3776819915219272244}
-  m_Layer: 0
+  - component: {fileID: 5914921201723090084}
+  m_Layer: 7
   m_Name: Bush2 Reworked (41)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169483,7 +169610,8 @@ GameObject:
   - component: {fileID: 4365658665046306689}
   - component: {fileID: 9151119275674841519}
   - component: {fileID: 3145178174354202085}
-  m_Layer: 0
+  - component: {fileID: 9151119275674841520}
+  m_Layer: 7
   m_Name: Bush2 Reworked (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175460,7 +175588,8 @@ GameObject:
   - component: {fileID: 1619770546790520644}
   - component: {fileID: 7690547059510181443}
   - component: {fileID: 798897699714515709}
-  m_Layer: 0
+  - component: {fileID: 7690547059510181444}
+  m_Layer: 7
   m_Name: Bush2 Reworked (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176680,6 +176809,27 @@ MonoBehaviour:
   saveDataAssetGuid: b6624a1d72be5c44a940fa5889b10395
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &4963365624433540651
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775004027689096840}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029478972, y: 0.008038014, z: -0.028380282}
 --- !u!23 &4966032376218980117
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -177271,6 +177421,27 @@ MonoBehaviour:
   saveDataAssetGuid: 1cc01e6cb7507b947bd0a42c4dab7fc9
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &5015621880615703419
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4015418752085523478}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028379329}
 --- !u!1 &5015901042782644153
 GameObject:
   m_ObjectHideFlags: 0
@@ -177283,7 +177454,8 @@ GameObject:
   - component: {fileID: 5669401869650481760}
   - component: {fileID: 7414128742842901289}
   - component: {fileID: 6285997020827630012}
-  m_Layer: 0
+  - component: {fileID: 9117894620609772094}
+  m_Layer: 7
   m_Name: Bush2 Reworked (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179273,7 +179445,8 @@ GameObject:
   - component: {fileID: 4025756255948223671}
   - component: {fileID: 201127069284530148}
   - component: {fileID: 1811409786277560592}
-  m_Layer: 0
+  - component: {fileID: 7232828639380926489}
+  m_Layer: 7
   m_Name: Bush2 Reworked (52)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182926,6 +183099,27 @@ MonoBehaviour:
   saveDataAssetGuid: 627c3207b14262e4da6dcaa831cc80dd
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &5275403582842546445
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4083652878024262029}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029450357, y: 0.008038014, z: -0.028381228}
 --- !u!114 &5277452206022033124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183251,7 +183445,8 @@ GameObject:
   - component: {fileID: 3929932504811080643}
   - component: {fileID: 5728944666154311693}
   - component: {fileID: 5324882930185458601}
-  m_Layer: 0
+  - component: {fileID: 5728944666154311694}
+  m_Layer: 7
   m_Name: Bush2 Reworked (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183419,7 +183614,8 @@ GameObject:
   - component: {fileID: 6052003595671767448}
   - component: {fileID: 6836914763636171735}
   - component: {fileID: 2210079239309389770}
-  m_Layer: 0
+  - component: {fileID: 6836914763636171736}
+  m_Layer: 7
   m_Name: Bush2 Reworked (46)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184343,7 +184539,8 @@ GameObject:
   - component: {fileID: 3863146774080089925}
   - component: {fileID: 1061481361737996992}
   - component: {fileID: 6731713607548836710}
-  m_Layer: 0
+  - component: {fileID: 7329340141248187342}
+  m_Layer: 7
   m_Name: Bush2 Reworked (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190185,13 +190382,35 @@ GameObject:
   - component: {fileID: 3420461277578360190}
   - component: {fileID: 937680239133025371}
   - component: {fileID: 3304878523604607700}
-  m_Layer: 0
+  - component: {fileID: 5449705075209291643}
+  m_Layer: 7
   m_Name: Bush2 Reworked (47)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &5449705075209291643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5449705075209291642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.1979029}
+  m_Center: {x: -0.0029459898, y: 0.008038014, z: -0.028377417}
 --- !u!1 &5452591062525907970
 GameObject:
   m_ObjectHideFlags: 0
@@ -191569,7 +191788,8 @@ GameObject:
   - component: {fileID: 2366446109077757777}
   - component: {fileID: 2563579121541893398}
   - component: {fileID: 6065242099544477851}
-  m_Layer: 0
+  - component: {fileID: 6065242099544477852}
+  m_Layer: 7
   m_Name: Bush2 Reworked (50)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193507,13 +193727,35 @@ GameObject:
   - component: {fileID: 1721936147533213427}
   - component: {fileID: 2233639842973205113}
   - component: {fileID: 5521176824923170770}
-  m_Layer: 0
+  - component: {fileID: 5638289647541451398}
+  m_Layer: 7
   m_Name: Bush2 Reworked (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &5638289647541451398
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5638289647541451397}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029464662, y: 0.008038014, z: -0.028381228}
 --- !u!4 &5639326449210383402
 Transform:
   m_ObjectHideFlags: 0
@@ -195132,6 +195374,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5306264740118602526}
   m_Mesh: {fileID: 4300000, guid: 207f1cd623e5e504e9a0513912b69463, type: 2}
+--- !u!65 &5728944666154311694
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5306264740118602526}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029478967, y: 0.008038014, z: -0.028385043}
 --- !u!4 &5730127553047627836
 Transform:
   m_ObjectHideFlags: 0
@@ -196377,6 +196640,27 @@ MonoBehaviour:
   saveDataAssetGuid: 283b95d390368e642b408fd37c260786
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &5819618752271587286
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552390322804918634}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028377421}
 --- !u!4 &5819710742824345674
 Transform:
   m_ObjectHideFlags: 0
@@ -197543,6 +197827,27 @@ MonoBehaviour:
   saveDataAssetGuid: 0eef15d445a73cb489fb81899c90b146
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &5914921201723090084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4552158758156023516}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002946943, y: 0.008038014, z: -0.028382182}
 --- !u!4 &5918463761719835163
 Transform:
   m_ObjectHideFlags: 0
@@ -198211,6 +198516,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340096445011407683}
   m_Mesh: {fileID: 4300000, guid: bab536851907bab47a74520db8813921, type: 2}
+--- !u!65 &5971982007835380007
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340096445011407683}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029465854, y: 0.008038014, z: -0.028381228}
 --- !u!111 &5973129566551841435
 Animation:
   m_ObjectHideFlags: 0
@@ -199898,7 +200224,8 @@ GameObject:
   - component: {fileID: 3012204423117337583}
   - component: {fileID: 3192346461100502267}
   - component: {fileID: 3180282052491816280}
-  m_Layer: 0
+  - component: {fileID: 6507275258761663013}
+  m_Layer: 7
   m_Name: Bush2 Reworked (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200060,6 +200387,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6065242099544477852
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5535073415351876889}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979027}
+  m_Center: {x: -0.002944082, y: 0.008038014, z: -0.028381227}
 --- !u!1 &6065739647746782031
 GameObject:
   m_ObjectHideFlags: 0
@@ -202557,6 +202905,27 @@ MonoBehaviour:
   saveDataAssetGuid: 273b1d05a9e99f842bfb16dd6653f4b1
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &6195833549952482254
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761580621216376769}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029478972, y: 0.008038014, z: -0.028378375}
 --- !u!4 &6196007217469170562
 Transform:
   m_ObjectHideFlags: 0
@@ -208462,13 +208831,35 @@ GameObject:
   - component: {fileID: 2756747357222830595}
   - component: {fileID: 2030711983875295586}
   - component: {fileID: 4798734576462503795}
-  m_Layer: 0
+  - component: {fileID: 6262863138681262220}
+  m_Layer: 7
   m_Name: Bush2 Reworked (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &6262863138681262220
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6262863138681262219}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028379329}
 --- !u!1 &6263908175985248872
 GameObject:
   m_ObjectHideFlags: 0
@@ -208918,7 +209309,8 @@ GameObject:
   - component: {fileID: 6824072100047953302}
   - component: {fileID: 7620102251223722516}
   - component: {fileID: 4498341220096167266}
-  m_Layer: 0
+  - component: {fileID: 7620102251223722517}
+  m_Layer: 7
   m_Name: Bush2 Reworked (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211062,6 +211454,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!65 &6444368348590906821
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559109575800270301}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029478967, y: 0.008038014, z: -0.028383136}
 --- !u!23 &6444562541223261354
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -212316,6 +212729,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: -86.78, z: 0}
+--- !u!65 &6507275258761663013
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6054546274525999149}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334384, y: 0.93821794, z: 1.1979029}
+  m_Center: {x: -0.0029450364, y: 0.008038014, z: -0.028378967}
 --- !u!1 &6508003923382808303
 GameObject:
   m_ObjectHideFlags: 0
@@ -212616,6 +213050,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6519979252269791944
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250139537488452840}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029459894, y: 0.008038014, z: -0.028381228}
 --- !u!4 &6520968774447573440
 Transform:
   m_ObjectHideFlags: 0
@@ -215747,6 +216202,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6647456451683151188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3161190522588307243}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334384, y: 0.93821794, z: 1.1979029}
+  m_Center: {x: -0.0029469437, y: 0.008038014, z: -0.028383497}
 --- !u!4 &6651063352724256130
 Transform:
   m_ObjectHideFlags: 0
@@ -215791,7 +216267,8 @@ GameObject:
   - component: {fileID: 2977487772446869175}
   - component: {fileID: 8175375144171095179}
   - component: {fileID: 8524189571419262549}
-  m_Layer: 0
+  - component: {fileID: 8524189571419262550}
+  m_Layer: 7
   m_Name: Bush2 Reworked (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216249,7 +216726,7 @@ Transform:
   m_GameObject: {fileID: 7945148786604214080}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.99, y: -4.56, z: 8.294151}
+  m_LocalPosition: {x: -2.33, y: -4.56, z: -0.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -223505,6 +223982,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5316136149346439041}
   m_Mesh: {fileID: 4300000, guid: 5617ba58c0b6cdc43a6373ae5cd268e1, type: 2}
+--- !u!65 &6836914763636171736
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5316136149346439041}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029474199, y: 0.008038014, z: -0.028380275}
 --- !u!1 &6838859139726704341
 GameObject:
   m_ObjectHideFlags: 0
@@ -235373,6 +235871,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 89.92, z: 0}
+--- !u!65 &6982760402998288016
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57721058720401984}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334384, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469437, y: 0.008038014, z: -0.028380759}
 --- !u!4 &6983587334917645225
 Transform:
   m_ObjectHideFlags: 0
@@ -236797,6 +237316,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 89.47, z: 0}
+--- !u!65 &7063890074362135710
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888425850529727483}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029459898, y: 0.008038014, z: -0.028381236}
 --- !u!1 &7066237925598344166
 GameObject:
   m_ObjectHideFlags: 0
@@ -236809,7 +237349,8 @@ GameObject:
   - component: {fileID: 9074568625694551259}
   - component: {fileID: 4429720181259119903}
   - component: {fileID: 2769805576542970123}
-  m_Layer: 0
+  - component: {fileID: 9074568625694551260}
+  m_Layer: 7
   m_Name: Bush2 Reworked (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236885,6 +237426,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990304422305474761}
   m_Mesh: {fileID: 4300000, guid: 3d126739115d9f74fa799a7e11e59920, type: 2}
+--- !u!65 &7068209644777509007
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990304422305474761}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029459894, y: 0.008038014, z: -0.028381228}
 --- !u!1 &7070338970532395770
 GameObject:
   m_ObjectHideFlags: 0
@@ -237936,7 +238498,8 @@ GameObject:
   - component: {fileID: 7435010515303485752}
   - component: {fileID: 8885447844220552596}
   - component: {fileID: 1046487566114712457}
-  m_Layer: 0
+  - component: {fileID: 8885447844220552597}
+  m_Layer: 7
   m_Name: Bush2 Reworked (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239037,7 +239600,8 @@ GameObject:
   - component: {fileID: 1833729956580191632}
   - component: {fileID: 7837288185035716696}
   - component: {fileID: 3505166139592798324}
-  m_Layer: 0
+  - component: {fileID: 7837288185035716697}
+  m_Layer: 7
   m_Name: Bush2 Reworked (38)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239323,6 +239887,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7232828639380926489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5060687667682685679}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002946943, y: 0.008038014, z: -0.028382182}
 --- !u!4 &7233131935944213553
 Transform:
   m_ObjectHideFlags: 0
@@ -245428,6 +246013,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 89.42, z: 0}
+--- !u!65 &7329340141248187342
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372572261133874507}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334378, y: 0.93821794, z: 1.1979027}
+  m_Center: {x: -0.0029450355, y: 0.008038014, z: -0.028377412}
 --- !u!4 &7330043616777965317
 Transform:
   m_ObjectHideFlags: 0
@@ -246049,7 +246655,8 @@ GameObject:
   - component: {fileID: 9009927150849453912}
   - component: {fileID: 5505923741527158964}
   - component: {fileID: 3828100483936106589}
-  m_Layer: 0
+  - component: {fileID: 9009927150849453913}
+  m_Layer: 7
   m_Name: Bush2 Reworked (48)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246713,7 +247320,8 @@ GameObject:
   - component: {fileID: 6847546804328014665}
   - component: {fileID: 7784228527030256848}
   - component: {fileID: 723839400951178351}
-  m_Layer: 0
+  - component: {fileID: 8136636247857703454}
+  m_Layer: 7
   m_Name: Bush2 Reworked (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246938,6 +247546,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7430947396659643308
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3154172558013204530}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002946943, y: 0.008038014, z: -0.028380275}
 --- !u!4 &7432985900585288170
 Transform:
   m_ObjectHideFlags: 0
@@ -247737,6 +248366,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203519464875226141}
   m_Mesh: {fileID: 4300000, guid: 9d1d61e340a81bc4e9b19abbf7ca0177, type: 2}
+--- !u!65 &7473856309274072109
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203519464875226141}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029464662, y: 0.008038014, z: -0.028381228}
 --- !u!4 &7477874761316898174
 Transform:
   m_ObjectHideFlags: 0
@@ -248041,6 +248691,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949985165899716205}
   m_Mesh: {fileID: 4300000, guid: 2831a9936eb14bd489e260bd7feee2ef, type: 2}
+--- !u!65 &7499817122489995154
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949985165899716205}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029464662, y: 0.008038014, z: -0.028381228}
 --- !u!4 &7500772499080344234
 Transform:
   m_ObjectHideFlags: 0
@@ -249055,7 +249726,8 @@ GameObject:
   - component: {fileID: 3280060995083461837}
   - component: {fileID: 4569108282294706947}
   - component: {fileID: 7819577570104399386}
-  m_Layer: 0
+  - component: {fileID: 7819577570104399387}
+  m_Layer: 7
   m_Name: Bush2 Reworked (44)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249592,6 +250264,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6296528357016148813}
   m_Mesh: {fileID: 4300000, guid: 9d98b11336174f845998569dd3dbf5ac, type: 2}
+--- !u!65 &7620102251223722517
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6296528357016148813}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334378, y: 0.93821794, z: 1.1979027}
+  m_Center: {x: -0.0029450355, y: 0.008038014, z: -0.02837932}
 --- !u!4 &7622390555920400881
 Transform:
   m_ObjectHideFlags: 0
@@ -249941,6 +250634,27 @@ MonoBehaviour:
   saveDataAssetGuid: c1a235318aaff5542af08bf562e8babd
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &7655130510739890934
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909198779056593959}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334384, y: 0.93821794, z: 1.1979029}
+  m_Center: {x: -0.0029469437, y: 0.008038014, z: -0.02838302}
 --- !u!23 &7656268377795636251
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -255338,7 +256052,8 @@ GameObject:
   - component: {fileID: 2307805572409793283}
   - component: {fileID: 8600784962520843853}
   - component: {fileID: 8415431118525769103}
-  m_Layer: 0
+  - component: {fileID: 8600784962520843854}
+  m_Layer: 7
   m_Name: Bush2 Reworked (51)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255361,6 +256076,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4896314152000180211}
   m_Mesh: {fileID: 4300000, guid: 26ee61acd85bdf24aa572582516f5b6b, type: 2}
+--- !u!65 &7690547059510181444
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4896314152000180211}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029459894, y: 0.008038014, z: -0.028381228}
 --- !u!1 &7690871313577375707
 GameObject:
   m_ObjectHideFlags: 0
@@ -266068,7 +266804,8 @@ GameObject:
   - component: {fileID: 7019922500927994052}
   - component: {fileID: 1789896666459455444}
   - component: {fileID: 8075539741842184400}
-  m_Layer: 0
+  - component: {fileID: 8075539741842184401}
+  m_Layer: 7
   m_Name: Bush2 Reworked (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266352,6 +267089,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7819577570104399387
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7600669638060363157}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029483736, y: 0.008038014, z: -0.028380275}
 --- !u!1 &7821822625742079406
 GameObject:
   m_ObjectHideFlags: 0
@@ -266500,6 +267258,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7201977158620707399}
   m_Mesh: {fileID: 4300000, guid: 6263a7376a437df459ec918babca6b1b, type: 2}
+--- !u!65 &7837288185035716697
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201977158620707399}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028379329}
 --- !u!4 &7838292220045724113
 Transform:
   m_ObjectHideFlags: 0
@@ -267795,7 +268574,8 @@ GameObject:
   - component: {fileID: 7092581309007431217}
   - component: {fileID: 1410354739393316585}
   - component: {fileID: 7959922305868029645}
-  m_Layer: 0
+  - component: {fileID: 7959922305868029646}
+  m_Layer: 7
   m_Name: Bush2 Reworked (49)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268880,7 +269660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &7945857208857041807
 GameObject:
   m_ObjectHideFlags: 0
@@ -273833,6 +274613,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7959922305868029646
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7864443810975431340}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979027}
+  m_Center: {x: -0.0029447973, y: 0.008038014, z: -0.028381227}
 --- !u!4 &7960359172462246234
 Transform:
   m_ObjectHideFlags: 0
@@ -274541,6 +275342,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1230232934839245085}
   m_Mesh: {fileID: 4300000, guid: 03d37cd7b829d6e42832be0d8c30ae3b, type: 2}
+--- !u!65 &8015855655102140300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230232934839245085}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029478967, y: 0.008038014, z: -0.028381228}
 --- !u!23 &8017035062111285564
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -275553,6 +276375,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8075539741842184401
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7792782138152796190}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029450362, y: 0.008038014, z: -0.028381228}
 --- !u!1 &8077821646505600601
 GameObject:
   m_ObjectHideFlags: 0
@@ -281561,6 +282404,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 89.47, z: 0}
+--- !u!65 &8136636247857703454
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7416266418527468350}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028380282}
 --- !u!195 &8138174477073962544
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -283393,6 +284257,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8243188361183006278
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864505373512293784}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028380282}
 --- !u!1 &8246818512412521421
 GameObject:
   m_ObjectHideFlags: 0
@@ -289954,6 +290839,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4323315412968247789}
   m_Mesh: {fileID: 4300000, guid: a3bc36e6f5f4d154ab088e25c2c29d62, type: 2}
+--- !u!65 &8388415239192185499
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4323315412968247789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029469435, y: 0.008038014, z: -0.028379329}
 --- !u!4 &8391824733836415351
 Transform:
   m_ObjectHideFlags: 0
@@ -290564,6 +291470,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8408218525064870007
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2445861822858379897}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029483736, y: 0.008038014, z: -0.028380275}
 --- !u!1 &8408410761516019958
 GameObject:
   m_ObjectHideFlags: 0
@@ -291817,6 +292744,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3330826874594911183}
   m_Mesh: {fileID: 4300000, guid: ec8cc37a505dc3b46a10f06277fde0f5, type: 2}
+--- !u!65 &8499767219661448356
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3330826874594911183}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002946943, y: 0.008038014, z: -0.028381228}
 --- !u!1 &8501539493637765939
 GameObject:
   m_ObjectHideFlags: 0
@@ -292145,6 +293093,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8524189571419262550
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655589631853417088}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002946943, y: 0.008038014, z: -0.028381228}
 --- !u!1 &8524876716506059489
 GameObject:
   m_ObjectHideFlags: 0
@@ -293214,6 +294183,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7690127404077630413}
   m_Mesh: {fileID: 4300000, guid: 0eda53fa37bd02347a5e5dccd176b8d6, type: 2}
+--- !u!65 &8600784962520843854
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7690127404077630413}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029450357, y: 0.008038014, z: -0.028382182}
 --- !u!4 &8601053249242946365
 Transform:
   m_ObjectHideFlags: 0
@@ -297100,6 +298090,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3180903912941815327}
   m_Mesh: {fileID: 4300000, guid: 7e976e38b3651cd4aa2008503f780701, type: 2}
+--- !u!65 &8842421105370142990
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3180903912941815327}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334384, y: 0.93821794, z: 1.1979029}
+  m_Center: {x: -0.0029469437, y: 0.008038014, z: -0.028382543}
 --- !u!4 &8846047422315825398
 Transform:
   m_ObjectHideFlags: 0
@@ -297739,6 +298750,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8877917935089135401
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253948762018031885}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029478972, y: 0.008038014, z: -0.028380282}
 --- !u!1 &8879795871760187077
 GameObject:
   m_ObjectHideFlags: 0
@@ -297852,6 +298884,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7127679346204383658}
   m_Mesh: {fileID: 4300000, guid: 43a20897be37d3b41b8b3ff515bfbaca, type: 2}
+--- !u!65 &8885447844220552597
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7127679346204383658}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029478972, y: 0.008038014, z: -0.028377421}
 --- !u!4 &8886489808874204432
 Transform:
   m_ObjectHideFlags: 0
@@ -299737,13 +300790,35 @@ GameObject:
   - component: {fileID: 5208490839909053371}
   - component: {fileID: 1605206740133057333}
   - component: {fileID: 2975070604607983391}
-  m_Layer: 0
+  - component: {fileID: 8971544080059595906}
+  m_Layer: 7
   m_Name: Bush2 Reworked (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &8971544080059595906
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8971544080059595905}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029459898, y: 0.008038014, z: -0.028381228}
 --- !u!1 &8971991745044129652
 GameObject:
   m_ObjectHideFlags: 0
@@ -300333,6 +301408,27 @@ MonoBehaviour:
   saveDataAssetGuid: e1ef52ab2ee4adb4a95b17c6fbcd0278
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &9009927150849453913
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7381335425084508950}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334386, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029495668, y: 0.008038014, z: -0.028379329}
 --- !u!1 &9011580884926024696
 GameObject:
   m_ObjectHideFlags: 0
@@ -300755,6 +301851,27 @@ MonoBehaviour:
   saveDataAssetGuid: 0f56a679507146a41a16aedaa050733b
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &9024789029205526724
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4340823236499988320}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029450357, y: 0.008038014, z: -0.028381228}
 --- !u!4 &9025901775736731815
 Transform:
   m_ObjectHideFlags: 0
@@ -301783,6 +302900,27 @@ MonoBehaviour:
   saveDataAssetGuid: 607428c9183757f4aa5dd5af5bc0603a
   IsSaveDataLoaded: 0
   <IsDirtySaveData>k__BackingField: 0
+--- !u!65 &9074568625694551260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066237925598344166}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.002945036, y: 0.008038014, z: -0.028381228}
 --- !u!4 &9075843324510143752
 Transform:
   m_ObjectHideFlags: 0
@@ -301835,13 +302973,35 @@ GameObject:
   - component: {fileID: 1350808118251898236}
   - component: {fileID: 474701550855086420}
   - component: {fileID: 7499801671167930668}
-  m_Layer: 0
+  - component: {fileID: 9080652631353092919}
+  m_Layer: 7
   m_Name: Bush2 Reworked (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &9080652631353092919
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9080652631353092918}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029450357, y: 0.008038014, z: -0.028385043}
 --- !u!1 &9082296138925533958
 GameObject:
   m_ObjectHideFlags: 0
@@ -301940,13 +303100,35 @@ GameObject:
   - component: {fileID: 8265496763792693819}
   - component: {fileID: 2446196600170612692}
   - component: {fileID: 2130609530327808586}
-  m_Layer: 0
+  - component: {fileID: 9085089142484825965}
+  m_Layer: 7
   m_Name: Bush2 Reworked (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &9085089142484825965
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085089142484825964}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029459894, y: 0.008038014, z: -0.028385043}
 --- !u!4 &9085233196648665480
 Transform:
   m_ObjectHideFlags: 0
@@ -302425,6 +303607,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9117894620609772094
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5015901042782644153}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029474199, y: 0.008038014, z: -0.028385043}
 --- !u!4 &9120205464998425191
 Transform:
   m_ObjectHideFlags: 0
@@ -303188,6 +304391,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4801413376792810759}
   m_Mesh: {fileID: 4300000, guid: 58cf292eb9eb70c4e84398f479c2942b, type: 2}
+--- !u!65 &9151119275674841520
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4801413376792810759}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334382, y: 0.93821794, z: 1.197903}
+  m_Center: {x: -0.0029478972, y: 0.008038014, z: -0.028381236}
 --- !u!1 &9151472397572153489
 GameObject:
   m_ObjectHideFlags: 0
@@ -304259,6 +305483,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6028431500369827934}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9210024025180438672
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033766214335419788}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8334379, y: 0.93821794, z: 1.1979028}
+  m_Center: {x: -0.0029464662, y: 0.008038014, z: -0.028381228}
 --- !u!1 &9210143013598701034
 GameObject:
   m_ObjectHideFlags: 0
@@ -304474,3 +305719,5 @@ SceneRoots:
   - {fileID: 110250671}
   - {fileID: 2669025558145277785}
   - {fileID: 1242970593}
+  - {fileID: 962907354}
+  - {fileID: 248852712}
