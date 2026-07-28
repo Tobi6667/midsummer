@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputSystem : MonoBehaviour
 {
-    Move moveScript;
+ /*   Move moveScript;
     [System.Serializable]
     public class InputSettings
 
@@ -143,5 +143,5 @@ public class InputSystem : MonoBehaviour
     public void Release()
     {
         bowScript.ReleaseString();
-    }
+    } */
 }

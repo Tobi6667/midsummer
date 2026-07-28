@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Dragon_Grid_Hologram
-  m_Shader: {fileID: -6465566751694194690, guid: 2ca99467703c241f2b2603f2c8556688, type: 3}
-  m_Parent: {fileID: 0}
+  m_Shader: {fileID: -6465566751694194690, guid: de487131c0a5e473194161dfed747057, type: 3}
+  m_Parent: {fileID: 2100000, guid: 8e63d3a3898f24285a1f87592aa48cbd, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -28,41 +28,22 @@ Material:
         m_Texture: {fileID: 2800000, guid: 552a20de773034229bc698a293af4fe2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Displacement_Density: 0.5
     - _Displacement_Noise_Scale: 0.5
     - _Displacement_Offset: 0.05
-    - _Displacement_Speed: 1
     - _Emission_Scale: 1
     - _Fresnel_Power: 1
     - _Pattern_Boost: 1
     - _Pattern_Density: 1000
-    - _Pattern_Edge_A: 0
     - _Pattern_Edge_B: 0
     - _Pattern_Noise_Scale: 50
     - _Pattern_Speed_A: 1
     - _Pattern_Speed_B: 1
-    - _QueueControl: 0
-    - _QueueOffset: 0
     m_Colors:
-    - _Displacement_Direction: {r: 1, g: 0, b: 0, a: 0}
     - _Displacement_Noise_Direction: {r: 1, g: 0, b: 0, a: 0}
     - _Hologram_Color: {r: 0.4397111, g: 1, b: 0, a: 1}
-    - _Pattern_Direction_Horizontal: {r: 1, g: 0, b: 0, a: 0}
-    - _Pattern_Direction_Vertical: {r: 0, g: 1, b: 0, a: 0}
     - _Texture_Tint_Color: {r: 0, g: 1, b: 0.87953043, a: 0.10980392}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
