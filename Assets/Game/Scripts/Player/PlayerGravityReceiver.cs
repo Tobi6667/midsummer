@@ -208,6 +208,7 @@ public class PlayerGravityReceiver : MonoBehaviour
             out _,
             capsule.height * 0.5f + 0.15f,
             collisionMask);
+        Debug.Log("rgound: " + isGrounded);
     }
 
 
@@ -225,7 +226,7 @@ public class PlayerGravityReceiver : MonoBehaviour
         float speed = moveSpeed * (isSprinting ? sprintMultiplier : 1f);
 
         bool isWalking = planarMove.sqrMagnitude > 0.0001f && isGrounded;
-
+        Debug.Log("walk speed:" + speed);
         animActionComp.SetWalking(isWalking);
 
         if (isGrounded)

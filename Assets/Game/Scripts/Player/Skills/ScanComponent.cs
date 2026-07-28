@@ -14,6 +14,7 @@ public class ScanComponent : MonoBehaviour
     [SerializeField] private VFXTester _vfxTester;
     [SerializeField] private Transform _target;
     [SerializeField] private Light _scanLight;
+    [SerializeField] private LensPickUp _scanLensPickUp;
     private Sequence _scanSequence;
 
     private GuardController _currentGuard;
@@ -119,11 +120,17 @@ public class ScanComponent : MonoBehaviour
 
     private void ExpandScanLight()
     {
-        _scanSequence.PlayForward();
+        if (InventoryManagerNEW.Instance.HasItem(_scanLensPickUp.GetItem()))
+        {
+            _scanSequence.PlayForward();
+        }
     }
 
     private void CollapseScanLight()
     {
-        _scanSequence.PlayBackwards();
+        if (InventoryManagerNEW.Instance.HasItem(_scanLensPickUp.GetItem()))
+        {
+            _scanSequence.PlayBackwards();
+        }
     }
 }

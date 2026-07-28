@@ -11,6 +11,7 @@ public class Chair : InteractActionBase, IInteractable
 
     }
 
+
     public void StopInteracting()
     {
         ActManager.Instance.StopAct();

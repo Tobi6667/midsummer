@@ -14,6 +14,7 @@ public class PlayerBase : MonoBehaviour
 
     public virtual void UpdateStats(float _val)
     {
+        Debug.Log("hit "+_val);
         DetectionValue -= _val;
         if (DetectionValue <= 0)
         {

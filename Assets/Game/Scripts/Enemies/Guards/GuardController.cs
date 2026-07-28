@@ -35,5 +35,4 @@ void Start()
         _interactComponent = GetComponent<NPCInteractionComponent>();
     }
 
-
 }

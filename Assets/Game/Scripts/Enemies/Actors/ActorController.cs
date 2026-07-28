@@ -41,4 +41,9 @@ public class ActorController : EnemyBase, IInteractable
     public override void Initialize()
     {
     }
+
+    public void SetHighlighted(bool highlighted)
+    {
+        throw new NotImplementedException();
+    }
 }

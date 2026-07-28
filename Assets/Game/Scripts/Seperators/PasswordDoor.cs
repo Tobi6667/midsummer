@@ -161,4 +161,9 @@ public class PasswordDoor : MonoBehaviour, IInteractable
             .DOLocalRotate(new Vector3(0, openAngleRight, 0), duration)
             .SetEase(Ease.InOutSine);
     }
+
+    public void SetHighlighted(bool highlighted)
+    {
+        throw new NotImplementedException();
+    }
 }

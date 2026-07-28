@@ -36,6 +36,8 @@ public class EnemyAttackComponent : MonoBehaviour
 
     internal void Tick(float dt)
     {
+
+        PlayerController.Instance.UpdateStats(1f);
         if (_target == null) return;
 
         _cooldownRemaining -= dt;

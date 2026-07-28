@@ -30,7 +30,7 @@ public class EnemyChaseState : INPCStateBehavior
 
     public void Tick(float dt)
     {
-        PlayerController.Instance.UpdateStats(dt);
+
 
         if (_enemyAwarenessComponent.CurrentState == EnemyAwarenessComponent.AwarenessState.Idle)
         {

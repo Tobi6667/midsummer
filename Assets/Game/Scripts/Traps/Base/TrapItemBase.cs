@@ -7,8 +7,9 @@ public abstract class TrapItemBase : PickUpBase
 {
     [SerializeField] protected List<StatusEffectBase> statusEffects;
     [SerializeField] protected ParticleSystem triggerEffect;
+    [SerializeField] protected bool onlyPickup;
     private ParticleSystem partObj;
-    private bool isTriggered = false;
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -22,10 +23,10 @@ public abstract class TrapItemBase : PickUpBase
     private void OnTriggerEnter(Collider collider)
     {     
 
-        if(collider.gameObject.CompareTag("Enemy") && !isTriggered)
+        if(collider.gameObject.CompareTag("Enemy") && !isTriggered && !onlyPickup)
         {
             Debug.Log("enemy hit trap");
-            isTriggered = true;
+           base.isTriggered = true;
             EnemyController enemy = collider.gameObject.GetComponent<EnemyController>();
             foreach (var effect in statusEffects)
             {

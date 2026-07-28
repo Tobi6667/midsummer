@@ -32,10 +32,12 @@ public class PlayerInventoryComponent : MonoBehaviour {
 	{
         if (other.tag == "Item")
         {
+            
+
             Debug.Log("ITEM!!");
             //inventory.AddItem(other.GetComponent<ItemScript>());
             var it = other.GetComponent<PickUpBase>();
-
+            if (it.IsTriggered()) return;
 
                 InventoryManagerNEW.Instance.AddItem(it.GetItem());
             
