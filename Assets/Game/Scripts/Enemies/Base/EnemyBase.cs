@@ -31,6 +31,8 @@ public abstract class EnemyBase : MonoBehaviour
             return;
         }
 
+
+
         _effectController.AddEffect(effect);
     }
 

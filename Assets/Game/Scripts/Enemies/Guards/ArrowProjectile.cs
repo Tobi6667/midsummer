@@ -5,7 +5,8 @@ public class ArrowProjectile : MonoBehaviour
 {
     [SerializeField] private float _flightDuration = 0.6f;
     [SerializeField] private float _arcHeight = 2f;
-
+    [SerializeField] GameObject arrow;
+    
     public void Launch(Vector3 targetPosition, System.Action onHit = null)
     {
         Vector3 start = transform.position;
@@ -22,4 +23,6 @@ public class ArrowProjectile : MonoBehaviour
                 Destroy(gameObject);
             });
     }
+   
+
 }

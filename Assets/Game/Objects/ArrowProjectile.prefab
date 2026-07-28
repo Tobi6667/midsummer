@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArrowProjectile
   _flightDuration: 4
   _arcHeight: 3.63
+  arrow: {fileID: 0}
 --- !u!96 &7698226294345850158
 TrailRenderer:
   serializedVersion: 4
@@ -404,6 +405,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4110985954270807128}
+  - component: {fileID: 8223743107143618317}
+  - component: {fileID: 4096991066042929504}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -429,6 +432,41 @@ Transform:
   - {fileID: 1983903959281613884}
   m_Father: {fileID: 3176711548843644199}
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+--- !u!136 &8223743107143618317
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5198203981847221044}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.04
+  m_Height: 0.64
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.35, z: 0}
+--- !u!114 &4096991066042929504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5198203981847221044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790df05e738184f499c23620ffe1d78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Arrowhead
 --- !u!1 &6103901011001937747
 GameObject:
   m_ObjectHideFlags: 0
