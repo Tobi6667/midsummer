@@ -30,6 +30,9 @@ public class PasswordDoor : MonoBehaviour, IInteractable
     private Action _onFinishInteract;
     private bool _pwCorrect = false;
 
+
+    [SerializeField] private AudioSource _audio;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -149,7 +152,7 @@ public class PasswordDoor : MonoBehaviour, IInteractable
             {
                 Debug.Log("1 second passed");
                 _rootElement.style.display = DisplayStyle.None;
-
+                _audio.Play();
             });
 
             // Optional: play error sound or shake UI

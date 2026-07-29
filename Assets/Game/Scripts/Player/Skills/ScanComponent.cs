@@ -48,7 +48,7 @@ public class ScanComponent : MonoBehaviour
         // _inputController.OnScanReleased -= StopScanning;
     }
 
-    private const float scanRadius = 5f;
+    private const float scanRadius = 10f;
     private Collider[] _lastHits;
 
     private void StartScanning()
