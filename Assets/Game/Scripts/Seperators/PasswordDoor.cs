@@ -61,6 +61,11 @@ public class PasswordDoor : MonoBehaviour, IInteractable
         Label slotLabel = new Label($"Slot {slotIndex + 1}");
         slotLabel.AddToClassList("pw-slot-label");
 
+        // Hint icon — shows where to find the correct item for this slot
+        Image hintIcon = new Image();
+        hintIcon.AddToClassList("pw-hint-icon");
+        hintIcon.image = _allPwItems[_password[slotIndex]].HintIcon.texture;
+
         Button btnUp = new Button { text = "\u25B2" }; // ▲
         btnUp.AddToClassList("pw-arrow-btn");
 
@@ -77,6 +82,7 @@ public class PasswordDoor : MonoBehaviour, IInteractable
         btnDown.clicked += () => ChangeItem(slotIndex, -1, icon, itemNameLabel);
 
         slot.Add(slotLabel);
+        slot.Add(hintIcon);   // put above the selectable icon
         slot.Add(btnUp);
         slot.Add(icon);
         slot.Add(btnDown);
@@ -133,13 +139,23 @@ public class PasswordDoor : MonoBehaviour, IInteractable
             // Open the door here
             // GetComponent<Door>().Open();
             OpenDoor();
-            _rootElement.style.display = DisplayStyle.None;
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                Debug.Log("1 second passed");
+                _rootElement.style.display = DisplayStyle.None;
+
+            });
         }
         else
         {
             Debug.Log("Wrong password!");
             _statusLabel.text = "Wrong password.";
-            _statusLabel.style.display = DisplayStyle.Flex;
+            DOVirtual.DelayedCall(1f, () =>
+            {
+                Debug.Log("1 second passed");
+                _rootElement.style.display = DisplayStyle.None;
+
+            });
 
             // Optional: play error sound or shake UI
         }
