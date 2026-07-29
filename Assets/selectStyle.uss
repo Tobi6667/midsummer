@@ -1,0 +1,40 @@
+:root {
+    --color-void: #0B0E23;
+    --color-forest: #1B2A4A;
+    --color-forest-light: #2A3D63;
+    --color-gold: #D4AF6A;
+    --color-gold-bright: #F2CB7E;
+    --color-glitch: #4DE8E8;
+    --color-glitch-dim: rgba(77, 232, 232, 0.35);
+    --color-text: #F5F0E6;
+    --color-text-dim: #A8A0C0;
+}
+
+.interact-button {
+    background-color: var(--color-forest);
+    border-width: 1px;
+    border-color: var(--color-gold);
+    border-radius: 3px;
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.15s;
+}
+
+.interact-button:hover {
+    background-color: var(--color-forest-light);
+    border-color: var(--color-glitch);
+}
+
+.interact-button:active {
+    scale: 0.97 0.97;
+    border-color: var(--color-gold-bright);
+}
+
+#interact-label {
+    color: var(--color-text);
+    -unity-text-align: middle-center;
+    letter-spacing: 1px;
+}
+
+.interact-button:hover #interact-label {
+    color: var(--color-glitch);
+}

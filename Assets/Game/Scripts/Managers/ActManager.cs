@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -5,60 +6,57 @@ public  class ActManager : MonoBehaviour
 {
     public static ActManager Instance;
 
-    [SerializeField] private ActPlayData _actData;
+    [SerializeField] private ActorController _bottom;
+    [SerializeField] private ActorController _wall;
+
+
     [SerializeField] private Transform _curtainBlockade;
 
     [SerializeField] private PlayableDirector _actTimeline;
     [SerializeField] private PlayableDirector _actSolvedTimeline;
+
+    [SerializeField] private AudioSource _audio;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        StoryEventBus.Subscribe<RemoveCurtainEvent>(RemoveCurtain);
-
-        
+        _actTimeline.stopped += OnTimelineFinished;
     }
 
-    private void RemoveCurtain(RemoveCurtainEvent @event)
+    private void OnTimelineFinished(PlayableDirector director)
     {
-        Debug.Log("SOÖVED");
-         _curtainBlockade.gameObject.SetActive(false);
-
-        StopAct();
-        _actTimeline.Stop();
-        _actSolvedTimeline.Play();
-
-    }
-
-    public void PlayAct()
-    {
-        _actTimeline.Play();
-        Debug.Log("start actor");
-        foreach (var actor in _actData._actors)
+        if(_bottom.InteractComponent.HasItem() &&  _wall.InteractComponent.HasItem())
         {
-            actor.StartActing();
+            _actSolvedTimeline.Play();
         }
-    }
-
-    public void StopAct()
-    {
-
-        Debug.Log("STOP THE SHIT");
-        foreach(var actor in _actData._actors)
+        else
         {
-            actor.StopAct();
+            _audio.Play();
         }
     }
 
     private void OnDisable()
     {
-        StoryEventBus.Unsubscribe<RemoveCurtainEvent>(RemoveCurtain);
+        _actTimeline.stopped -= OnTimelineFinished;
+    }
+
+
+    public void PlayAct()
+    {
+        _actTimeline.Play();
 
     }
+
+    public void StopAct()
+    {
+
+    }
+
+
 
 
 }

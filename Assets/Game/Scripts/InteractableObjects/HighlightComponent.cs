@@ -12,6 +12,7 @@ public class HighlightComponent : MonoBehaviour, IHighlight
 
     public void SetHighlighted(bool highlighted)
     {
+        Debug.Log("highlight");
         _renderer.GetPropertyBlock(_block);
         _block.SetColor(EmissionColor, highlighted ? _highlightColor : Color.black);
         _renderer.SetPropertyBlock(_block);
