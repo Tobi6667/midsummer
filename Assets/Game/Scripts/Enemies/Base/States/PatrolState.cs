@@ -15,7 +15,7 @@ public class PatrolState : INPCStateBehavior
 
     public void Enter()
     {
-        Debug.Log("chase State");
+     //   Debug.Log("chase State");
         _patrolling.StartPatrolling();
         _patrolling.OnWaypointReached += HandleWaypointReached;
     }
