@@ -91,6 +91,14 @@ public class ActorActingController : MonoBehaviour
         {
             StoryEventBus.Publish(new WaitForTurnEvent());
         }
+
+
+        if(actorAction.removeCurtain)
+        {
+            StoryEventBus.Publish(new RemoveCurtainEvent());
+
+        }
+
     }
 
     private IEnumerator MoveTo(Vector3 target)
