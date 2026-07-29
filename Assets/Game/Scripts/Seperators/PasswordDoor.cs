@@ -62,9 +62,6 @@ public class PasswordDoor : MonoBehaviour, IInteractable
         slotLabel.AddToClassList("pw-slot-label");
 
         // Hint icon — shows where to find the correct item for this slot
-        Image hintIcon = new Image();
-        hintIcon.AddToClassList("pw-hint-icon");
-        hintIcon.image = _allPwItems[_password[slotIndex]].HintIcon.texture;
 
         Button btnUp = new Button { text = "\u25B2" }; // ▲
         btnUp.AddToClassList("pw-arrow-btn");
@@ -82,15 +79,14 @@ public class PasswordDoor : MonoBehaviour, IInteractable
         btnDown.clicked += () => ChangeItem(slotIndex, -1, icon, itemNameLabel);
 
         slot.Add(slotLabel);
-        slot.Add(hintIcon);   // put above the selectable icon
         slot.Add(btnUp);
         slot.Add(icon);
         slot.Add(btnDown);
         slot.Add(itemNameLabel);
 
         icon.image = _allPwItems[0].Icon.texture;
-        itemNameLabel.text = _allPwItems[0].name;
-        _slotNameLabels.Add(itemNameLabel);
+
+       // _slotNameLabels.Add(itemNameLabel);
 
         _slotPanel.Add(slot);
     }
@@ -108,7 +104,6 @@ public class PasswordDoor : MonoBehaviour, IInteractable
 
         var selected = _allPwItems[_selectedIndices[slotIndex]];
         icon.image = selected.Icon.texture;
-        itemNameLabel.text = selected.name;
     }
 
     public void Interact(Action onFinished)
