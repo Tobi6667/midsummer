@@ -9,6 +9,8 @@ public class ActorController : EnemyBase, IInteractable
     private ActorActingController _actingController;
 
 
+    public NPCInteractionComponent InteractComponent => _interactComponent;
+
     private void Start()
     {
         _interactComponent = GetComponent<NPCInteractionComponent>();

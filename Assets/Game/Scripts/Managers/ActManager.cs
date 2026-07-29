@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Playables;
 
 public  class ActManager : MonoBehaviour
 {
@@ -6,6 +7,9 @@ public  class ActManager : MonoBehaviour
 
     [SerializeField] private ActPlayData _actData;
     [SerializeField] private Transform _curtainBlockade;
+
+    [SerializeField] private PlayableDirector _actTimeline;
+    [SerializeField] private PlayableDirector _actSolvedTimeline;
 
     private void Awake()
     {
@@ -15,15 +19,24 @@ public  class ActManager : MonoBehaviour
     private void Start()
     {
         StoryEventBus.Subscribe<RemoveCurtainEvent>(RemoveCurtain);
+
+        
     }
 
     private void RemoveCurtain(RemoveCurtainEvent @event)
     {
-        _curtainBlockade.gameObject.SetActive(false);
+        Debug.Log("SOÖVED");
+         _curtainBlockade.gameObject.SetActive(false);
+
+        StopAct();
+        _actTimeline.Stop();
+        _actSolvedTimeline.Play();
+
     }
 
     public void PlayAct()
     {
+        _actTimeline.Play();
         Debug.Log("start actor");
         foreach (var actor in _actData._actors)
         {

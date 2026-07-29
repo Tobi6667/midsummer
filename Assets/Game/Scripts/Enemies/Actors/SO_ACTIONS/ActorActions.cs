@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Playables;
 
 [System.Serializable]
 public class ActorActions
@@ -10,4 +11,6 @@ public class ActorActions
     public bool sendEvent;
     public float waitTime;
     public bool needsItem;
+    public bool removeCurtain;
+    public PlayableDirector timeline;
 }
