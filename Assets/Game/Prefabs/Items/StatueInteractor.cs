@@ -14,6 +14,9 @@ public class StatueInteractor :MonoBehaviour,  IInteractable
             didDrop = true;
         }
 
+
+        onFinished?.Invoke();
+
     }
 
 }
