@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Game/UI/InGameStyle.uss?fileID=7433441132597879392&amp;guid=216194d0746671245bcebd06b167b8ae&amp;type=3#InGameStyle"/>
-    <ui:VisualElement name="hud-root" class="hud-root">
-        <ui:VisualElement name="quest-panel" class="quest-panel">
+    <ui:VisualElement name="hud-root" picking-mode="Ignore" class="hud-root">
+        <ui:VisualElement name="quest-panel" picking-mode="Ignore" class="quest-panel">
             <ui:Label name="act-scene-label" text="Act I, Scene II" class="act-scene-label"/>
             <ui:Label name="scene-title-label" text="Fragments in the Code" class="scene-title-label"/>
             <ui:VisualElement name="objectives-list" class="objectives-list">
@@ -31,14 +31,14 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="dialogue-box" class="dialogue-box">
+        <ui:VisualElement name="dialogue-box" picking-mode="Ignore" class="dialogue-box">
             <ui:VisualElement name="dialogue-portrait" class="dialogue-portrait"/>
             <ui:VisualElement class="dialogue-body">
                 <ui:Label name="dialogue-speaker" text="Wm. Shakespeare.exe" class="dialogue-speaker"/>
                 <ui:Label name="dialogue-text" text="Welcome, Puck. This is one of my tinker&apos;d worlds within the dreaming cube. Use wit, not steel. The play favors those who bend before they break." class="dialogue-text"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="scan-readout" class="scan-readout">
+        <ui:VisualElement name="scan-readout" picking-mode="Ignore" class="scan-readout">
             <ui:Label name="scan-status-label" text="Scanning..." class="scan-status-label"/>
             <ui:Label name="scan-target-name" text="AI_Entity: Titania" class="scan-target-name"/>
             <ui:VisualElement class="scan-stat-row">
@@ -62,7 +62,7 @@
                 <ui:Label name="scan-threat-value" text="Low" class="scan-stat-value scan-threat-low"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="disguise-panel" class="disguise-panel">
+        <ui:VisualElement name="disguise-panel" picking-mode="Ignore" class="disguise-panel">
             <ui:VisualElement name="disguise-icon" class="disguise-icon"/>
             <ui:VisualElement class="disguise-info">
                 <ui:ProgressBar value="22" title="my-progress" name="detection-bar"/>
@@ -72,7 +72,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="ability-hotbar" class="ability-hotbar" style="transform-origin: center; translate: 0% 0; right: 24px;">
+        <ui:VisualElement name="ability-hotbar" picking-mode="Ignore" class="ability-hotbar" style="transform-origin: center; translate: 0% 0; right: 24px;">
             <ui:VisualElement name="inventory-slot-1" class="ability-slot">
                 <ui:Image name="inventory-slot-1-icon" class="ability-icon"/>
                 <ui:Label name="inventory-slot-1-count" text="" class="inventory-count"/>
